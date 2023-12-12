@@ -11,6 +11,7 @@ class NewCheck extends StatelessWidget {
     required this.value,
     required this.checkboxBloc,
     required this.checkboxId,
+    required this.enabled,
     Key? key,
   }) : super(key: key);
 
@@ -18,6 +19,7 @@ class NewCheck extends StatelessWidget {
   final bool value;
   final CheckboxBloc checkboxBloc;
   final String checkboxId;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +38,32 @@ class NewCheck extends StatelessWidget {
           onChanged: (newValue) {
             checkboxBloc.add(CheckboxEvent(checkboxId, newValue ?? false));
           },
+          enabled: enabled,
           controlAffinity: ListTileControlAffinity.leading,
         );
       },
     );
+  }
+}
+
+class ShowCheck extends StatelessWidget {
+  const ShowCheck({
+    required this.text,
+    required this.value,
+    Key? key,
+  }) : super(key: key);
+
+  final String text;
+  final bool value;
+
+  @override
+  Widget build(BuildContext context) {
+        return CheckboxListTile(
+          title: Text(text),
+          value: value,
+          enabled: false,
+          controlAffinity: ListTileControlAffinity.leading,
+          onChanged: null,
+        );
   }
 }

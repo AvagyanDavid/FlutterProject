@@ -6,5 +6,5 @@ class PhotoEvent {
   final String photoId;
   final XFile? newPhoto;
 
-  PhotoEvent(this.photoId, this.newPhoto);
+  const PhotoEvent(this.photoId, this.newPhoto);
 }

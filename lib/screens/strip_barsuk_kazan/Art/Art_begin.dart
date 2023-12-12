@@ -1,30 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_form/api/api.dart';
 import 'package:test_form/component/Forms.dart';
+import 'package:test_form/screens/strip_barsuk_kazan/Art/Art.dart';
 
 import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
-import '../../../connection/database.dart';
 
 class Art_begin extends StatelessWidget {
   Art_begin({super.key});
 
+  /// Сделать запрос на проверку существующей записи по дате
+  ///
+  ///
+  ///
+  ///
+  /// select * from ArtEnd_StripBarsukKazan where Date = '${DateTime.now()}'
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+
+  bool readOnly = false;
+  bool enabled = true;
+
   CheckboxBloc checkboxBloc = CheckboxBloc();
 
-  String commentListArtist = '';
-  String commentReadiness = '';
-  String commentSendListOfGirls = '';
-  String commentListDJ = '';
-  String commentAnalyzeGraph = '';
-  String commentControlArtistAnalize = '';
-  String commentFiveMinutes = '';
-  String commentCard = '';
-  String commentControl1 = '';
-  String commentControl2 = '';
-  String commentControl3 = '';
-  String commentControl4 = '';
-  String commentControl5 = '';
-  String commentToyOrder = '';
+  String? commentListArtist;
+  String? commentReadiness;
+  String? commentSendListOfGirls;
+  String? commentListDJ;
+  String? commentAnalyzeGraph;
+  String? commentControlArtistAnalize;
+  String? commentFiveMinutes;
+  String? commentCard;
+  String? commentControl1;
+  String? commentControl2;
+
+  String? commentControl3;
+  String? commentControl4;
+  String? commentControl5;
+  String? commentToyOrder;
 
   String? commentDirectorListArtist;
   String? commentDirectorReadiness;
@@ -36,10 +55,19 @@ class Art_begin extends StatelessWidget {
   String? commentDirectorCard;
   String? commentDirectorToyOrder;
 
-  var db = Mysql();
+  // List? checkBox = [];
+  // checkBox.append("false")
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String date = '${now.year}-${now.month}-${now.day}';
+    final response = Api().showArtBegin(date);
+    if (response != null){
+      readOnly = true;
+      enabled = false;
+    }
+
     return Scaffold(
       body: Column(
         children: [
@@ -54,21 +82,17 @@ class Art_begin extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
-                  // width: double.infinity,
                   height: 200,
                   decoration: const BoxDecoration(
                     color: Color(0xff000000),
                   ),
                   child: Row(
-                    // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // group5Pm1 (207:166)
                         margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
                         width: 173,
                         height: double.infinity,
                         child: Container(
-                          // autogroupc5usX6X (Qd8Af2EBZv8YZ9YRmLC5Us)
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
                           width: double.infinity,
                           height: 63.17,
@@ -96,10 +120,9 @@ class Art_begin extends StatelessWidget {
                               const SizedBox(
                                 height: 10,
                               ),
-                              const Text(
-                                // 6oq (207:28)
-                                'сегодня',
-                                style: TextStyle(
+                              Text(
+                                'сегодня $date',
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
                                   height: 1.3,
@@ -127,7 +150,7 @@ class Art_begin extends StatelessWidget {
             // BD1 (231:55)
             // margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
             child: const Text(
-              'Смена:',
+              'Начало смены',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w400,
@@ -152,8 +175,6 @@ class Art_begin extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 20),
-
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
@@ -164,17 +185,18 @@ class Art_begin extends StatelessWidget {
                                     state.checkboxStates['listArtist'] ?? false,
                                 checkboxBloc: checkboxBloc,
                                 checkboxId: 'listArtist',
+                                enabled: enabled,
                               );
                             }),
                           ),
-                          const SizedBox(height: 20),
                           CommentWorker(
                             commentValue: commentListArtist,
                             onChanged: (value) {
                               commentListArtist = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorListArtist,
                           ),
                           const SizedBox(height: 20),
@@ -183,29 +205,26 @@ class Art_begin extends StatelessWidget {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                 builder: (context, state) {
                               return NewCheck(
-                                text:
-                                    'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
-                                value:
-                                    state.checkboxStates['readiness'] ?? false,
+                                text: 'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
+                                value: state.checkboxStates['readiness'] ?? false,
                                 checkboxBloc: checkboxBloc,
                                 checkboxId: 'readiness',
+                                enabled: enabled,
                               );
                             }),
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
+                          const SizedBox(height: 20,),
                           CommentWorker(
                             commentValue: commentReadiness,
                             onChanged: (value) {
                               commentReadiness = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorReadiness,
                           ),
 
-                          const SizedBox(height: 20),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
@@ -217,6 +236,7 @@ class Art_begin extends StatelessWidget {
                                           false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'sendListOfGirls',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -226,8 +246,9 @@ class Art_begin extends StatelessWidget {
                             onChanged: (value) {
                               commentSendListOfGirls = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorSendListOfGirls,
                           ),
 
@@ -241,6 +262,7 @@ class Art_begin extends StatelessWidget {
                                       state.checkboxStates['listDJ'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'listDJ',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -250,11 +272,12 @@ class Art_begin extends StatelessWidget {
                             onChanged: (value) {
                               commentListDJ = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorListDJ,
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
 
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
@@ -267,6 +290,7 @@ class Art_begin extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'analyzeGraph',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -276,9 +300,10 @@ class Art_begin extends StatelessWidget {
                             onChanged: (value) {
                               commentAnalyzeGraph = value!;
                             },
+                            readOnly: readOnly,
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
@@ -291,6 +316,7 @@ class Art_begin extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'controlArtistAnalize',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -300,12 +326,13 @@ class Art_begin extends StatelessWidget {
                             onChanged: (value) {
                               commentControlArtistAnalize = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorControlArtistAnalize,
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
@@ -317,6 +344,7 @@ class Art_begin extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'fiveMinutes',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -326,17 +354,14 @@ class Art_begin extends StatelessWidget {
                             onChanged: (value) {
                               commentFiveMinutes = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorFiveMinutes,),
-                          SizedBox(height: 20,),
-                          Container(
-                            // autogroupssnkLeB (Qd7tBVgL7cMFvwHZ7FsSNK)
-                            // padding:const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          const SizedBox(height: 20,),
+                          const SizedBox(
                             width: double.infinity,
-                            child: Container(
-                              // ANK (211:310)
-                              child: const Text(
+                              child: Text(
                                 'Выдача карт:',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -346,7 +371,6 @@ class Art_begin extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
@@ -357,6 +381,7 @@ class Art_begin extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'firstCard',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -371,6 +396,7 @@ class Art_begin extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'secondCard',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -385,21 +411,20 @@ class Art_begin extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'thirdCard',
+                                  enabled: enabled,
                                 );
                               },
                             ),
                           ),
                           CommentWorker(commentValue: commentCard,onChanged: (value){
                             commentCard = value!;
-                          },),
-                          CommentDirector(valueDirector: commentDirectorCard,),
-                          Container(
-                            // autogroupssnkLeB (Qd7tBVgL7cMFvwHZ7FsSNK)
-                            // padding:const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                            width: double.infinity,
-                            child: Container(
-                              // ANK (211:310)
-                              child: const Text(
+                          },
+                            readOnly: readOnly,
+                          ),
+                          ShowCommentDirector(valueDirector: commentDirectorCard,),
+                          const SizedBox(height: 20,),
+                          const SizedBox(
+                              child: Text(
                                 'Контроль:',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -409,18 +434,18 @@ class Art_begin extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
                           const SizedBox(height: 20,),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Expanded(
                                 flex: 3,
-                              child: Control(
+                              child: CommentWorker(
                                 commentValue: commentControl1,
                                 onChanged: (value) {
                                   commentControl1 = value!;
                                 },
+                                readOnly: readOnly,
                               ),
                               ),
                               Expanded(flex: 1,
@@ -434,6 +459,7 @@ class Art_begin extends StatelessWidget {
                                           false,
                                       checkboxBloc: checkboxBloc,
                                       checkboxId: 'control1',
+                                      enabled: enabled,
                                     );
                                   },
                                 ),
@@ -441,17 +467,18 @@ class Art_begin extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Expanded(
                                 flex: 3,
-                                child: Control(
+                                child: CommentWorker(
                                   commentValue: commentControl2,
                                   onChanged: (value) {
                                     commentControl2 = value!;
                                   },
+                                  readOnly: readOnly,
                                 ),
                               ),
                               Expanded(flex: 1,
@@ -465,6 +492,7 @@ class Art_begin extends StatelessWidget {
                                             false,
                                         checkboxBloc: checkboxBloc,
                                         checkboxId: 'control2',
+                                        enabled: enabled,
                                       );
                                     },
                                   ),
@@ -472,17 +500,18 @@ class Art_begin extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 20,),
+                          const SizedBox(height: 20,),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Expanded(
                                 flex: 3,
-                                child: Control(
+                                child: CommentWorker(
                                   commentValue: commentControl3,
                                   onChanged: (value) {
                                     commentControl3 = value!;
                                   },
+                                  readOnly: readOnly,
                                 ),
                               ),
                               Expanded(flex: 1,
@@ -496,6 +525,7 @@ class Art_begin extends StatelessWidget {
                                             false,
                                         checkboxBloc: checkboxBloc,
                                         checkboxId: 'control3',
+                                        enabled: enabled
                                       );
                                     },
                                   ),
@@ -503,17 +533,18 @@ class Art_begin extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 20,),
+                          const SizedBox(height: 20,),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Expanded(
                                 flex: 3,
-                                child: Control(
+                                child: CommentWorker(
                                   commentValue: commentControl4,
                                   onChanged: (value) {
                                     commentControl4 = value!;
                                   },
+                                  readOnly: readOnly,
                                 ),
                               ),
                               Expanded(flex: 1,
@@ -527,6 +558,7 @@ class Art_begin extends StatelessWidget {
                                             false,
                                         checkboxBloc: checkboxBloc,
                                         checkboxId: 'control4',
+                                        enabled: enabled,
                                       );
                                     },
                                   ),
@@ -534,17 +566,18 @@ class Art_begin extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 20,),
+                          const SizedBox(height: 20,),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Expanded(
                                 flex: 3,
-                                child: Control(
+                                child: CommentWorker(
                                   commentValue: commentControl5,
                                   onChanged: (value) {
                                     commentControl5 = value!;
                                   },
+                                  readOnly: readOnly,
                                 ),
                               ),
                               Expanded(flex: 1,
@@ -558,6 +591,7 @@ class Art_begin extends StatelessWidget {
                                             false,
                                         checkboxBloc: checkboxBloc,
                                         checkboxId: 'control5',
+                                        enabled: enabled,
                                       );
                                     },
                                   ),
@@ -575,6 +609,7 @@ class Art_begin extends StatelessWidget {
                                       state.checkboxStates['toyOrder'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'toyOrder',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -584,27 +619,24 @@ class Art_begin extends StatelessWidget {
                             onChanged: (value) {
                               commentToyOrder = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorToyOrder,
                           ),
 
                           const SizedBox(height: 20),
                           Center(
-                            child: Container(
-                                // group167uy (231:53)
-                                width: double.infinity,
-                                height: 51,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    minimumSize: const Size(200, 100),
+                                    minimumSize: const Size(100, 50),
                                     textStyle: const TextStyle(fontSize: 20),
-                                    backgroundColor: Colors.green,
+                                    backgroundColor: Colors.green[800],
                                   ),
                                   onPressed: () {
-                                    DateTime now = DateTime.now().toUtc();
-                                    DateTime date = DateTime(now.year, now.month, now.day).toUtc();
-                                    DateTime datenow = DateTime(now.year, now.month, now.day, now.hour, now.minute).toUtc();
+                                    DateTime now = DateTime.now();
+                                    String date = '${now.year}-${now.month}-${now.day}';
+                                    String time = '${now.hour}:${now.minute}:${now.second}';
 
                                     final state = checkboxBloc.state;
 
@@ -625,60 +657,52 @@ class Art_begin extends StatelessWidget {
                                     final control5 = state.checkboxStates['control5'] ?? false;
                                     final toyOrder = state.checkboxStates['toyOrder'] ?? false;
 
-                                    db.getConnection().then((conn) {
-                                    conn.query(
-                                    'INSERT INTO ArtManagerBegin_StripBarsukKazan (Date,DateTime,ListArtist,Comment_ListArtist,CommentDirector_ListArtist,Readiness,Comment_Readiness,CommentDirector_Readiness,'
-                                        'SendListOfGirls,Comment_SendListOfGirls,CommentDirector_SendListOfGirls,ListDJ,Comment_ListDJ,CommentDirector_ListDJ,AnalyzeGraph,Comment_AnalyzeGraph,CommentDirector_AnalyzeGraph,'
-                                        'ControlArtistAnalize,Comment_ControlArtistAnalize,CommentDirector_ControlArtistAnalize,FiveMinutes,Comment_FiveMinutes,CommentDirector_FiveMinutes,'
-                                        'FirstCard,SecondCard,ThirdCard,Comment_Card,CommentDirector_Card,Control1,Comment_Control1,Control2,Comment_Control2,Control3,Comment_Control3,Control4,'
-                                        'Comment_Control4,Control5,Comment_Control5,ToyOrder,Comment_ToyOrder,CommentDirector_ToyOrder,Users_idUsers) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-                                    [
-                                      date,
-                                      datenow,
-                                      listArtist,
-                                      commentListArtist,
-                                      commentDirectorListArtist,
-                                      readiness,
-                                      commentReadiness,
-                                      commentDirectorReadiness,
-                                      sendListOfGirls,
-                                      commentSendListOfGirls,
-                                      commentDirectorSendListOfGirls,
-                                      listDJ,
-                                      commentListDJ,
-                                      commentDirectorListDJ,
-                                      analyzeGraph,
-                                      commentAnalyzeGraph,
-                                      commentDirectorAnalyzeGraph,
-                                      controlArtistAnalize,
-                                      commentControlArtistAnalize,
-                                      commentDirectorControlArtistAnalize,
-                                      fiveMinutes,
-                                      commentFiveMinutes,
-                                      commentDirectorFiveMinutes,
-                                      firstCard,
-                                      secondCard,
-                                      thirdCard,
-                                      commentCard,
-                                      commentDirectorCard,
-                                      control1,
-                                      commentControl1,
-                                      control2,
-                                      commentControl2,
-                                      control3,
-                                      commentControl3,
-                                      control4,
-                                      commentControl4,
-                                      control5,
-                                      commentControl5,
-                                      toyOrder,
-                                      commentToyOrder,
-                                      commentDirectorToyOrder,
-                                      '2'
-                                    ]).then((results) {
-                                    print('${results}');
-                                    });
-                                    });
+                                    Api().artBegin(
+                                        date,
+                                        time,
+                                        listArtist,
+                                        commentListArtist,
+                                        commentDirectorListArtist,
+                                        readiness,
+                                        commentReadiness,
+                                        commentDirectorReadiness,
+                                        sendListOfGirls,
+                                        commentSendListOfGirls,
+                                        commentDirectorSendListOfGirls,
+                                        listDJ,
+                                        commentListDJ,
+                                        commentDirectorListDJ,
+                                        analyzeGraph,
+                                        commentAnalyzeGraph,
+                                        commentDirectorAnalyzeGraph,
+                                        controlArtistAnalize,
+                                        commentControlArtistAnalize,
+                                        commentDirectorControlArtistAnalize,
+                                        fiveMinutes,
+                                        commentFiveMinutes,
+                                        commentDirectorFiveMinutes,
+                                        firstCard,
+                                        secondCard,
+                                        thirdCard,
+                                        commentCard,
+                                        commentDirectorCard,
+                                        control1,
+                                        commentControl1,
+                                        control2,
+                                        commentControl2,
+                                        control3,
+                                        commentControl3,
+                                        control4,
+                                        commentControl4,
+                                        control5,
+                                        commentControl5,
+                                        toyOrder,
+                                        commentToyOrder,
+                                        commentDirectorToyOrder,
+                                        3);
+                                    Navigator.pop(context);
+                                    readOnly = true;
+                                    enabled = false;
                                     },
                                   child: const Text(
                                     'Отправить отчет',
@@ -691,7 +715,6 @@ class Art_begin extends StatelessWidget {
                                   ),
                               ),
                             ),
-                          ),
                         ],
                       ),
                     ),

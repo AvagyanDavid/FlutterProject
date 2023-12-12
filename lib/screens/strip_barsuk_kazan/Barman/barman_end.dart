@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_form/api/api.dart';
 
 import 'package:test_form/component/Forms.dart';
 import 'package:test_form/component/photo/bloc/photo_bloc.dart';
 import 'package:test_form/connection/database.dart';
+import 'package:test_form/main.dart';
+import 'package:test_form/screens/strip_barsuk_kazan/Barman/barman.dart';
 
 import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
@@ -13,8 +16,13 @@ import '../../../component/photo/photo.dart';
 
 class barman_end extends StatelessWidget {
 
+  bool readOnly = false;
+  bool enabled = true;
+
   CheckboxBloc checkboxBloc = CheckboxBloc();
   PhotoBloc photoBloc = PhotoBloc();
+
+  String? cleanlinessWorkplacePath = null;
 
   String commentCleanlinessWorkplace = '';
   String commentCloseShift = '';
@@ -26,14 +34,19 @@ class barman_end extends StatelessWidget {
   String? commentDirectorCloseShift;
   String? commentDirectorCleanlinessWorkplace;
 
-  var db = Mysql();
-
   barman_end({super.key});
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String date = '${now.year}-${now.month}-${now.day}';
+    final response = Api().showBarmanEnd(date);
+    if (response != null){
+      readOnly = true;
+      enabled = false;
+    }
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         // frame5Sco (207:23)a
         width: 400,
         height: double.infinity,
@@ -48,7 +61,6 @@ class barman_end extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  // appbar7Yb (207:165)
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
                   padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
                   width: double.infinity,
@@ -60,12 +72,10 @@ class barman_end extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // group5Pm1 (207:166)
                         margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
                         width: 173,
                         height: double.infinity,
                         child: Container(
-                          // autogroupc5usX6X (Qd8Af2EBZv8YZ9YRmLC5Us)
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
                           width: double.infinity,
                           height: 63.17,
@@ -86,10 +96,10 @@ class barman_end extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const Text(
+                              Text(
                                 // 6oq (207:28)
-                                'сегодня',
-                                style: TextStyle(
+                                'сегодня $date',
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
                                   height: 1.3,
@@ -117,7 +127,7 @@ class barman_end extends StatelessWidget {
             // BD1 (231:55)
             margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
             child: const Text(
-              'Смена:',
+              'Конец смены',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w400,
@@ -129,17 +139,12 @@ class barman_end extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Container(
-                // autogrouptfuqVzP (Qd88RFd5Sycz9vo7TbtFuq)
                 padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      // autogroupssnkLeB (Qd7tBVgL7cMFvwHZ7FsSNK)
-                      // padding:const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      width: double.infinity,
-                      child: Container(
+                     Container(
                         // ANK (211:310)
                         child: const Text(
                           'Составить заявку:',
@@ -151,7 +156,6 @@ class barman_end extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
                     BlocProvider<CheckboxBloc>(
                       create: (context) => checkboxBloc,
                       // BlocBuilder(builder: builder)
@@ -161,7 +165,8 @@ class barman_end extends StatelessWidget {
                               text: "Алкоголь",
                               value: state.checkboxStates['alcogol'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'alcogol',);
+                          checkboxId: 'alcogol',
+                          enabled: enabled,);
                         },
                       ),
                     ),
@@ -174,7 +179,8 @@ class barman_end extends StatelessWidget {
                               text: "Б/а",
                               value: state.checkboxStates['nonalcogol'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'nonalcogol',);
+                          checkboxId: 'nonalcogol',
+                          enabled: enabled,);
                         },
                       ),
                     ),
@@ -187,14 +193,17 @@ class barman_end extends StatelessWidget {
                               text: "Табак",
                               value: state.checkboxStates['tobacco'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'tobacco',);
+                          checkboxId: 'tobacco',
+                          enabled: enabled,);
                         },
                       ),
                     ),
                     CommentWorker(commentValue: commentApplication, onChanged: (value){
                       commentApplication = value!;
-                    },),
-                    CommentDirector(valueDirector: commentDirectorApplication,),
+                    },
+                      readOnly: readOnly,
+                    ),
+                    ShowCommentDirector(valueDirector: commentDirectorApplication,),
                     BlocProvider<CheckboxBloc>(
                       create: (context) => checkboxBloc,
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
@@ -203,14 +212,17 @@ class barman_end extends StatelessWidget {
                               text: "Заполнить отчет",
                               value: state.checkboxStates['fillOutReport'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'fillOutReport',);
+                          checkboxId: 'fillOutReport',
+                          enabled: enabled,);
                         },
                       ),
                     ),
                     CommentWorker(commentValue: commentFillOutReport, onChanged: (value){
                       commentFillOutReport = value!;
-                    },),
-                    CommentDirector(valueDirector: commentDirectorFillOutReport,),
+                    },
+                      readOnly: readOnly,
+                    ),
+                    ShowCommentDirector(valueDirector: commentDirectorFillOutReport,),
                     BlocProvider<CheckboxBloc>(
                       create: (context) => checkboxBloc,
                       // BlocBuilder(builder: builder)
@@ -220,14 +232,17 @@ class barman_end extends StatelessWidget {
                               text: "Закрыть смену",
                               value: state.checkboxStates['closeShift'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'closeShift',);
+                          checkboxId: 'closeShift',
+                          enabled: enabled,);
                         },
                       ),
                     ),
                     CommentWorker(commentValue: commentCloseShift,onChanged: (value){
                       commentCloseShift = value!;
-                    },),
-                    CommentDirector(valueDirector: commentDirectorCloseShift,),
+                    },
+                      readOnly: readOnly,
+                    ),
+                    ShowCommentDirector(valueDirector: commentDirectorCloseShift,),
                     BlocProvider<CheckboxBloc>(
                       create: (context) => checkboxBloc,
                       // BlocBuilder(builder: builder)
@@ -237,7 +252,8 @@ class barman_end extends StatelessWidget {
                               text: "Навести порядок на рабочем месте",
                               value: state.checkboxStates['cleanlinessWorkplace'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'cleanlinessWorkplace',);
+                          checkboxId: 'cleanlinessWorkplace',
+                          enabled: enabled,);
                         },
                       ),
                     ),
@@ -258,8 +274,9 @@ class barman_end extends StatelessWidget {
                       onChanged:(value){
                         commentCleanlinessWorkplace= value!;
                       },
+                      readOnly: readOnly,
                       ),
-                    CommentDirector(valueDirector: commentDirectorCleanlinessWorkplace,),
+                    ShowCommentDirector(valueDirector: commentDirectorCleanlinessWorkplace,),
                     const SizedBox(
                       height: 20,
                     ),
@@ -274,48 +291,25 @@ class barman_end extends StatelessWidget {
 
                           final photostate = photoBloc.state;
                           final cleanlinessWorkplacePhoto = photostate.photoStates['cleanlinessWorkplacePhoto'];
-
-                          List<int> cleanlinessWorkplacePhotoBLOB = File(cleanlinessWorkplacePhoto!.path).readAsBytesSync();
+                          if (cleanlinessWorkplacePhoto != null) {
+                            cleanlinessWorkplacePath = cleanlinessWorkplacePhoto.path;
+                          }
 
                           DateTime now = DateTime.now().toUtc();
-                          DateTime date = DateTime(now.year, now.month, now.day).toUtc();
-                          DateTime datenow = DateTime(now.year, now.month, now.day, now.hour, now.minute).toUtc();
+                          String date = '${now.year}-${now.month}-${now.day}';
+                          String time = '${now.hour}:${now.minute}:${now.second}';
+
                           final state = checkboxBloc.state;
                           final alcogol = state.checkboxStates['alcogol'] ?? false;
-                          final nonalcogol = state.checkboxStates['nonalcogol'] ?? false;
+                          final nonAlcogol = state.checkboxStates['nonalcogol'] ?? false;
                           final tobacco = state.checkboxStates['tobacco'] ?? false;
                           final fillOutReport = state.checkboxStates['fillOutReport'] ?? false;
                           final closeShift = state.checkboxStates['closeShift'] ?? false;
                           final cleanlinessWorkplace = state.checkboxStates['cleanlinessWorkplace'] ?? false;
 
-                          db.getConnection().then((conn) {
-                            conn.query(
-                                'INSERT INTO BarmanEnd_StripBarsukKazan (Date,DateTime,Alcogol,Nonalcogol,Tobacco,Comment_Application,CommentDirector_Application,FillOutReport,Comment_FillOutReport,'
-                                    'CommentDirector_FillOutReport,CloseShift,Comment_CloseShift,CommentDirector_CloseShift,CleanlinessWorkplace,CleanlinessWorkplacePhotoBLOB,Comment_CleanlinessWorkplace,'
-                                    'CommentDirector_CleanlinessWorkplace,Users_idUsers) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-                                [
-                                  date,
-                                  datenow,
-                                  alcogol,
-                                  nonalcogol,
-                                  tobacco,
-                                  commentApplication,
-                                  commentDirectorApplication,
-                                  fillOutReport,
-                                  commentFillOutReport,
-                                  commentDirectorFillOutReport,
-                                  closeShift,
-                                  commentCloseShift,
-                                  commentDirectorCloseShift,
-                                  cleanlinessWorkplace,
-                                  cleanlinessWorkplacePhotoBLOB,
-                                  commentCleanlinessWorkplace,
-                                  commentDirectorCleanlinessWorkplace,
-                                  '3'
-                                ]).then((results) {
-                              print('${results}');
-                            });
-                          });
+                          Api().barmanEnd(date, time, alcogol, nonAlcogol, tobacco, commentApplication, commentDirectorApplication, fillOutReport, commentFillOutReport, commentDirectorFillOutReport, closeShift, commentCloseShift, commentDirectorCloseShift, cleanlinessWorkplace, cleanlinessWorkplacePath, commentCleanlinessWorkplace, commentDirectorCleanlinessWorkplace, 4);
+
+                          Navigator.pop(context);
                         },
                         child: const Text(
                           'Отправить отчет',

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:test_form/main.dart';
+import 'package:test_form/screens/aithorization.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Host/host_end.dart';
 import 'host_begin.dart';
 
-class host extends StatelessWidget {
-  host({super.key});
+class Host extends StatelessWidget {
+  final int id;
+  final String login;
+  final String post;
+
+  Host({super.key,required this.id, required this.login, required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +112,7 @@ class host extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(100, 50),
                             textStyle: const TextStyle(fontSize: 20),
-                            backgroundColor: Colors.grey,
+                            backgroundColor: Colors.brown[900],
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -121,14 +127,13 @@ class host extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 30,
                               height: 1.3,
-                              color: Colors.black,
+                              color: Colors.white,
                             ),
                           )),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(
+                    height: 20),
                   Center(
                     child: Container(
                       // group167uy (231:53)
@@ -138,7 +143,7 @@ class host extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(100, 50),
                             textStyle: const TextStyle(fontSize: 20),
-                            backgroundColor: Colors.grey,
+                            backgroundColor: Colors.brown[900],
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -153,7 +158,39 @@ class host extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 30,
                               height: 1.3,
-                              color: Colors.black,
+                              color: Colors.white,
+                            ),
+                          )),
+                    ),
+                  ),
+                  const SizedBox(height: 40,),
+                  Center(
+                    child: Container(
+                      height: 51,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(100, 50),
+                            textStyle: const TextStyle(fontSize: 20),
+                            backgroundColor: Colors.red[900],
+                          ),
+                          onPressed: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => Autorization()),
+                            // );
+                            idUser = 0;
+                            Post = '';
+                            Login = '';
+                          },
+
+                          child: const Text(
+                            'Выйти',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 30,
+                              height: 1.3,
+                              color: Colors.white,
                             ),
                           )),
                     ),

@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_form/api/api.dart';
 import 'package:test_form/component/Forms.dart';
+import 'package:test_form/main.dart';
 import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
 import '../../../connection/database.dart';
 import 'host.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class host_begin extends StatelessWidget {
   host_begin({super.key});
 
   CheckboxBloc checkboxBloc = CheckboxBloc();
+
+  String? cleanlinessWorkplaceHostPath = null;
+  String? cleanlinessWorkplaceHostName = null;
 
   String commentTakeRadioTerminalTelephone = '';
   String commentSendMessage = '';
@@ -17,10 +24,18 @@ class host_begin extends StatelessWidget {
   String? commentDirectorTakeRadioTerminalTelephone;
   String? commentDirectorSendMessage;
 
-  var db = Mysql();
+  bool readOnly = false;
+  bool enabled = true;
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String date = '${now.year}-${now.month}-${now.day}';
+    final response = Api().showHostBegin(date);
+    if (response != null){
+      readOnly = true;
+      enabled = false;
+    }
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -71,10 +86,10 @@ class host_begin extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   // 6oq (207:28)
-                                  'сегодня',
-                                  style: TextStyle(
+                                  'сегодня $date',
+                                  style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
                                     height: 1.3,
@@ -102,7 +117,7 @@ class host_begin extends StatelessWidget {
               // BD1 (231:55)
               margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
               child: const Text(
-                'Смена:',
+                'Начало смены',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w400,
@@ -135,23 +150,19 @@ class host_begin extends StatelessWidget {
                                       text: "Взять рацию, терминал, телефон",
                                       value: state.checkboxStates['takeRadioTerminalTelephone'] ?? false,
                                       checkboxBloc: checkboxBloc,
-                                      checkboxId: 'takeRadioTerminalTelephone',);
+                                      checkboxId: 'takeRadioTerminalTelephone',
+                                  enabled: enabled,);
                                 },
                               ),
                             ),
                             CommentWorker(commentValue: commentTakeRadioTerminalTelephone, onChanged: (value) {
-                              commentTakeRadioTerminalTelephone = value!;},),
-                            CommentDirector(valueDirector: commentDirectorTakeRadioTerminalTelephone),
+                              commentTakeRadioTerminalTelephone = value!;},
+                            readOnly: readOnly,),
+                            ShowCommentDirector(valueDirector: commentDirectorTakeRadioTerminalTelephone),
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
-                      // autogroupssnkLeB (Qd7tBVgL7cMFvwHZ7FsSNK)
-                      // padding:const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      width: double.infinity,
-                      child: Container(
-                        // ANK (211:310)
-                        child: const Text(
+                const Text(
                           'Отправить сообщение:',
                           style: TextStyle(
                             fontSize: 16,
@@ -160,8 +171,6 @@ class host_begin extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                      ),
-                    ),
                             BlocProvider<CheckboxBloc>(
                               create: (context) => checkboxBloc,
                               // BlocBuilder(builder: builder)
@@ -171,7 +180,8 @@ class host_begin extends StatelessWidget {
                                       text: "WhatsApp",
                                     value: state.checkboxStates['sendMessageWatsApp'] ?? false,
                                       checkboxBloc: checkboxBloc,
-                                    checkboxId: 'sendMessageWatsApp',);
+                                    checkboxId: 'sendMessageWatsApp',
+                                  enabled: enabled,);
                                 },
                               ),
                             ),
@@ -184,55 +194,42 @@ class host_begin extends StatelessWidget {
                                     text: "Telegram",
                                     value: state.checkboxStates['sendMessageTelegram'] ?? false,
                                     checkboxBloc: checkboxBloc,
-                                    checkboxId: 'sendMessageTelegram',);
+                                    checkboxId: 'sendMessageTelegram',
+                                  enabled: enabled,);
                                 },
                               ),
                             ),
-                            CommentWorker(commentValue: commentSendMessage, onChanged: (value) {
-                              commentSendMessage = value!;
-                            },),
-                            CommentDirector(valueDirector: commentDirectorSendMessage),
+                            CommentWorker(commentValue: commentSendMessage,
+                              onChanged: (value) {
+                                commentSendMessage = value!;
+                              },
+                              readOnly: readOnly,
+                            ),
+                            ShowCommentDirector(valueDirector: commentDirectorSendMessage),
                           ],
                         ),
                       ),
+                      const SizedBox(height: 20,),
                       Center(
-                        child: SizedBox(
-                            // group167uy (231:53)
-                            width: double.infinity,
-                            height: 51,
-                        child: ElevatedButton(
+                          child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(200, 100),
+                                minimumSize: const Size(100, 50),
                                 textStyle: const TextStyle(fontSize: 20),
                                 backgroundColor: Colors.green,
                               ),
-                        onPressed: () async {
-                          db.getConnection().then((conn) {
-                            final state = checkboxBloc.state;
-                            final takeRadioTerminalTelephone = state.checkboxStates['takeRadioTerminalTelephone'] ?? false;
-                            final sendMessageWatsApp = state.checkboxStates['sendMessageWatsApp'] ?? false;
-                            final sendMessageTelegram = state.checkboxStates['sendMessageTelegram'] ?? false;
+                        onPressed: () {
+                          DateTime now = DateTime.now();
+                          String date = '${now.year}-${now.month}-${now.day}';
+                          String time = '${now.hour}:${now.minute}:${now.second}';
 
+                          final state = checkboxBloc.state;
+                          final takeRadioTerminalTelephone = state.checkboxStates['takeRadioTerminalTelephone'] ?? false;
+                          final sendMessageWatsApp = state.checkboxStates['sendMessageWatsApp'] ?? false;
+                          final sendMessageTelegram = state.checkboxStates['sendMessageTelegram'] ?? false;
 
-                            DateTime now = DateTime.now().toUtc();
-                            DateTime date =
-                                DateTime(now.year, now.month, now.day).toUtc();
-                            DateTime datenow = DateTime(now.year, now.month,
-                                now.day, now.hour, now.minute).toUtc();
-                            conn.query(
-                                'INSERT INTO HostBegin_StripBarsukKazan (Date,DateTime,TakeRadioTerminalTelephone, CommentWorker_TakeRadioTerminalTelephone, '
-                                    'CommentDirector_TakeRadioTerminalTelephone,'
-                                    'SendMessageWatsApp,SendMessageTelegram, CommentWorker_SendMessage, CommentDirector_SendMessage, Users_idUsers) VALUES (?,?,?, ?, ?, ?, ?, ?, ?)',
-                                [date,datenow,takeRadioTerminalTelephone,commentTakeRadioTerminalTelephone,commentDirectorTakeRadioTerminalTelephone,sendMessageWatsApp,sendMessageTelegram,commentSendMessage,commentDirectorSendMessage,'1']).then((results) {
-                            });
-                          });
-                          print(commentTakeRadioTerminalTelephone);
-                          print(commentSendMessage);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => host()),
-                            );
+                          Api().hostBegin(date,time,takeRadioTerminalTelephone,commentTakeRadioTerminalTelephone,commentDirectorTakeRadioTerminalTelephone,sendMessageWatsApp,sendMessageTelegram,commentSendMessage,commentDirectorSendMessage,1);
+
+                          Navigator.pop(context);
                           },
                           child: const Text(
                               'Отправить отчет',
@@ -245,20 +242,14 @@ class host_begin extends StatelessWidget {
                             ),
                           )
                         ),
-                      ),
                     ],
                   ),
                 ),
               ),
             ),
           ],
-        ),
+    ),
       ),
     );
   }
-
-
-
-
-  // host_begin_bd(bool takeRadioTerminalTelephone, String commentTakeRadioTerminalTelephone, bool sendMessage, String commentSendMessage) {}
 }

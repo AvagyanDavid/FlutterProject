@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:test_form/main.dart';
+import 'package:test_form/screens/aithorization.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Waiter/waiter_begin.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Waiter/waiter_end.dart';
 
 
-class waiter extends StatelessWidget {
-  waiter({super.key});
+class Waiter extends StatelessWidget {
+  final int id;
+  final String login;
+  final String post;
+
+  Waiter({super.key,required this.id, required this.login, required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -100,20 +106,18 @@ class waiter extends StatelessWidget {
               children: [
                 Center(
                   child: Container(
-                    // group167uy (231:53)
-                    //width: double.infinity,
                     height: 51,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(100, 50),
                           textStyle: const TextStyle(fontSize: 20),
-                          backgroundColor: Colors.grey,
+                          backgroundColor: Colors.brown[900],
                         ),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => waiter_begin()),
+                                builder: (context) => Waiter_begin()),
                           );
                         },
                         child: const Text(
@@ -122,12 +126,12 @@ class waiter extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 30,
                             height: 1.3,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         )),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Center(
@@ -139,13 +143,13 @@ class waiter extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(100, 50),
                           textStyle: const TextStyle(fontSize: 20),
-                          backgroundColor: Colors.grey,
+                          backgroundColor: Colors.brown[900],
                         ),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => waiter_end()),
+                                builder: (context) => Waiter_end()),
                           );
                         },
                         child: const Text(
@@ -154,7 +158,39 @@ class waiter extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 30,
                             height: 1.3,
-                            color: Colors.black,
+                            color: Colors.white,
+                          ),
+                        )),
+                  ),
+                ),
+                const SizedBox(height: 40,),
+                Center(
+                  child: Container(
+                    height: 51,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(100, 50),
+                          textStyle: const TextStyle(fontSize: 20),
+                          backgroundColor: Colors.red[900],
+                        ),
+                        onPressed: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => Autorization()),
+                          // );
+                          idUser = 0;
+                          Post = '';
+                          Login = '';
+                        },
+
+                        child: const Text(
+                          'Выйти',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 30,
+                            height: 1.3,
+                            color: Colors.white,
                           ),
                         )),
                   ),

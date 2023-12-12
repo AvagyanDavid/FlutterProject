@@ -1,23 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:test_form/api/api.dart';
 import 'package:test_form/component/Forms.dart';
 import 'package:test_form/component/checkbox/bloc/checkbox_bloc.dart';
+import 'package:test_form/main.dart';
+import 'package:test_form/screens/strip_barsuk_kazan/Waiter/waiter.dart';
 
 import '../../../component/checkbox/checkbox.dart';
 
-class waiter_end extends StatelessWidget {
-  const waiter_end({super.key});
+class Waiter_end extends StatelessWidget {
+  Waiter_end({super.key});
+
+  CheckboxBloc checkboxBloc = CheckboxBloc();
+
+  String commentChargerCandle = '';
+  String commentFixOttomansAndTables = '';
+  String commentCleanTables = '';
+  String commentPutAwayTheNapkins = '';
+
+  String? commentDirectorChargerCandle;
+  String? commentDirectorFixOttomansAndTables;
+  String? commentDirectorCleanTables;
+  String? commentDirectorPutAwayTheNapkins;
+
+  bool readOnly = false;
+  bool enabled = true;
 
   @override
   Widget build(BuildContext context) {
-    // String tableArrangement = '';
-
-    String commentChargerCandle = '';
-    String commentFixOttomansAndTables = '';
-    String commentCleanTables = '';
-    String commentPutAwayTheNapkins = '';
-
+    DateTime now = DateTime.now();
+    String date = '${now.year}-${now.month}-${now.day}';
+    final response = Api().showWaiterEnd(date);
+    if (response != null){
+      readOnly = true;
+      enabled = false;
+    }
     return Scaffold(
       body: Container(
         // frame5Sco (207:23)
@@ -25,7 +42,7 @@ class waiter_end extends StatelessWidget {
         height: double.infinity,
         child: Column(
           children: [
-            Container(
+            SizedBox(
               width: double.infinity,
               // decoration: const BoxDecoration (
               /// разделяющая линия приветсвие и филиал (207:6)
@@ -35,7 +52,6 @@ class waiter_end extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    // appbar7Yb (207:165)
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
                     padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
                     width: double.infinity,
@@ -47,12 +63,10 @@ class waiter_end extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          // group5Pm1 (207:166)
                           margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
                           width: 173,
                           height: double.infinity,
                           child: Container(
-                            // autogroupc5usX6X (Qd8Af2EBZv8YZ9YRmLC5Us)
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
                             width: double.infinity,
                             height: 63.17,
@@ -60,9 +74,7 @@ class waiter_end extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  // qd1 (207:27)
-                                  margin:
-                                  const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
+                                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
                                   child: const Text(
                                     'Привет Официант',
                                     style: TextStyle(
@@ -74,7 +86,6 @@ class waiter_end extends StatelessWidget {
                                   ),
                                 ),
                                 const Text(
-                                  // 6oq (207:28)
                                   'сегодня',
                                   style: TextStyle(
                                     fontSize: 15,
@@ -87,7 +98,7 @@ class waiter_end extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: 100,
                           height: 150,
                           child: Align(
@@ -101,7 +112,6 @@ class waiter_end extends StatelessWidget {
               ),
             ),
             Container(
-              // BD1 (231:55)
               margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
               child: const Text(
                 'Смена:',
@@ -116,95 +126,135 @@ class waiter_end extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  // autogrouptfuqVzP (Qd88RFd5Sycz9vo7TbtFuq)
                   padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
                   width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // frame6qHZ (211:334)
-                        margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
+                        margin: const EdgeInsets.fromLTRB(0, 0, 19, 56),
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             BlocProvider<CheckboxBloc>(
-                              create: (context) => CheckboxBloc(),
-                              // BlocBuilder(builder: builder)
+                              create: (context) => checkboxBloc,
                               child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                 builder: (context, state) {
                                   return NewCheck(
                                       text: "Убрать на зарядку свечи",
                                       value: state.checkboxStates['chargerCandle'] ?? false,
-                                      checkboxBloc:
-                                      BlocProvider.of<CheckboxBloc>(
-                                          context), checkboxId: 'chargerCandle',);
+                                      checkboxBloc:checkboxBloc,
+                                    checkboxId: 'chargerCandle',
+                                  enabled: enabled,);
                                 },
                               ),
                             ),
-
-                            CommentWorker(commentValue: commentChargerCandle),
+                            CommentWorker(commentValue: commentChargerCandle,
+                              onChanged: (value){
+                              commentChargerCandle = value!;
+                            },readOnly: readOnly,),
+                            const SizedBox(height: 20,),
+                            ShowCommentDirector(valueDirector: commentDirectorChargerCandle),
+                            const SizedBox(height: 20,),
                             BlocProvider<CheckboxBloc>(
-                              create: (context) => CheckboxBloc(),
-                              // BlocBuilder(builder: builder)
+                              create: (context) => checkboxBloc,
                               child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                 builder: (context, state) {
                                   return NewCheck(
                                       text: "Поправить пуфы и столики",
                                       value: state.checkboxStates['fixOttomansAndTables'] ?? false,
-                                      checkboxBloc:
-                                      BlocProvider.of<CheckboxBloc>(
-                                          context), checkboxId: 'fixOttomansAndTables',);
+                                      checkboxBloc: checkboxBloc,
+                                    checkboxId: 'fixOttomansAndTables',
+                                  enabled: enabled,);
                                 },
                               ),
                             ),
-                            CommentWorker(commentValue: commentFixOttomansAndTables),
+                            CommentWorker(commentValue: commentFixOttomansAndTables,onChanged: (value){
+                              commentFixOttomansAndTables = value!;
+                            },readOnly: readOnly,),
+                            const SizedBox(height: 20,),
+                            ShowCommentDirector(valueDirector: commentDirectorFixOttomansAndTables,),
                             BlocProvider<CheckboxBloc>(
-                              create: (context) => CheckboxBloc(),
-                              // BlocBuilder(builder: builder)
+                              create: (context) => checkboxBloc,
                               child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                 builder: (context, state) {
                                   return NewCheck(
                                       text: "Протереть столы",
                                       value: state.checkboxStates['cleanTables'] ?? false,
-                                      checkboxBloc:
-                                      BlocProvider.of<CheckboxBloc>(
-                                          context), checkboxId: 'cleanTables',);
+                                      checkboxBloc:checkboxBloc,
+                                    checkboxId: 'cleanTables',
+                                  enabled: enabled,);
                                 },
                               ),
                             ),
-                            CommentWorker(commentValue: commentCleanTables),
+                            CommentWorker(commentValue: commentCleanTables,onChanged: (value){
+                              commentCleanTables = value!;
+                            },readOnly: readOnly,),
+                            const SizedBox(height: 20,),
+                            ShowCommentDirector(valueDirector: commentDirectorCleanTables,),
+                            const SizedBox(height: 20,),
                             BlocProvider<CheckboxBloc>(
-                              create: (context) => CheckboxBloc(),
-                              // BlocBuilder(builder: builder)
+                              create: (context) => checkboxBloc,
                               child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                 builder: (context, state) {
                                   return NewCheck(
                                       text: "Убрать все салфетки (которыми протирали пилон) от зеркала",
                                       value: state.checkboxStates['putAwayTheNapkins'] ?? false,
-                                      checkboxBloc:
-                                      BlocProvider.of<CheckboxBloc>(
-                                          context), checkboxId: 'putAwayTheNapkins',);
+                                      checkboxBloc:checkboxBloc,
+                                    checkboxId: 'putAwayTheNapkins',
+                                  enabled: enabled,);
                                 },
                               ),
                             ),
-                            CommentWorker(commentValue: commentPutAwayTheNapkins),
+                            CommentWorker(commentValue: commentPutAwayTheNapkins, onChanged: (value){
+                              commentPutAwayTheNapkins = value!;
+                            },
+                              readOnly: readOnly,
+                            ),
+                            const SizedBox(height: 20,),
+                            ShowCommentDirector(valueDirector: commentDirectorPutAwayTheNapkins,),
                           ],
                         ),
                       ),
                       Center(
-                        child: Container(
-                          // group167uy (231:53)
-                          width: double.infinity,
-                          height: 51,
                           child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(200, 100),
+                                  minimumSize: const Size(100, 50),
                                   textStyle: const TextStyle(fontSize: 20),
                                   backgroundColor: Colors.green,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  DateTime now = DateTime.now();
+                                  String date = '${now.year}-${now.month}-${now.day}';
+                                  String time = '${now.hour}:${now.minute}:${now.second}';
+
+                                  final state = checkboxBloc.state;
+
+                                  final chargerCandle = state.checkboxStates['chargerCandle'] ?? false;
+                                  final fixOttomansAndTables = state.checkboxStates['fixOttomansAndTables'] ?? false;
+                                  final cleanTables = state.checkboxStates['cleanTables'] ?? false;
+                                  final putAwayTheNapkins = state.checkboxStates['putAwayTheNapkins'] ?? false;
+
+                                  Api().waiterEnd(
+                                    date,
+                                    time,
+                                    chargerCandle,
+                                    commentChargerCandle,
+                                    commentDirectorChargerCandle,
+                                    fixOttomansAndTables,
+                                    commentFixOttomansAndTables,
+                                    commentDirectorFixOttomansAndTables,
+                                    cleanTables,
+                                    commentCleanTables,
+                                    commentDirectorCleanTables,
+                                    putAwayTheNapkins,
+                                    commentPutAwayTheNapkins,
+                                    commentDirectorPutAwayTheNapkins,
+                                    2,
+                                  );
+                                  Navigator.pop(context);
+                                },
                                 child: const Text(
                                   'Отправить отчет',
                                   textAlign: TextAlign.center,
@@ -216,7 +266,6 @@ class waiter_end extends StatelessWidget {
                                 ),
                               )
                           ),
-                        ),
                     ],
                   ),
                 ),

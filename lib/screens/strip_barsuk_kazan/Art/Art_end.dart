@@ -1,60 +1,45 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:test_form/api/api.dart';
 import 'package:test_form/component/Forms.dart';
-
+import 'package:test_form/screens/strip_barsuk_kazan/Art/Art.dart';
 import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
 import '../../../component/photo/bloc/photo_bloc.dart';
 import '../../../component/photo/photo.dart';
-import '../../../connection/database.dart';
 
 class Art_end extends StatelessWidget {
   Art_end({super.key});
 
+  bool readOnly = false;
+  bool enabled = true;
+
   CheckboxBloc checkboxBloc = CheckboxBloc();
   PhotoBloc photoBloc = PhotoBloc();
 
-  String commentReportCompletedArt = '';
-  String commentReportCompleteMarket = '';
-  String commentSendReportChat = '';
-  String commentOrderDressingRoom = '';
+  String? commentReportCompletedArt;
+  String? commentReportCompleteMarket;
+  String? commentSendReportChat;
+  String? commentOrderDressingRoom;
+
+  String? orderDressingRoomPhotoPath = null;
+  String? orderDressingRoomPhotoName = null;
 
   String? commentDirectorReportCompletedArt;
   String? commentDirectorReportCompleteMarket;
   String? commentDirectorSendReportChat;
   String? commentDirectorOrderDressingRoom;
 
-  var db = Mysql();
-
-  // TextFormField(
-  //   decoration:const  InputDecoration(
-  //     border: OutlineInputBorder(
-  //         borderRadius: BorderRadius.all(Radius.circular(10.0))),
-  //     hintText: "Артистка",
-  //     fillColor: Colors.white,
-  //   ),
-  //   minLines: 1,
-  //   maxLines: 3,
-  //   textInputAction: TextInputAction.next,
-  // ),
-  // BlocProvider<CheckboxBloc>(
-  //   create: (context) => CheckboxBloc(),
-  //   child: BlocBuilder<CheckboxBloc, CheckboxState>(
-  //     builder: (context, state) {
-  //       return NewCheck(
-  //           text: " ",
-  //           value: availabilityOfAnalyzes,
-  //           checkboxBloc: BlocProvider.of<CheckboxBloc>(context));
-  //     },
-  //   ),
-  // ),
-  // ]
-
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String date = '${now.year}-${now.month}-${now.day}';
+    final response = Api().showArtEnd(date);
+    if (response != null){
+      readOnly = true;
+      enabled = false;
+    }
+
     return Scaffold(
       body: Column(
         children: [
@@ -113,10 +98,10 @@ class Art_end extends StatelessWidget {
                               const SizedBox(
                                 height: 10,
                               ),
-                              const Text(
+                              Text(
                                 // 6oq (207:28)
-                                'сегодня',
-                                style: TextStyle(
+                                'сегодня $date',
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
                                   height: 1.3,
@@ -144,7 +129,7 @@ class Art_end extends StatelessWidget {
             // BD1 (231:55)
             // margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
             child: const Text(
-              'Смена:',
+              'Конец смены',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w400,
@@ -157,7 +142,7 @@ class Art_end extends StatelessWidget {
             child: SingleChildScrollView(
               child: Container(
                 // autogrouptfuqVzP (Qd88RFd5Sycz9vo7TbtFuq)
-                padding: const EdgeInsets.fromLTRB(0, 31.5, 0, 62),
+                padding: const EdgeInsets.fromLTRB(0, 31.5, 0, 0),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -169,7 +154,6 @@ class Art_end extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 20),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
@@ -181,6 +165,7 @@ class Art_end extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'reportCompletedArt',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -190,11 +175,12 @@ class Art_end extends StatelessWidget {
                             onChanged: (value) {
                               commentReportCompletedArt = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorReportCompletedArt,
                           ),
-                          SizedBox(height: 20,),
+                          const SizedBox(height: 20,),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
@@ -207,6 +193,7 @@ class Art_end extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'reportCompleteMarket',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -216,17 +203,15 @@ class Art_end extends StatelessWidget {
                             onChanged: (value) {
                               commentReportCompleteMarket = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorReportCompleteMarket,
                           ),
-                          Container(
-                            // autogroupssnkLeB (Qd7tBVgL7cMFvwHZ7FsSNK)
-                            // padding:const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                            width: double.infinity,
-                            child: Container(
+                          const SizedBox(height: 20,),
+                          const SizedBox(
                               // ANK (211:310)
-                              child: const Text(
+                              child: Text(
                                 'Скинуть все отчеты в чат:',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -236,7 +221,6 @@ class Art_end extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
@@ -246,6 +230,7 @@ class Art_end extends StatelessWidget {
                                   value: state.checkboxStates['art'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'art',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -262,6 +247,7 @@ class Art_end extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'bar',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -278,6 +264,7 @@ class Art_end extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'market',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -294,6 +281,7 @@ class Art_end extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'hostes',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -303,8 +291,9 @@ class Art_end extends StatelessWidget {
                             onChanged: (value) {
                               commentSendReportChat = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorSendReportChat,
                           ),
                           BlocProvider<CheckboxBloc>(
@@ -317,6 +306,7 @@ class Art_end extends StatelessWidget {
                                       false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'orderDressingRoom',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -333,26 +323,22 @@ class Art_end extends StatelessWidget {
                               },
                             ),
                           ),
+                          const SizedBox(height: 20,),
                           CommentWorker(
                             commentValue: commentOrderDressingRoom,
                             onChanged: (value) {
                               commentOrderDressingRoom = value!;
                             },
+                            readOnly: readOnly,
                           ),
-                          CommentDirector(
+                          ShowCommentDirector(
                             valueDirector: commentDirectorOrderDressingRoom,
                           ),
-
-
-
+                          const SizedBox(height: 20,),
                           Center(
-                            child: Container(
-                              // group167uy (231:53)
-                              width: double.infinity,
-                              height: 51,
-                              child: ElevatedButton(
+                            child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(200, 100),
+                                  minimumSize: const Size(100, 50),
                                   textStyle: const TextStyle(fontSize: 20),
                                   backgroundColor: Colors.green,
                                 ),
@@ -360,13 +346,14 @@ class Art_end extends StatelessWidget {
                                   final photostate = photoBloc.state;
                                   final orderDressingRoomPhoto = photostate
                                       .photoStates['orderDressingRoomPhoto'];
+                                  if(orderDressingRoomPhoto != null) {
+                                    orderDressingRoomPhotoPath = orderDressingRoomPhoto.path;
+                                  }
 
-                                  List<int> orderDressingRoomPhotoBLOB =
-                                    File(orderDressingRoomPhoto!.path).readAsBytesSync();
+                                  DateTime now = DateTime.now();
+                                  String date = '${now.year}-${now.month}-${now.day}';
+                                  String time = '${now.hour}:${now.minute}:${now.second}';
 
-                                  DateTime now = DateTime.now().toUtc();
-                                  DateTime date = DateTime(now.year, now.month, now.day).toUtc();
-                                  DateTime datenow = DateTime(now.year, now.month, now.day, now.hour, now.minute).toUtc();
                                   final state = checkboxBloc.state;
                                   final reportCompletedArt = state.checkboxStates['reportCompletedArt'] ?? false;
                                   final reportCompleteMarket = state.checkboxStates['reportCompleteMarket'] ?? false;
@@ -376,34 +363,9 @@ class Art_end extends StatelessWidget {
                                   final hostes = state.checkboxStates['hostes'] ?? false;
                                   final orderDressingRoom = state.checkboxStates['orderDressingRoom'] ?? false;
 
-                                  db.getConnection().then((conn) {
-                                    conn.query(
-                                        'INSERT INTO ArtManagerEnd_StripBarsukKazan (Date,DateTime,ReportCompletedArt,Comment_ReportCompletedArt,CommentDirector_ReportCompletedArt,ReportCompleteMarket,Comment_ReportCompleteMarket,CommentDirector_ReportCompleteMarket,'
-                                            'Art,Bar,Market,Hostes,Comment_SendReportChat,CommentDirector_SendReportChat,OrderDressingRoom,OrderDressingRoomPhotoBLOB,Comment_OrderDressingRoom,CommentDirector_OrderDressingRoom,Users_idUsers) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-                                        [
-                                          date,
-                                          datenow,
-                                          reportCompletedArt,
-                                          commentReportCompletedArt,
-                                          commentDirectorReportCompletedArt,
-                                          reportCompleteMarket,
-                                          commentReportCompleteMarket,
-                                          commentDirectorReportCompleteMarket,
-                                          art,
-                                          bar,
-                                          market,
-                                          hostes,
-                                          commentSendReportChat,
-                                          commentDirectorSendReportChat,
-                                          orderDressingRoom,
-                                          orderDressingRoomPhotoBLOB,
-                                          commentOrderDressingRoom,
-                                          commentDirectorOrderDressingRoom,
-                                          '2'
-                                        ]).then((results) {
-                                      print('${results}');
-                                    });
-                                  });
+                                  Api().artEnd(date, time, reportCompletedArt, commentReportCompletedArt, commentDirectorReportCompletedArt, reportCompleteMarket, commentReportCompleteMarket, commentDirectorReportCompleteMarket, art, bar, market, hostes, commentSendReportChat, commentDirectorSendReportChat, orderDressingRoom, orderDressingRoomPhotoPath, commentOrderDressingRoom, commentDirectorOrderDressingRoom, 3);
+
+                                  Navigator.pop(context);
                                 },
                                 child: const Text(
                                   'Отправить отчет',
@@ -416,7 +378,6 @@ class Art_end extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
                         ],
                       ),
                     ),

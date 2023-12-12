@@ -1,21 +1,25 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_form/api/api.dart';
 import 'package:test_form/component/Forms.dart';
 import 'package:test_form/component/photo/photo.dart';
+import 'package:test_form/screens/strip_barsuk_kazan/Host/host.dart';
 
 import '../../../component/photo/bloc/photo_bloc.dart';
 import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
-import '../../../connection/database.dart';
 
 class host_end extends StatelessWidget {
   host_end({Key? key});
 
+  bool readOnly = false;
+  bool enabled = true;
 
   CheckboxBloc checkboxBloc = CheckboxBloc();
   PhotoBloc photoBloc = PhotoBloc();
+
+  String? cleanlinessWorkplaceHostPath = null;
+  String? cleanlinessWorkplaceHostName = null;
 
   String commentChargeRadioTerminalTelephone = '';
   String commentCleanlinessWorkplaceHost = '';
@@ -23,12 +27,17 @@ class host_end extends StatelessWidget {
   String? commentDirectorChargeRadioTerminalTelephone;
   String? commentDirectorCleanlinessWorkplaceHost;
 
-  var db = Mysql();
-
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String date = '${now.year}-${now.month}-${now.day}';
+    final response = Api().showHostEnd(date);
+    if (response != null){
+      readOnly = true;
+      enabled = false;
+    }
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         // frame5Sco (207:23)
         width: 400,
         height: double.infinity,
@@ -55,12 +64,10 @@ class host_end extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // group5Pm1 (207:166)
                         margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
                         width: 173,
                         height: double.infinity,
                         child: Container(
-                          // autogroupc5usX6X (Qd8Af2EBZv8YZ9YRmLC5Us)
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
                           width: double.infinity,
                           height: 63.17,
@@ -68,7 +75,6 @@ class host_end extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                // qd1 (207:27)
                                 margin:
                                     const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
                                 child: const Text(
@@ -81,10 +87,9 @@ class host_end extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const Text(
-                                // 6oq (207:28)
-                                'сегодня',
-                                style: TextStyle(
+                              Text(
+                                'сегодня $date',
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
                                   height: 1.3,
@@ -95,7 +100,7 @@ class host_end extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 100,
                         height: 150,
                         child: Align(
@@ -112,7 +117,7 @@ class host_end extends StatelessWidget {
             // BD1 (231:55)
             margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
             child: const Text(
-              'Смена:',
+              'Конец смены',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w400,
@@ -147,6 +152,7 @@ class host_end extends StatelessWidget {
                                   value: state.checkboxStates['chargeRadioTerminalTelephone'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'chargeRadioTerminalTelephone',
+                                  enabled: enabled,
                                 );
                               },
                             ),
@@ -159,11 +165,13 @@ class host_end extends StatelessWidget {
                                   commentChargeRadioTerminalTelephone,
                             onChanged: (value) {
                                 commentChargeRadioTerminalTelephone = value!;
-                                },),
+                                },
+                            readOnly: readOnly,
+                          ),
                           const SizedBox(
                             height: 20,
                           ),
-                          CommentDirector(valueDirector: commentDirectorChargeRadioTerminalTelephone,),
+                          ShowCommentDirector(valueDirector: commentDirectorChargeRadioTerminalTelephone,),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             // BlocBuilder(builder: builder)
@@ -174,16 +182,13 @@ class host_end extends StatelessWidget {
                                   value: state.checkboxStates['cleanlinessWorkplaceHost'] ?? false,
                                   checkboxBloc:checkboxBloc,
                                   checkboxId: 'cleanlinessWorkplaceHost',
+                                  enabled: enabled,
                                 );
                               },
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
                           BlocProvider<PhotoBloc>(
                             create: (context) => photoBloc,
-                            // BlocBuilder(builder: builder)
                             child: BlocBuilder<PhotoBloc, PhotoState>(
                               builder: (context, state) {
                                 return NewPhoto(
@@ -199,63 +204,40 @@ class host_end extends StatelessWidget {
                           CommentWorker(
                               commentValue: commentCleanlinessWorkplaceHost,onChanged: (value) {
                                 commentCleanlinessWorkplaceHost = value!;
-                                },),
+                                },
+                            readOnly: readOnly,
+                          ),
                           const SizedBox(
-                            height: 20,
+                            height: 0,
                           ),
-                          CommentDirector(
-                            valueDirector:
-                                commentDirectorCleanlinessWorkplaceHost,
-                          ),
+                          ShowCommentDirector(valueDirector: commentDirectorCleanlinessWorkplaceHost,),
                         ],
                       ),
                     ),
                     Center(
-                      child: Container(
-                        // group167uy (231:53)
-                        width: double.infinity,
-                        height: 51,
-                        child: ElevatedButton(
+                      child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(200, 100),
+                            minimumSize: const Size(100, 50),
                             textStyle: const TextStyle(fontSize: 20),
                             backgroundColor: Colors.green,
                           ),
-                          onPressed: () {
+                          onPressed: () async{
                             final photostate = photoBloc.state;
-                            final cleanlinessWorkplaceHostPhoto = photostate
-                                .photoStates['cleanlinessWorkplaceHostPhoto'];
+                            final cleanlinessWorkplaceHostPhoto = photostate.photoStates['cleanlinessWorkplaceHostPhoto'];
+                            if(cleanlinessWorkplaceHostPhoto != null) {
+                              cleanlinessWorkplaceHostPath = cleanlinessWorkplaceHostPhoto.path;
+                            }
+                            DateTime now = DateTime.now();
+                            String date = '${now.year}-${now.month}-${now.day}';
+                            String time = '${now.hour}:${now.minute}:${now.second}';
 
-                              List<int> cleanlinessWorkplaceHostPhotoBLOB =
-                                  File(cleanlinessWorkplaceHostPhoto!.path).readAsBytesSync();
+                            final state = checkboxBloc.state;
+                            final chargeRadioTerminalTelephone = state.checkboxStates['chargeRadioTerminalTelephone'] ?? false;
+                            final cleanlinessWorkplaceHost = state.checkboxStates['cleanlinessWorkplaceHost'] ?? false;
 
-                              DateTime now = DateTime.now().toUtc();
-                              DateTime date = DateTime(now.year, now.month, now.day).toUtc();
-                              DateTime datenow = DateTime(now.year, now.month, now.day, now.hour, now.minute).toUtc();
-                              final state = checkboxBloc.state;
-                              final chargeRadioTerminalTelephone = state.checkboxStates['chargeRadioTerminalTelephone'] ?? false;
-                              final cleanlinessWorkplaceHost = state.checkboxStates['cleanlinessWorkplaceHost'] ?? false;
-                              db.getConnection().then((conn) {
-                                conn.query(
-                                    'INSERT INTO HostEnd_StripBarsukKazan (Date,DateTime,ChargerRadioTerminalTelephone,Comment_ChargerRadioTerminalTelephone,CommentDirector_ChargerRadioTerminalTelephone,'
-                                        'CleanWorkplace,WorkplacePhoto,Comment_Workplace,CommentDirector_Workplace,Users_idUsers) VALUES (?, ?, ?, ?, ?, ?,?,?,?,?)',
-                                    [
-                                      date,
-                                      datenow,
-                                      chargeRadioTerminalTelephone,
-                                      commentChargeRadioTerminalTelephone,
-                                      commentDirectorChargeRadioTerminalTelephone,
-                                      cleanlinessWorkplaceHost,
-                                      cleanlinessWorkplaceHostPhotoBLOB,
-                                      commentCleanlinessWorkplaceHost,
-                                      commentDirectorCleanlinessWorkplaceHost,
-                                      '1'
-                                    ]).then((results) {
-                                  print('${results}');
-                                });
-                                print(commentChargeRadioTerminalTelephone);
-                                print(commentCleanlinessWorkplaceHost);
-                              });
+                            Api().hostEnd(date,time,chargeRadioTerminalTelephone,commentChargeRadioTerminalTelephone,commentDirectorChargeRadioTerminalTelephone,cleanlinessWorkplaceHost,cleanlinessWorkplaceHostPath,commentCleanlinessWorkplaceHost,commentDirectorCleanlinessWorkplaceHost,1);
+
+                            Navigator.pop(context);
                           },
                           child: const Text(
                             'Отправить отчет',
@@ -268,7 +250,6 @@ class host_end extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),

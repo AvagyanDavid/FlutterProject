@@ -46,6 +46,7 @@ class NewPhoto extends StatelessWidget {
               onPressed: () async {
                 final pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
                   photoBloc.add(PhotoEvent(photoId, pickedImage));
+
               },
               child: const Column(
                 children: [
@@ -70,6 +71,31 @@ class NewPhoto extends StatelessWidget {
         }
       },
     );
+  }
+}
+
+
+class ShowPhoto extends StatelessWidget {
+  const ShowPhoto({
+    required this.image,
+  });
+
+  final String? image;
+
+  @override
+  Widget build(BuildContext context) {
+    if (image != null) {
+      return Center(
+        child: Image(
+          image: NetworkImage(image!),
+          width: 200,
+          height: 200,
+          fit: BoxFit.cover,
+        ),
+      );
+    } else {
+      return const Text('Фотография не прикреплена');
+        }
   }
 }
 

@@ -4,8 +4,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 class CommentWorker extends StatelessWidget {
   late String? commentValue;
   final Function(String?)? onChanged;
+  final bool readOnly;
 
-  CommentWorker({super.key, this.commentValue = '', this.onChanged});
+  CommentWorker({super.key, this.commentValue = '', this.onChanged, required this.readOnly});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class CommentWorker extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 initialValue: commentValue,
                 onChanged: onChanged,
+                readOnly: readOnly,
               ),
             ]),
           ),
@@ -40,11 +42,12 @@ class CommentWorker extends StatelessWidget {
   }
 }
 
-class Control extends StatelessWidget {
+class ShowCommentWorker extends StatelessWidget {
   late String? commentValue;
-  final Function(String?)? onChanged;
+  final TextEditingController textController;
 
-  Control({super.key, this.commentValue = '', this.onChanged});
+  ShowCommentWorker({required String? commentValue})
+      : textController = TextEditingController(text: commentValue);
 
   @override
   Widget build(BuildContext context) {
@@ -64,12 +67,10 @@ class Control extends StatelessWidget {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  hintText: "Напиши комментарий",
                   fillColor: Colors.white,
                 ),
-                textInputAction: TextInputAction.next,
-                initialValue: commentValue,
-                onChanged: onChanged,
+                controller: textController,
+                readOnly: true,
               ),
             ]),
           ),
@@ -82,8 +83,66 @@ class Control extends StatelessWidget {
 class CommentDirector extends StatelessWidget {
   String? valueDirector;
   final Function(String?)? onChanged;
+  final bool readOnly;
 
-  CommentDirector({Key? key, this.valueDirector,this.onChanged}) : super(key: key);
+
+  CommentDirector(
+      {Key? key, this.valueDirector, this.onChanged, required this.readOnly});
+
+  @override
+  Widget build(BuildContext context) {
+    if (valueDirector != null) {
+      return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Column(
+              children: [
+                FormBuilderTextField(
+                  name: 'CommentWorker',
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    hintText: "Комментарий управляющего",
+                    fillColor: Colors.white,
+                  ),
+                  textInputAction: TextInputAction.next,
+                  initialValue: valueDirector,
+                  onChanged: onChanged,
+                  readOnly: true,
+                )
+              ]
+          )
+      );
+    } else {
+      return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Column(
+              children: [
+                FormBuilderTextField(
+                  name: 'CommentWorker',
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    hintText: "Комментарий управляющего",
+                    fillColor: Colors.white,
+                  ),
+                  textInputAction: TextInputAction.next,
+                  initialValue: valueDirector,
+                  onChanged: onChanged,
+                  readOnly: false,
+                )
+              ]
+          )
+      );
+    }
+  }
+}
+class ShowCommentDirector extends StatelessWidget {
+  String? valueDirector;
+  final TextEditingController textController;
+
+  ShowCommentDirector({Key? key, this.valueDirector}) : textController = TextEditingController(text: valueDirector);
 
   @override
   Widget build(BuildContext context) {
@@ -105,43 +164,12 @@ class CommentDirector extends StatelessWidget {
               ),
               textInputAction: TextInputAction.next,
               initialValue: valueDirector,
-              onChanged: onChanged,
             ),
           ],
         ),
       );
     } else {
-      return SizedBox(height: 0);
+      return const SizedBox(height: 0);
     }
-  }
-}
-
-class NewList extends StatelessWidget {
-  late String? newListValue;
-  final Function(String?)? onChanged;
-
-  NewList({super.key, this.newListValue = '', this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Column(children: [
-        TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0))),
-            hintText: "Комментарий управляющего",
-            fillColor: Colors.white,
-          ),
-          minLines: 1,
-          maxLines: 50,
-          textInputAction: TextInputAction.next,
-          initialValue: newListValue,
-          onChanged: onChanged,
-        ),
-      ],
-      ),
-    );
   }
 }
