@@ -23,16 +23,19 @@ class barman_end extends StatelessWidget {
   PhotoBloc photoBloc = PhotoBloc();
 
   String? cleanlinessWorkplacePath = null;
+  String? wipeDustShelvingEndPath = null;
 
   String commentCleanlinessWorkplace = '';
   String commentCloseShift = '';
   String commentFillOutReport = '';
   String commentApplication = '';
+  String commentWipeDustShelvingEnd = '';
 
   String? commentDirectorApplication;
   String? commentDirectorFillOutReport;
   String? commentDirectorCloseShift;
   String? commentDirectorCleanlinessWorkplace;
+  String? commentDirectorWipeDustShelvingEnd;
 
   barman_end({super.key});
 
@@ -274,12 +277,41 @@ class barman_end extends StatelessWidget {
                       onChanged:(value){
                         commentCleanlinessWorkplace= value!;
                       },
-                      readOnly: readOnly,
+                      readOnly: false,
                       ),
                     ShowCommentDirector(valueDirector: commentDirectorCleanlinessWorkplace,),
                     const SizedBox(
                       height: 20,
                     ),
+                    BlocProvider<PhotoBloc>(
+                      create: (context) => photoBloc,
+                      child: BlocBuilder<PhotoBloc, PhotoState>(
+                        builder: (context, state) {
+                          return NewPhoto(
+                            photoBloc: photoBloc,
+                            photoId: 'wipeDustShelvingEnd',);
+                        },
+                      ),
+                    ),
+                    // CommentDirector(readOnly: false)
+
+                    /// НЕДОДЕЛЛАННО ВЕЗДЕ НАДО СДЕЛАТЬ КОММЕНТАРИИ ДИРЕКТОРА!!!!!
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+                    ///
+
                     Center(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -295,6 +327,11 @@ class barman_end extends StatelessWidget {
                             cleanlinessWorkplacePath = cleanlinessWorkplacePhoto.path;
                           }
 
+                          final wipeDustShelvingEndPhoto = photostate.photoStates['wipeDustShelvingPhoto'];
+                          // if(wipeDustShelvingPhoto != null) {
+                          //   wipeDustShelvingEndPath = wipeDustShelvingEndPhoto.path;
+                          // }
+
                           DateTime now = DateTime.now().toUtc();
                           String date = '${now.year}-${now.month}-${now.day}';
                           String time = '${now.hour}:${now.minute}:${now.second}';
@@ -306,8 +343,16 @@ class barman_end extends StatelessWidget {
                           final fillOutReport = state.checkboxStates['fillOutReport'] ?? false;
                           final closeShift = state.checkboxStates['closeShift'] ?? false;
                           final cleanlinessWorkplace = state.checkboxStates['cleanlinessWorkplace'] ?? false;
+                          final wipeDustShelvingEnd = state.checkboxStates['wipeDustShelvingEnd'] ?? false;
 
-                          Api().barmanEnd(date, time, alcogol, nonAlcogol, tobacco, commentApplication, commentDirectorApplication, fillOutReport, commentFillOutReport, commentDirectorFillOutReport, closeShift, commentCloseShift, commentDirectorCloseShift, cleanlinessWorkplace, cleanlinessWorkplacePath, commentCleanlinessWorkplace, commentDirectorCleanlinessWorkplace, 4);
+                          // Api().barmanEnd(
+                          //     date,
+                          //     time,
+                          //     alcogol, nonAlcogol, tobacco, commentApplication, commentDirectorApplication,
+                          //     fillOutReport, commentFillOutReport, commentDirectorFillOutReport,
+                          //     closeShift, commentCloseShift, commentDirectorCloseShift,
+                          //     cleanlinessWorkplace, cleanlinessWorkplacePath, commentCleanlinessWorkplace, commentDirectorCleanlinessWorkplace,
+                          //     wipeDustShelvingEnd, wipeDustShelvingEndFile, 4);
 
                           Navigator.pop(context);
                         },

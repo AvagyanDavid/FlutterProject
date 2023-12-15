@@ -6,7 +6,8 @@ import '../../../../component/checkbox/checkbox.dart';
 
 class ShowArtEnd extends StatefulWidget {
   final String formatterdate;
-  ShowArtEnd({required this.formatterdate});
+  final String post;
+  ShowArtEnd({required this.formatterdate, required this.post});
   @override
   _ShowArtEndState createState() => _ShowArtEndState();
 }
@@ -16,7 +17,6 @@ class _ShowArtEndState extends State<ShowArtEnd> {
   TextEditingController commentWorkerSendMessageController = TextEditingController();
 
   bool readOnly = false;
-  bool enabled = true;
 
   bool reportCompletedArt = false;
   String? commentReportCompleteArt;
@@ -65,6 +65,9 @@ class _ShowArtEndState extends State<ShowArtEnd> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.post == 'Owner'){
+      readOnly = true;
+    }
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -244,6 +247,13 @@ class _ShowArtEndState extends State<ShowArtEnd> {
                             },
                               readOnly: readOnly,
                             ),
+                            if (widget.post == 'Manager')
+                              ElevatedButton(
+                                onPressed: () {
+                                  /// запрос с апдейтом
+                                },
+                                child: const Text('Отправить комментарии'),
+                              ),
                           ],
                         ),
                       ),

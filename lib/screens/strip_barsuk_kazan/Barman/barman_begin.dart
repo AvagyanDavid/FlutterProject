@@ -19,13 +19,15 @@ class barman_begin extends StatelessWidget {
   String? checkAndTakeAlcogolPath = null;
   String? cleaningPath = null;
   String? rubTheDishesPath = null;
+  String? wipeDustShelvingPath = null;
 
-  String commentOpenCheckout = '';
-  String commentCheckAndTakeAlcogol = '';
-  String commentExtractorHumidifier = '';
-  String commentWriteStopList = '';
-  String commentRubTheDishes = '';
-  String commentCleaning = '';
+  String? commentOpenCheckout;
+  String? commentCheckAndTakeAlcogol;
+  String? commentExtractorHumidifier;
+  String? commentWriteStopList;
+  String? commentRubTheDishes;
+  String? commentCleaning;
+  String? commentWipeDustShelvingBegin;
 
   String? commentDirectorOpenCheckout;
   String? commentDirectorCheckAndTakeAlcogol;
@@ -33,6 +35,7 @@ class barman_begin extends StatelessWidget {
   String? commentDirectorWriteStopList;
   String? commentDirectorRubTheDishes;
   String? commentDirectorCleaning;
+  String? commentDirectorWipeDustShelvingBegin;
 
   barman_begin({super.key});
 
@@ -298,6 +301,38 @@ class barman_begin extends StatelessWidget {
                       ShowCommentDirector(
                         valueDirector: commentDirectorRubTheDishes,
                       ),
+                      BlocProvider<CheckboxBloc>(
+                        create: (context) => CheckboxBloc(),
+                        child: BlocBuilder<CheckboxBloc, CheckboxState>(
+                          builder: (context, state) {
+                            return NewCheck(
+                              text: "Протереть пыль со стеллажа",
+                              value: state.checkboxStates['wipeDustShelvingBegin'] ??
+                                  false,
+                              checkboxBloc: checkboxBloc,
+                              checkboxId: 'cleaning',
+                              enabled: enabled,
+                            );
+                          },
+                        ),
+                      ),
+                      BlocProvider<PhotoBloc>(
+                        create: (context) => PhotoBloc(),
+                        child: BlocBuilder<PhotoBloc, PhotoState>(
+                          builder: (context, state) {
+                            return NewPhoto(
+                              photoId: 'wipeDustShelvingBeginPhoto',
+                              photoBloc: photoBloc,
+                            );
+                          },
+                        ),
+                      ),
+                      CommentWorker( commentValue: commentWipeDustShelvingBegin, onChanged: (value){
+                        commentWipeDustShelvingBegin = value!;
+                      },readOnly: readOnly),
+                      CommentDirector(valueDirector: commentDirectorWipeDustShelvingBegin,onChanged: (value){
+                        commentDirectorWipeDustShelvingBegin = value!;
+                      }, readOnly: false),
                       if (now.weekday == DateTime.sunday)
                         Column(
                           children: [
@@ -339,6 +374,7 @@ class barman_begin extends StatelessWidget {
                             ),
                             ShowCommentDirector(
                                 valueDirector: commentDirectorCleaning),
+
                           ],
                         )
                       else
@@ -367,11 +403,17 @@ class barman_begin extends StatelessWidget {
                             if (rubTheDishesPhoto != null) {
                               rubTheDishesPath = rubTheDishesPhoto.path;
                             }
+
                             final cleaningPhoto =
                                 photostate.photoStates['cleaningPhoto'];
                             if (cleaningPhoto != null) {
                               cleaningPath = cleaningPhoto.path;
                             }
+                            final wipeDustShelvingBeginPhoto = photostate.photoStates['wipeDustShelvingBeginPhoto'];
+                            if(wipeDustShelvingBeginPhoto != null){
+                              wipeDustShelvingPath = wipeDustShelvingBeginPhoto.path;
+                            }
+
                             DateTime now = DateTime.now();
                             String date = '${now.year}-${now.month}-${now.day}';
                             String time =
@@ -384,6 +426,7 @@ class barman_begin extends StatelessWidget {
                             final writeStopList = state.checkboxStates['writeStopList'] ?? false;
                             final rubTheDishes = state.checkboxStates['rubTheDishes'] ?? false;
                             final cleaning = state.checkboxStates['cleaning'] ?? false;
+                            final wipeDustShelvingBegin = state.checkboxStates['wipeDustShelvingBegin'] ?? false;
 
                             Api().barmanBegin(
                                 date,
@@ -405,47 +448,15 @@ class barman_begin extends StatelessWidget {
                                 rubTheDishesPath,
                                 commentRubTheDishes,
                                 commentDirectorRubTheDishes,
+                                wipeDustShelvingBegin,
+                                wipeDustShelvingPath,
+                                commentWipeDustShelvingBegin,
+                                commentDirectorWipeDustShelvingBegin,
                                 cleaning,
                                 cleaningPath,
                                 commentCleaning,
                                 commentDirectorCleaning,
                                 4);
-
-                            // db.getConnection().then((conn) {
-                            //   conn.query(
-                            //       'INSERT INTO BarmanBegin_StripBarsukKazan (Date,DateTime,OpenCheckout,Comment_OpenCheckout,CommentDirector_OpenCheckout,CheckAndTakeAlcogol,CheckAndTakeAlcogolPhotoBLOB,'
-                            //           'Comment_CheckAndTakeAlcogol,CommentDirector_CheckAndTakeAlcogol,ExtractorHumidifier,Comment_ExtractorHumidifier,CommentDirector_ExtractorHumidifier,WriteStopList,'
-                            //           'Comment_WriteStopList, CommentDirector_WriteStopList,  RubTheDishes,RubTheDishesPhotoBLOB,Comment_RubTheDishes,CommentDirector_RubTheDishes,Cleaning,CleaningPhotoBLOB,Comment_Cleaning,CommentDirector_Cleaning, Users_idUsers) '
-                            //           'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-                            //       [
-                            //         date,
-                            //         datenow,
-                            //         openCheckout,
-                            //         commentOpenCheckout,
-                            //         commentDirectorOpenCheckout,
-                            //         checkAndTakeAlcogol,
-                            //         checkAndTakeAlcogolPhotoBLOB,
-                            //         commentCheckAndTakeAlcogol,
-                            //         commentDirectorCheckAndTakeAlcogol,
-                            //         extractorHumidifier,
-                            //         commentExtractorHumidifier,
-                            //         commentDirectorExtractorHumidifier,
-                            //         writeStopList,
-                            //         commentWriteStopList,
-                            //         commentDirectorWriteStopList,
-                            //         rubTheDishes,
-                            //         rubTheDishesPhotoBLOB,
-                            //         commentRubTheDishes,
-                            //         commentDirectorRubTheDishes,
-                            //         cleaning,
-                            //         cleaningPhotoBLOB,
-                            //         commentCleaning,
-                            //         commentDirectorCleaning,
-                            //         idUser,
-                            //       ]).then((results) {
-                            //     print('${results}');
-                            //   });
-                            // });
                             Navigator.pop(context);
                           },
                           child: const Text(

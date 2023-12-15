@@ -19,7 +19,7 @@ class Manager extends StatefulWidget {
   final String login;
   final String post;
 
-  Manager({super.key,required this.id, required this.login, required this.post});
+  Manager({super.key, required this.id, required this.login, required this.post});
 
   @override
   _ManagerState createState() => _ManagerState();
@@ -36,6 +36,8 @@ class _ManagerState extends State<Manager> {
   String LoginHostBegin = '';
   String LoginHostEnd = '';
 
+  DateTime now = DateTime.now();
+
   DateFormat formatter = DateFormat('yyyy-MM-dd');
   String formattedDate = '';
   String formatteddate = '';
@@ -51,8 +53,8 @@ class _ManagerState extends State<Manager> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
     String date = '${now.year}-${now.month}-${now.day}';
+    print(widget.post);
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -142,28 +144,41 @@ class _ManagerState extends State<Manager> {
                               },
                               rowHeight: 50,
                               daysOfWeekHeight: 10,
+                              headerStyle:
+                                  const HeaderStyle(formatButtonVisible: false),
                               onDaySelected: (selectedDay, focusedDay) async {
-
-                                formattedDate = formatter.format(selectedDay.toLocal());
+                                formattedDate =
+                                    formatter.format(selectedDay.toLocal());
 
                                 debugPrint(formattedDate.toString());
-                                responseHostBegin = await Api().checkReportHostBegin(formattedDate);
-                                responseHostEnd = await Api().checkReportHostEnd(formattedDate);
-                                responseWaiterBegin = await Api().checkReportWaiterBegin(formattedDate);
-                                responseWaiterEnd = await Api().checkReportWaiterEnd(formattedDate);
-                                responseBarmanBegin = await Api().checkReportBarmanBegin(formattedDate);
-                                responseBarmanEnd = await Api().checkReportBarmanEnd(formattedDate);
-                                responseArtBegin = await Api().checkReportArtBegin(formattedDate);
-                                responseArtEnd = await Api().checkReportArtEnd(formattedDate);
+                                responseHostBegin = await Api()
+                                    .checkReportHostBegin(formattedDate);
+                                responseHostEnd = await Api()
+                                    .checkReportHostEnd(formattedDate);
+                                responseWaiterBegin = await Api()
+                                    .checkReportWaiterBegin(formattedDate);
+                                responseWaiterEnd = await Api()
+                                    .checkReportWaiterEnd(formattedDate);
+                                responseBarmanBegin = await Api()
+                                    .checkReportBarmanBegin(formattedDate);
+                                responseBarmanEnd = await Api()
+                                    .checkReportBarmanEnd(formattedDate);
+                                responseArtBegin = await Api()
+                                    .checkReportArtBegin(formattedDate);
+                                responseArtEnd = await Api()
+                                    .checkReportArtEnd(formattedDate);
 
-                                debugPrint('response HostEnd = ${responseHostEnd.toString()}');
+                                debugPrint(
+                                    'response HostEnd = ${responseHostEnd.toString()}');
                                 debugPrint(responseHostBegin.toString());
                                 setState(() {
                                   now = selectedDay;
                                 });
                               }),
                           Text(
-                            responseArtBegin != null ? responseArtBegin.toString() : 'логин Арта',
+                            responseArtBegin != null
+                                ? responseArtBegin.toString()
+                                : 'логин Арта',
                             textAlign: TextAlign.right,
                             style: const TextStyle(
                               fontSize: 30,
@@ -187,8 +202,10 @@ class _ManagerState extends State<Manager> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowArtBegin(formatterdate: formattedDate,)
-                                        ),
+                                            builder: (context) => ShowArtBegin(
+                                                  formatterdate: formattedDate,
+                                                  post: widget.post,
+                                                )),
                                       );
                                     } else {
                                       return;
@@ -207,8 +224,10 @@ class _ManagerState extends State<Manager> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowArtEnd(formatterdate: formattedDate,)
-                                        ),
+                                            builder: (context) => ShowArtEnd(
+                                                  formatterdate: formattedDate,
+                                                  post: widget.post,
+                                                )),
                                       );
                                     } else {
                                       return;
@@ -218,7 +237,9 @@ class _ManagerState extends State<Manager> {
                             ],
                           ),
                           Text(
-                            responseBarmanBegin != null ? responseBarmanBegin.toString() : 'логин Бармена',
+                            responseBarmanBegin != null
+                                ? responseBarmanBegin.toString()
+                                : 'логин Бармена',
                             textAlign: TextAlign.right,
                             style: const TextStyle(
                               fontSize: 30,
@@ -242,8 +263,10 @@ class _ManagerState extends State<Manager> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ShowBarmanBegin(formatterdate: formattedDate,)
-                                      ),
+                                          builder: (context) => ShowBarmanBegin(
+                                                formatterdate: formattedDate,
+                                            post: widget.post,
+                                              )),
                                     );
                                   } else {
                                     return;
@@ -263,8 +286,10 @@ class _ManagerState extends State<Manager> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowBarmanEnd(formatterdate: formattedDate,)
-                                        ),
+                                            builder: (context) => ShowBarmanEnd(
+                                                  formatterdate: formattedDate,
+                                              post: widget.post,
+                                                )),
                                       );
                                     } else {
                                       return;
@@ -274,7 +299,9 @@ class _ManagerState extends State<Manager> {
                             ],
                           ),
                           Text(
-                            responseWaiterBegin != null ? responseWaiterBegin.toString() : 'логин Официанта',
+                            responseWaiterBegin != null
+                                ? responseWaiterBegin.toString()
+                                : 'логин Официанта',
                             textAlign: TextAlign.right,
                             style: const TextStyle(
                               fontSize: 30,
@@ -289,17 +316,21 @@ class _ManagerState extends State<Manager> {
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
-                                    backgroundColor: (responseWaiterBegin != null)
-                                        ? Colors.green[900]
-                                        : Colors.red[900],
+                                    backgroundColor:
+                                        (responseWaiterBegin != null)
+                                            ? Colors.green[900]
+                                            : Colors.red[900],
                                   ),
                                   onPressed: () {
                                     if (responseWaiterBegin != null) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowWaiterBegin(formatterdate: formattedDate,)
-                                        ),
+                                            builder: (context) =>
+                                                ShowWaiterBegin(
+                                                  formatterdate: formattedDate,
+                                                  post:widget.post,
+                                                )),
                                       );
                                     } else {
                                       return;
@@ -318,8 +349,10 @@ class _ManagerState extends State<Manager> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowWaiterEnd(formatterdate: formattedDate,)
-                                        ),
+                                            builder: (context) => ShowWaiterEnd(
+                                                  formatterdate: formattedDate,
+                                                  post: widget.post,
+                                                )),
                                       );
                                     } else {
                                       return;
@@ -329,7 +362,9 @@ class _ManagerState extends State<Manager> {
                             ],
                           ),
                           Text(
-                            responseHostBegin != null ? responseHostBegin! : 'логин Хоста',
+                            responseHostBegin != null
+                                ? responseHostBegin!
+                                : 'логин Хоста',
                             textAlign: TextAlign.right,
                             style: const TextStyle(
                               fontSize: 30,
@@ -353,8 +388,11 @@ class _ManagerState extends State<Manager> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowHostBegin(formatterdate: formattedDate,)
-                                        ),
+                                            builder: (context) => ShowHostBegin(
+                                                  formatterdate: formattedDate,
+                                                  id: idUser,
+                                                  post: widget.post,
+                                                )),
                                       );
                                     } else {
                                       return;
@@ -364,15 +402,20 @@ class _ManagerState extends State<Manager> {
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
-                                    backgroundColor: (responseHostEnd != null) ? Colors.green[900] : Colors.red[900],
+                                    backgroundColor: (responseHostEnd != null)
+                                        ? Colors.green[900]
+                                        : Colors.red[900],
                                   ),
                                   onPressed: () {
                                     if (responseHostEnd != null) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowHostEnd(formatterdate: formattedDate,)
-                                        ),
+                                            builder: (context) => ShowHostEnd(
+                                                  formatterdate: formattedDate,
+                                                  id: idUser,
+                                                  post: widget.post,
+                                                )),
                                       );
                                     } else {
                                       return;
@@ -411,8 +454,7 @@ class _ManagerState extends State<Manager> {
                                 height: 1.3,
                                 color: Colors.white,
                               ),
-                            )
-                        ),
+                            )),
                       ),
                     ),
                   ],

@@ -63,7 +63,8 @@ class CheckboxBloc extends Bloc<CheckboxEvent, CheckboxState> {
     'hostes': false,
     'orderDressingRoom': false,
     'Post':false,
-
+    'wipeDustShelvingBegin' : false,
+    'wipeDustShelvingEnd' : false
   })) {
     on<CheckboxEvent>((event, emit) {
       final updatedCheckboxStates = Map<String, bool>.from(state.checkboxStates);

@@ -92,6 +92,36 @@ class Api {
     return response.data;
   }
 
+  Future<Map<String, dynamic>> updateHostBegin(
+      String? commentDirectorTakeRadioTerminalTelephone,
+      String? commentDirectorSendMessage,
+      int idUser) async {
+    Map<String, dynamic> data = {
+      'commentDirectorTakeRadioTerminalTelephone': commentDirectorTakeRadioTerminalTelephone,
+      'commentDirectorSendMessage': commentDirectorSendMessage,
+      'idUsers': idUser,
+    };
+    debugPrint(data.toString());
+    final response = await Dio().post('$baseUrl/UpdateHostBegin', data: data);
+    return response.data;
+  }
+
+
+  Future<Map<String, dynamic>> updateHostEnd(
+      String? commentDirectorChargeRadioTerminalTelephone,
+      String? commentDirectorCleanlinessWorkplaceHost,
+      int idUser) async {
+    Map<String, dynamic> data = {
+      'commentDirectorChargeRadioTerminalTelephone': commentDirectorChargeRadioTerminalTelephone,
+      'commentDirectorCleanlinessWorkplaceHost': commentDirectorCleanlinessWorkplaceHost,
+      'idUsers': idUser,
+    };
+    debugPrint(data.toString());
+
+    final response = await Dio().post('$baseUrl/UpdateHostEnd', data: data);
+    return response.data;
+  }
+
   /// Все запросы к Waiter
   Future<Map<String, dynamic>> waiterBegin(
       String date,
@@ -377,7 +407,7 @@ class Api {
     return response.data;
   }
 
-  Future<Map<String, dynamic>> artEnd(
+  Future<Map<String, dynamic>>? artEnd(
       String date,
       String time,
       bool reportCompletedArt,
@@ -464,6 +494,10 @@ class Api {
       String? rubTheDishesFile,
       String? commentRubTheDishes,
       String? commentDirectorRubTheDishes,
+      bool wipeDustShelvingBegin,
+      String? wipeDustShelvingBeginFile,
+      String? commentWipeDustShelvingBegin,
+      String? commentDirectorWipeDustShelvingBegin,
       bool cleaning,
       String? cleaningFile,
       String? commentCleaning,
@@ -489,6 +523,10 @@ class Api {
       'rubTheDishesFile': rubTheDishesFile,
       'commentRubTheDishes': commentRubTheDishes,
       'commentDirectorRubTheDishes': commentDirectorRubTheDishes,
+      'wipeDustShelvingBegin': wipeDustShelvingBegin,
+      'wipeDustShelvingBeginFile': wipeDustShelvingBegin,
+      'commentWipeDustShelvingBegin': commentWipeDustShelvingBegin,
+      'commentDirectorWipeDustShelvingBegin': commentDirectorWipeDustShelvingBegin,
       'cleaning': cleaning,
       'cleaningFile': cleaningFile,
       'commentCleaning': commentCleaning,
@@ -540,6 +578,10 @@ class Api {
       String? cleanlinessWorkplaceFile,
       String? commentCleanlinessWorkplace,
       String? commentDirectorCleanlinessWorkplace,
+      bool wipeDustShelvingEnd,
+      String? wipeDustShelvingEndFile,
+      String? commentWipeDustShelvingEnd,
+      String? commentDirectorWipeDustShelvingEnd,
       int idUser) async {
     Map<String, dynamic> data = {
       'date': date,
@@ -558,6 +600,10 @@ class Api {
       'cleanlinessWorkplaceFile': cleanlinessWorkplaceFile,
       'commentCleanlinessWorkplace': commentCleanlinessWorkplace,
       'commentDirectorCleanlinessWorkplace': commentDirectorCleanlinessWorkplace,
+      'wipeDustShelvingEnd' : wipeDustShelvingEnd,
+      'wipeDustShelvingBeginFile': wipeDustShelvingEndFile,
+      'commentWipeDustShelvingEnd': commentWipeDustShelvingEnd,
+      'commentDirectorWipeDustShelvingEnd' : commentDirectorWipeDustShelvingEnd,
       'idUser': idUser,
     };
     debugPrint(data.toString());
@@ -565,6 +611,10 @@ class Api {
     if (cleanlinessWorkplaceFile != null) {
       data['cleanlinessWorkplaceFile'] =
       await MultipartFile.fromFile(cleanlinessWorkplaceFile);
+    }
+
+    if (wipeDustShelvingEndFile != null) {
+      data['wipeDustShelvingEndFile'] = await MultipartFile.fromFile(wipeDustShelvingEndFile);
     }
 
     final formData = FormData.fromMap(data);
@@ -709,5 +759,10 @@ class Api {
         return {"message": "error"};
       }
   }
+
+
+
+
+
 
 }

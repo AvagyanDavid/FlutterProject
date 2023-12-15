@@ -5,7 +5,8 @@ import '../../../../component/checkbox/checkbox.dart';
 
 class ShowWaiterEnd extends StatefulWidget {
   final String formatterdate;
-  ShowWaiterEnd({required this.formatterdate});
+  final String post;
+  ShowWaiterEnd({required this.formatterdate, required this.post});
   @override
   _ShowWaiterEndState createState() => _ShowWaiterEndState();
 }
@@ -13,6 +14,8 @@ class ShowWaiterEnd extends StatefulWidget {
 class _ShowWaiterEndState extends State<ShowWaiterEnd> {
 
   TextEditingController commentWorkerSendMessageController = TextEditingController();
+
+  bool readOnly = false;
 
   bool ChargerCandle = false;
   String? Comment_ChargerCandle;
@@ -54,6 +57,9 @@ class _ShowWaiterEndState extends State<ShowWaiterEnd> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.post == 'Owner'){
+      readOnly = true;
+    }
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -178,6 +184,13 @@ class _ShowWaiterEndState extends State<ShowWaiterEnd> {
                                 text: "Убрать все салфетки (которыми протирали пилон) от зеркала",
                                 value: PutAwayTheNapkins),
                             ShowCommentWorker(commentValue: Comment_PutAwayTheNapkins),
+                            if (widget.post == 'Manager')
+                              ElevatedButton(
+                                onPressed: () {
+                                  /// запрос с апдейтом
+                                },
+                                child: const Text('Отправить комментарии'),
+                              ),
                           ],
                         ),
                       ),

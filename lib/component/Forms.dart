@@ -91,7 +91,6 @@ class CommentDirector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (valueDirector != null) {
       return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
@@ -108,36 +107,14 @@ class CommentDirector extends StatelessWidget {
                   textInputAction: TextInputAction.next,
                   initialValue: valueDirector,
                   onChanged: onChanged,
-                  readOnly: true,
-                )
-              ]
-          )
-      );
-    } else {
-      return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Column(
-              children: [
-                FormBuilderTextField(
-                  name: 'CommentWorker',
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    ),
-                    hintText: "Комментарий управляющего",
-                    fillColor: Colors.white,
-                  ),
-                  textInputAction: TextInputAction.next,
-                  initialValue: valueDirector,
-                  onChanged: onChanged,
-                  readOnly: false,
+                  readOnly: readOnly,
                 )
               ]
           )
       );
     }
   }
-}
+
 class ShowCommentDirector extends StatelessWidget {
   String? valueDirector;
   final TextEditingController textController;

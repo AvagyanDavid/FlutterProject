@@ -6,7 +6,8 @@ import '../../../../component/checkbox/checkbox.dart';
 
 class ShowWaiterBegin extends StatefulWidget {
   final String formatterdate;
-  ShowWaiterBegin({required this.formatterdate});
+  final String post;
+  ShowWaiterBegin({required this.formatterdate, required this.post});
   @override
   _ShowWaiterBeginState createState() => _ShowWaiterBeginState();
 }
@@ -14,6 +15,8 @@ class ShowWaiterBegin extends StatefulWidget {
 class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
 
   TextEditingController commentWorkerSendMessageController = TextEditingController();
+
+  bool readOnly = false;
 
   bool tableArrangement = false;
   String? commentTableArrangment;
@@ -117,6 +120,9 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.post == "Owner"){
+      readOnly = true;
+    }
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -241,7 +247,9 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentTableArrangment,),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorTableArrangment,),
+                            CommentDirector(valueDirector: commentDirectorTableArrangment,onChanged: (value){
+                              commentDirectorTableArrangment = value!;
+                            }, readOnly: readOnly,),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Протереть столы во всех местах",
@@ -251,7 +259,10 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentWipeTheTables,),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorWipeTheTables,),
+                            CommentDirector(valueDirector: commentDirectorWipeTheTables,onChanged: (value){
+                              commentDirectorWipeTheTables = value!;
+                            }, readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Осмотреть зал на предмет мелкого мусора. При необходимость убрать",
@@ -261,7 +272,9 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentInspectionOfTheHall),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorInspectionOfTheHall),
+                            CommentDirector(valueDirector: commentDirectorInspectionOfTheHall, onChanged: (value){
+                              commentDirectorInspectionOfTheHall = value!;
+                            },readOnly: readOnly,),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Расставить ровно все пуфики",
@@ -271,7 +284,10 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentArrangeOttomans),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorArrangeOttomans,),
+                            CommentDirector(valueDirector: commentDirectorArrangeOttomans,onChanged: (value){
+                              commentDirectorArrangeOttomans = value!;
+                            },readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Выставить все ровно на столах: салфетницы справа от кнопки, свечи слева от кнопки и крейзи меню слева от свечи",
@@ -281,7 +297,9 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentPutEverithingOnTheTables,),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorPutEverithingOnTheTables,),
+                            CommentDirector(valueDirector: commentDirectorPutEverithingOnTheTables,onChanged: (value){
+                              commentDirectorPutEverithingOnTheTables = value!;
+                            },readOnly: readOnly,),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Протереть все крейзи меню и меню бара",
@@ -289,7 +307,9 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentWipeMenu,),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorWipeMenu,),
+                            CommentDirector(valueDirector: commentDirectorWipeMenu,onChanged: (value){
+                              commentDirectorWipeMenu = value!;
+                            },readOnly: readOnly,),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Протереть винный шкаф",
@@ -297,14 +317,20 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentCleanWineCabinet,),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorCleanWineCabinet,),
+                            CommentDirector(valueDirector: commentDirectorCleanWineCabinet,
+                              onChanged: (value){
+                                commentDirectorCleanWineCabinet = value!;
+                              }, readOnly: readOnly,
+                            ),
                             ShowCheck(
                                 text: "Заполнить все салфетницы",
                                 value: fillTheNapkinHolder),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentFillTheNapkinHolder,),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorFillTheNapkinHolder,),
+                            CommentDirector(valueDirector: commentDirectorFillTheNapkinHolder,onChanged: (value){
+                              commentDirectorFillTheNapkinHolder = value!;
+                            },readOnly: readOnly,),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Ведерко для муссора должно быть пустым",
@@ -312,7 +338,9 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentGarbageEmpty,),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorGarbageEmpty,),
+                            CommentDirector(valueDirector: commentDirectorGarbageEmpty,onChanged: (value){
+                              commentDirectorGarbageEmpty = value!;
+                            },readOnly: readOnly,),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Передать посуду на кухню",
@@ -320,14 +348,18 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentPassDishesKitchen,),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorPassDishesKitchen,),
+                            CommentDirector(valueDirector: commentDirectorPassDishesKitchen,onChanged: (value){
+                              commentDirectorPassDishesKitchen = value!;
+                            },readOnly: readOnly,),
                             ShowCheck(
                                 text: "Запросить стоп-лист и старт-лист по кухне и бару",
                                 value: requestStartAndStopList),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentRequestStartAndStopList,),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorRequestStartAndStopList,),
+                            CommentDirector(valueDirector: commentDirectorRequestStartAndStopList,onChanged: (value){
+                              commentDirectorRequestStartAndStopList = value!;
+                            },readOnly: readOnly,),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Протереть хьюмидор и поднять в нем влажность",
@@ -335,7 +367,16 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentCleanHumidor,),
                             const SizedBox(height: 20,),
-                            ShowCommentDirector(valueDirector: commentDirectorCleanHumidor,)
+                            CommentDirector(valueDirector: commentDirectorCleanHumidor,onChanged: (value){
+                              commentDirectorCleanHumidor = value!;
+                            },readOnly: readOnly,),
+                            if (widget.post == 'Manager')
+                              ElevatedButton(
+                                onPressed: () {
+                                  /// запрос с апдейтом
+                                },
+                                child: const Text('Отправить комментарии'),
+                              ),
                           ],
                         ),
                       ),

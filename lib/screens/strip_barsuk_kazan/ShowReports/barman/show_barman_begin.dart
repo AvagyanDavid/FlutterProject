@@ -6,7 +6,8 @@ import 'package:test_form/component/checkbox/checkbox.dart';
 
 class ShowBarmanBegin extends StatefulWidget {
   final String formatterdate;
-  ShowBarmanBegin({required this.formatterdate});
+  final String post;
+  ShowBarmanBegin({required this.formatterdate,required this.post});
 
   @override
   _ShowBarmanBeginState createState() => _ShowBarmanBeginState();
@@ -17,7 +18,6 @@ class _ShowBarmanBeginState extends State<ShowBarmanBegin> {
   TextEditingController commentWorkerSendMessageController = TextEditingController();
 
   bool readOnly = false;
-  bool enabled = true;
 
   bool openCheckout  = false;
   String? commentOpenCheckout;
@@ -79,6 +79,9 @@ class _ShowBarmanBeginState extends State<ShowBarmanBegin> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.post == 'Onwer'){
+      readOnly = true;
+    }
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -254,7 +257,14 @@ class _ShowBarmanBeginState extends State<ShowBarmanBegin> {
                             CommentDirector(valueDirector: commentDirectorCleaning, onChanged: (value){
                               commentDirectorCleaning = value!;
                             },
-                            readOnly: readOnly,)
+                            readOnly: readOnly,),
+                            if (widget.post == 'Manager')
+                              ElevatedButton(
+                                onPressed: () {
+                                  /// запрос с апдейтом
+                                },
+                                child: const Text('Отправить комментарии'),
+                              ),
                           ],
                         ),
                       ),

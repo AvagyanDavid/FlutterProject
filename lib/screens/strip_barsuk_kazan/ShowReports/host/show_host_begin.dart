@@ -5,8 +5,9 @@ import '../../../../component/checkbox/checkbox.dart';
 
 class ShowHostBegin extends StatefulWidget {
   final String formatterdate;
-
-  ShowHostBegin({required this.formatterdate});
+  final int id;
+  final String post;
+  ShowHostBegin({required this.formatterdate,required this.id, required this.post});
 
   @override
   _ShowHostBeginState createState() => _ShowHostBeginState();
@@ -50,6 +51,9 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.post == "Owner"){
+      readOnly = true;
+    }
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -199,6 +203,13 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
                               },
                               readOnly: readOnly,
                             ),
+                            if (widget.post == 'Manager')
+                              ElevatedButton(
+                                onPressed: () {
+                                  Api().updateHostBegin(commentDirectorTakeRadioTerminalTelephone, commentDirectorSendMessage, widget.id);
+                                },
+                                child: const Text('Отправить комментарии'),
+                              ),
                           ],
                         ),
                       ),

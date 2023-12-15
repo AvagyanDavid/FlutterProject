@@ -5,6 +5,7 @@ import 'package:test_form/main.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Art/Art.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Barman/barman.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Host/host.dart';
+import 'package:test_form/screens/strip_barsuk_kazan/Manager.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Waiter/waiter.dart';
 import '../connection/database.dart';
 import 'Director.dart';
@@ -184,6 +185,12 @@ class Autorization extends StatelessWidget {
                 MaterialPageRoute(
                 builder: (context) => Director(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],)),
                 );
+                case 'Manager':
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Manager(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],)),
+                  );
               case 'Art':
                 Navigator.push(
                   context,

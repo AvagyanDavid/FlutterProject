@@ -637,28 +637,33 @@ class Waiter_begin extends StatelessWidget {
                           if (tableArrangementPhoto != null) {
                             tableArrangementPath = tableArrangementPhoto.path;
                           }
+
                           final wipeTheTablesPhoto =
                               photostate.photoStates['wipeTheTablesPhoto'];
                           if (wipeTheTablesPhoto != null) {
                             wipeTheTablesPath = wipeTheTablesPhoto.path;
                           }
+
                           final inspectionOfTheHallPhoto = photostate
                               .photoStates['inspectionOfTheHallPhoto'];
                           if (inspectionOfTheHallPhoto != null) {
                             inspectionOfTheHallPath =
                                 inspectionOfTheHallPhoto.path;
                           }
+
                           final arrangeOttomansPhoto =
                               photostate.photoStates['arrangeOttomansPhoto'];
                           if (arrangeOttomansPhoto != null) {
                             arrangeOttomansPath = arrangeOttomansPhoto.path;
                           }
+
                           final putEverythingOnTheTablesPhoto = photostate
                               .photoStates['putEverythingOnTheTablesPhoto'];
                           if (putEverythingOnTheTablesPhoto != null) {
                             putEverythingOnTheTablesPath =
                                 putEverythingOnTheTablesPhoto.path;
                           }
+
                           final wipeMenuPhoto =
                               photostate.photoStates['wipeMenuPhoto'];
                           if (wipeMenuPhoto != null) {

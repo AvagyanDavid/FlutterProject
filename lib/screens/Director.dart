@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:test_form/api/api.dart';
 import 'package:test_form/component/ratio/bloc/ratio_bloc.dart';
@@ -32,15 +30,7 @@ class _DirectorState extends State<Director> {
 
   RatioBloc ratioBloc = RatioBloc();
 
-  String LoginArtBegin = '';
-  String LoginArtEnd = '';
-  String LoginBarmanBegin = '';
-  String LoginBarmanEnd = '';
-  String LoginWaiterBegin = '';
-  String LoginWaiterEnd = '';
-  String LoginHostBegin = '';
-  String LoginHostEnd = '';
-
+  DateTime now = DateTime.now();
   DateFormat formatter = DateFormat('yyyy-MM-dd');
   String formattedDate = '';
   String formatteddate = '';
@@ -56,7 +46,6 @@ class _DirectorState extends State<Director> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
     String date = '${now.year}-${now.month}-${now.day}';
     return Scaffold(
       body: SizedBox(
@@ -168,50 +157,6 @@ class _DirectorState extends State<Director> {
                                   now = selectedDay;
                                 });
                               }),
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          //   child: BlocProvider<RatioBloc>(
-                          //     create: (context) => ratioBloc,
-                          //     child: BlocBuilder<RatioBloc, RatioState>(
-                          //       builder: (context, state) {
-                          //         List<FormBuilderChipOption<Object>> options = [
-                          //           const FormBuilderChipOption<Object>(
-                          //             value: 'Art',
-                          //             child: Text('Арт'),
-                          //           ),
-                          //           const FormBuilderChipOption<Object>(
-                          //             value: 'Barman',
-                          //             child: Text('Бармен'),
-                          //           ),
-                          //           const FormBuilderChipOption<Object>(
-                          //             value: 'Host',
-                          //             child: Text('Хост'),
-                          //           ),
-                          //           const FormBuilderChipOption<Object>(
-                          //             value: 'Waiter',
-                          //             child: Text('Официант'),
-                          //           ),
-                          //           const FormBuilderChipOption<Object>(
-                          //             value: 'Manager',
-                          //             child: Text('Управляющий'),
-                          //           ),
-                          //         ];
-                          //         return FormBuilderChoiceChip(
-                          //           runSpacing: 5.0,
-                          //           selectedColor: Colors.blue,
-                          //           name: 'choice_chip',
-                          //           decoration: const InputDecoration(labelText: 'Должность'),
-                          //           options: options,
-                          //           initialValue: post,
-                          //           onChanged: (value) {
-                          //             post = value.toString()!;
-                          //             print(post);
-                          //           },
-                          //         );
-                          //       },
-                          //     ),
-                          //   ),
-                          // ),
                           Text(
                             responseArtBegin != null ? responseArtBegin.toString() : 'логин Арта',
                             textAlign: TextAlign.right,
@@ -237,7 +182,10 @@ class _DirectorState extends State<Director> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowArtBegin(formatterdate: formattedDate,)
+                                            builder: (context) => ShowArtBegin(
+                                              formatterdate: formattedDate,
+                                              post: widget.post,
+                                            )
                                         ),
                                       );
                                     } else {
@@ -257,7 +205,10 @@ class _DirectorState extends State<Director> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowArtEnd(formatterdate: formattedDate,)
+                                            builder: (context) => ShowArtEnd(
+                                              formatterdate: formattedDate,
+                                              post: widget.post,
+                                            )
                                         ),
                                       );
                                     } else {
@@ -292,7 +243,10 @@ class _DirectorState extends State<Director> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ShowBarmanBegin(formatterdate: formattedDate,)
+                                          builder: (context) => ShowBarmanBegin(
+                                            formatterdate: formattedDate,
+                                            post: widget.post,
+                                          )
                                       ),
                                     );
                                   } else {
@@ -313,7 +267,10 @@ class _DirectorState extends State<Director> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowBarmanEnd(formatterdate: formattedDate,)
+                                            builder: (context) => ShowBarmanEnd(
+                                              formatterdate: formattedDate,
+                                              post: widget.post,
+                                            )
                                         ),
                                       );
                                     } else {
@@ -348,7 +305,10 @@ class _DirectorState extends State<Director> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowWaiterBegin(formatterdate: formattedDate,)
+                                            builder: (context) => ShowWaiterBegin(
+                                              formatterdate: formattedDate,
+                                              post: widget.post ,
+                                            )
                                         ),
                                       );
                                     } else {
@@ -368,7 +328,7 @@ class _DirectorState extends State<Director> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowWaiterEnd(formatterdate: formattedDate,)
+                                            builder: (context) => ShowWaiterEnd(formatterdate: formattedDate,post: widget.post,)
                                         ),
                                       );
                                     } else {
@@ -403,7 +363,7 @@ class _DirectorState extends State<Director> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowHostBegin(formatterdate: formattedDate,)
+                                            builder: (context) => ShowHostBegin(formatterdate: formattedDate, id: idUser, post: widget.post,)
                                         ),
                                       );
                                     } else {
@@ -421,7 +381,7 @@ class _DirectorState extends State<Director> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowHostEnd(formatterdate: formattedDate,)
+                                            builder: (context) => ShowHostEnd(formatterdate: formattedDate,id: idUser, post: widget.post,)
                                         ),
                                       );
                                     } else {

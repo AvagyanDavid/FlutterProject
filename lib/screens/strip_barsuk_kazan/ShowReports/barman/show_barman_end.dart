@@ -6,7 +6,8 @@ import 'package:test_form/component/checkbox/checkbox.dart';
 
 class ShowBarmanEnd extends StatefulWidget {
   final String formatterdate;
-  ShowBarmanEnd({required this.formatterdate});
+  final String post;
+  ShowBarmanEnd({required this.formatterdate, required this.post});
 
   @override
   _ShowBarmanEndState createState() => _ShowBarmanEndState();
@@ -66,6 +67,9 @@ class _ShowBarmanEndState extends State<ShowBarmanEnd> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.post == 'Owner'){
+      readOnly = true;
+    }
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -232,7 +236,14 @@ class _ShowBarmanEndState extends State<ShowBarmanEnd> {
                             const SizedBox(height: 20,),
                             CommentDirector(valueDirector: commentDirectorCleanlinessWorkplace,onChanged: (value){
                               commentDirectorCleanlinessWorkplace = value!;
-                            },readOnly: readOnly,)
+                            },readOnly: readOnly,),
+                            if (widget.post == 'Manager')
+                              ElevatedButton(
+                                onPressed: () {
+                                  /// запрос с апдейтом
+                                },
+                                child: const Text('Отправить комментарии'),
+                              ),
                           ],
                         ),
                       ),

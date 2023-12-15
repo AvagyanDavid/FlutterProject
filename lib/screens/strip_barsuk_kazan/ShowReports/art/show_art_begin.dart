@@ -5,7 +5,8 @@ import '../../../../component/checkbox/checkbox.dart';
 
 class ShowArtBegin extends StatefulWidget {
   final String formatterdate;
-  ShowArtBegin({required this.formatterdate});
+  final String post;
+  ShowArtBegin({required this.formatterdate, required this.post});
   @override
   _ShowArtBeginState createState() => _ShowArtBeginState();
 }
@@ -15,7 +16,6 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
   TextEditingController commentWorkerSendMessageController = TextEditingController();
 
   bool readOnly = false;
-  bool enabled = true;
 
   bool listArtist = false;
   String? commentListArtist;
@@ -109,6 +109,9 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.post == "Owner"){
+      readOnly = true;
+    }
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -440,11 +443,20 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                             CommentDirector(valueDirector: commentDirectorToyOrder,onChanged: (value){
                               commentDirectorToyOrder = value!;
                             },
-                                readOnly: readOnly)
-                          ],
+                                readOnly: readOnly),
+                        if (widget.post == 'Manager')
+                          ElevatedButton(
+                            onPressed: () {
+                            /// запрос с апдейтом
+                          },
+                        child: const Text('Отправить комментарии'),
+              ),
+                ],
                         ),
                       ),
+
                     ],
+
                   ),
                 ),
               ),
