@@ -17,25 +17,8 @@ class Art_begin extends StatefulWidget {
 }
 
 class _Art_beginState extends State<Art_begin> {
-
   bool readOnly = false;
   bool enabled = true;
-
-  void getStatusReport() async {
-    String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
-    final response = await Api().checkReportArtBegin(date);
-    if (response != null) {
-      readOnly = true;
-      enabled = false;
-      setState(() {});
-    }
-  }
-
-  @override
-  void initState() {
-    getStatusReport();
-    super.initState();
-  }
 
   CheckboxBloc checkboxBloc = CheckboxBloc();
 
@@ -62,6 +45,78 @@ class _Art_beginState extends State<Art_begin> {
   String? commentDirectorFiveMinutes;
   String? commentDirectorCard;
   String? commentDirectorToyOrder;
+  bool listArtist = false;
+  bool readiness = false;
+  bool sendListOfGirls = false;
+  bool listDJ = false;
+  bool analyzeGraph = false;
+  bool controlArtistAnalize = false;
+  bool fiveMinutes = false;
+  bool firstCard = false;
+  bool secondCard = false;
+  bool thirdCard = false;
+  bool control1 = false;
+  bool control2 = false;
+  bool control3 = false;
+  bool control4 = false;
+  bool control5 = false;
+  bool toyOrder = false;
+
+  void getStatusReport() async {
+    String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
+    final results = await Api().checkReportArtBegin(date);
+    if (results != null) {
+      readOnly = true;
+      enabled = false;
+      final response = await Api().showArtBegin(date);
+      listArtist = response['ListArtist'] != 0 ? true : false;
+      commentListArtist = response['Comment_ListArtist'] as String?;
+      commentDirectorListArtist = response['CommentDirector_ListArtist'] as String?;
+      readiness = response['Readiness'] != 0 ? true : false;
+      commentReadiness = response['Comment_Readiness'] as String?;
+      commentDirectorReadiness = response['CommentDirector_Readiness'] as String?;
+      sendListOfGirls = response['SendListOfGirls'] != 0 ? true : false;
+      commentSendListOfGirls = response['Comment_SendListOfGirls'] as String?;
+      commentDirectorSendListOfGirls = response['CommentDirector_SendListOfGirls'] as String?;
+      listDJ = response['ListDJ'] != 0 ? true : false;
+      commentListDJ = response['Comment_ListDJ'] as String?;
+      commentDirectorListDJ = response['CommentDirector_ListDJ'] as String?;
+      analyzeGraph = response['AnalyzeGraph'] != 0 ? true : false;
+      commentAnalyzeGraph = response['Comment_AnalyzeGraph'] as String?;
+      commentDirectorAnalyzeGraph = response['CommentDirector_AnalyzeGraph'] as String?;
+      controlArtistAnalize = response['ControlArtistAnalize'] != 0 ? true : false;
+      commentControlArtistAnalize = response['Comment_ControlArtistAnalize'] as String?;
+      commentDirectorControlArtistAnalize = response['CommentDirector_ControlArtistAnalize'] as String?;
+      fiveMinutes = response['FiveMinutes'] != 0 ? true : false;
+      commentFiveMinutes = response['Comment_FiveMinutes'] as String?;
+      commentDirectorFiveMinutes = response['CommentDirector_FiveMinutes'] as String?;
+      firstCard = response['FirstCard'] != 0 ? true : false;
+      secondCard = response['SecondCard'] != 0 ? true : false;
+      thirdCard = response['ThirdCard'] != 0 ? true : false;
+      commentCard = response['Comment_Card'] as String?;
+      commentDirectorCard = response['CommentDirector_Card'] as String?;
+      control1 = response['Control1'] != 0 ? true : false;
+      commentControl1 = response['Comment_Control1'] as String?;
+      control2 = response['Control2'] != 0 ? true : false;
+      commentControl2 = response['Comment_Control2'] as String?;
+      control3 = response['Control3'] != 0 ? true : false;
+      commentControl3 = response['Comment_Control3'] as String?;
+      control4 = response['Control4'] != 0 ? true : false;
+      commentControl4 = response['Comment_Control4'] as String?;
+      control5 = response['Control5'] != 0 ? true : false;
+      commentControl5 = response['Comment_Control5'] as String?;
+      toyOrder = response['ToyOrder'] != 0 ? true : false;
+      commentToyOrder = response['Comment_ToyOrder'] as String?;
+      commentDirectorToyOrder = response['CommentDirector_ToyOrder'] as String?;
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    getStatusReport();
+    super.initState();
+  }
 
   // List? checkBox = [];
   @override
@@ -134,9 +189,7 @@ class _Art_beginState extends State<Art_begin> {
                       Container(
                         width: 100,
                         height: 100,
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: Image.asset("assets/emblem.png")),
+                        child: Align(alignment: Alignment.topRight, child: Image.asset("assets/emblem.png")),
                       ),
                     ],
                   ),
@@ -175,16 +228,21 @@ class _Art_beginState extends State<Art_begin> {
                         children: [
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
-                            child: BlocBuilder<CheckboxBloc, CheckboxState>(
-                                builder: (context, state) {
-                              return NewCheck(
-                                text: 'Составить список артисток на смене',
-                                value:
-                                    state.checkboxStates['listArtist'] ?? false,
-                                checkboxBloc: checkboxBloc,
-                                checkboxId: 'listArtist',
-                                enabled: enabled,
-                              );
+                            child: BlocBuilder<CheckboxBloc, CheckboxState>(builder: (context, state) {
+                              if (enabled == false) {
+                                return ShowCheck(
+                                 text: 'Составить список артисток на смене',
+                                 value: listArtist
+                                );
+                              } else {
+                                return NewCheck(
+                                  text: 'Составить список артисток на смене',
+                                  value: state.checkboxStates['listArtist'] ?? false,
+                                  checkboxBloc: checkboxBloc,
+                                  checkboxId: 'listArtist',
+                                  enabled: enabled,
+                                );
+                              }
                             }),
                           ),
                           CommentWorker(
@@ -200,10 +258,10 @@ class _Art_beginState extends State<Art_begin> {
                           const SizedBox(height: 20),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
-                            child: BlocBuilder<CheckboxBloc, CheckboxState>(
-                                builder: (context, state) {
+                            child: BlocBuilder<CheckboxBloc, CheckboxState>(builder: (context, state) {
                               return NewCheck(
-                                text: 'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
+                                text:
+                                'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
                                 value: state.checkboxStates['readiness'] ?? false,
                                 checkboxBloc: checkboxBloc,
                                 checkboxId: 'readiness',
@@ -211,7 +269,9 @@ class _Art_beginState extends State<Art_begin> {
                               );
                             }),
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           CommentWorker(
                             commentValue: commentReadiness,
                             onChanged: (value) {
@@ -222,16 +282,13 @@ class _Art_beginState extends State<Art_begin> {
                           ShowCommentDirector(
                             valueDirector: commentDirectorReadiness,
                           ),
-
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 return NewCheck(
                                   text: 'Скинуть список девочек в чат Арт ',
-                                  value:
-                                      state.checkboxStates['sendListOfGirls'] ??
-                                          false,
+                                  value: state.checkboxStates['sendListOfGirls'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'sendListOfGirls',
                                   enabled: enabled,
@@ -249,15 +306,13 @@ class _Art_beginState extends State<Art_begin> {
                           ShowCommentDirector(
                             valueDirector: commentDirectorSendListOfGirls,
                           ),
-
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 return NewCheck(
                                   text: 'Составить список для диджея ',
-                                  value:
-                                      state.checkboxStates['listDJ'] ?? false,
+                                  value: state.checkboxStates['listDJ'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'listDJ',
                                   enabled: enabled,
@@ -276,16 +331,13 @@ class _Art_beginState extends State<Art_begin> {
                             valueDirector: commentDirectorListDJ,
                           ),
                           const SizedBox(height: 10),
-
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 return NewCheck(
-                                  text:
-                                      "Проанализировать график на ближайшие 7 дней",
-                                  value: state.checkboxStates['analyzeGraph'] ??
-                                      false,
+                                  text: "Проанализировать график на ближайшие 7 дней",
+                                  value: state.checkboxStates['analyzeGraph'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'analyzeGraph',
                                   enabled: enabled,
@@ -309,9 +361,7 @@ class _Art_beginState extends State<Art_begin> {
                               builder: (context, state) {
                                 return NewCheck(
                                   text: "Контроль наличия анализов у артисток",
-                                  value: state.checkboxStates[
-                                          'controlArtistAnalize'] ??
-                                      false,
+                                  value: state.checkboxStates['controlArtistAnalize'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'controlArtistAnalize',
                                   enabled: enabled,
@@ -338,8 +388,7 @@ class _Art_beginState extends State<Art_begin> {
                               builder: (context, state) {
                                 return NewCheck(
                                   text: "Пятиминутка",
-                                  value: state.checkboxStates['fiveMinutes'] ??
-                                      false,
+                                  value: state.checkboxStates['fiveMinutes'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'fiveMinutes',
                                   enabled: enabled,
@@ -355,28 +404,30 @@ class _Art_beginState extends State<Art_begin> {
                             readOnly: readOnly,
                           ),
                           ShowCommentDirector(
-                            valueDirector: commentDirectorFiveMinutes,),
-                          const SizedBox(height: 20,),
+                            valueDirector: commentDirectorFiveMinutes,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           const SizedBox(
                             width: double.infinity,
-                              child: Text(
-                                'Выдача карт:',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.3,
-                                  color: Colors.white,
-                                ),
+                            child: Text(
+                              'Выдача карт:',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                height: 1.3,
+                                color: Colors.white,
                               ),
                             ),
+                          ),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 return NewCheck(
                                   text: '1 карта',
-                                  value: state.checkboxStates['firstCard'] ??
-                                      false,
+                                  value: state.checkboxStates['firstCard'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'firstCard',
                                   enabled: enabled,
@@ -390,8 +441,7 @@ class _Art_beginState extends State<Art_begin> {
                               builder: (context, state) {
                                 return NewCheck(
                                   text: '2 карта',
-                                  value: state.checkboxStates['secondCard'] ??
-                                      false,
+                                  value: state.checkboxStates['secondCard'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'secondCard',
                                   enabled: enabled,
@@ -405,8 +455,7 @@ class _Art_beginState extends State<Art_begin> {
                               builder: (context, state) {
                                 return NewCheck(
                                   text: '3 карта',
-                                  value: state.checkboxStates['thirdCard'] ??
-                                      false,
+                                  value: state.checkboxStates['thirdCard'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'thirdCard',
                                   enabled: enabled,
@@ -414,54 +463,62 @@ class _Art_beginState extends State<Art_begin> {
                               },
                             ),
                           ),
-                          CommentWorker(commentValue: commentCard,onChanged: (value){
-                            commentCard = value!;
-                          },
+                          CommentWorker(
+                            commentValue: commentCard,
+                            onChanged: (value) {
+                              commentCard = value!;
+                            },
                             readOnly: readOnly,
                           ),
-                          ShowCommentDirector(valueDirector: commentDirectorCard,),
-                          const SizedBox(height: 20,),
+                          ShowCommentDirector(
+                            valueDirector: commentDirectorCard,
+                          ),
                           const SizedBox(
-                              child: Text(
-                                'Контроль:',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.3,
-                                  color: Colors.white,
-                                ),
+                            height: 20,
+                          ),
+                          const SizedBox(
+                            child: Text(
+                              'Контроль:',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                height: 1.3,
+                                color: Colors.white,
                               ),
                             ),
-                          const SizedBox(height: 20,),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Expanded(
                                 flex: 3,
-                              child: CommentWorker(
-                                commentValue: commentControl1,
-                                onChanged: (value) {
-                                  commentControl1 = value!;
-                                },
-                                readOnly: readOnly,
-                              ),
-                              ),
-                              Expanded(flex: 1,
-                                child: BlocProvider<CheckboxBloc>(
-                                create: (context) => checkboxBloc,
-                                child: BlocBuilder<CheckboxBloc, CheckboxState>(
-                                  builder: (context, state) {
-                                    return NewCheck(
-                                      text: '',
-                                      value: state.checkboxStates['control1'] ??
-                                          false,
-                                      checkboxBloc: checkboxBloc,
-                                      checkboxId: 'control1',
-                                      enabled: enabled,
-                                    );
+                                child: CommentWorker(
+                                  commentValue: commentControl1,
+                                  onChanged: (value) {
+                                    commentControl1 = value!;
                                   },
+                                  readOnly: readOnly,
                                 ),
                               ),
+                              Expanded(
+                                flex: 1,
+                                child: BlocProvider<CheckboxBloc>(
+                                  create: (context) => checkboxBloc,
+                                  child: BlocBuilder<CheckboxBloc, CheckboxState>(
+                                    builder: (context, state) {
+                                      return NewCheck(
+                                        text: '',
+                                        value: state.checkboxStates['control1'] ?? false,
+                                        checkboxBloc: checkboxBloc,
+                                        checkboxId: 'control1',
+                                        enabled: enabled,
+                                      );
+                                    },
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -479,15 +536,15 @@ class _Art_beginState extends State<Art_begin> {
                                   readOnly: readOnly,
                                 ),
                               ),
-                              Expanded(flex: 1,
+                              Expanded(
+                                flex: 1,
                                 child: BlocProvider<CheckboxBloc>(
                                   create: (context) => checkboxBloc,
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
                                       return NewCheck(
                                         text: '',
-                                        value: state.checkboxStates['control2'] ??
-                                            false,
+                                        value: state.checkboxStates['control2'] ?? false,
                                         checkboxBloc: checkboxBloc,
                                         checkboxId: 'control2',
                                         enabled: enabled,
@@ -498,7 +555,9 @@ class _Art_beginState extends State<Art_begin> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -512,26 +571,27 @@ class _Art_beginState extends State<Art_begin> {
                                   readOnly: readOnly,
                                 ),
                               ),
-                              Expanded(flex: 1,
+                              Expanded(
+                                flex: 1,
                                 child: BlocProvider<CheckboxBloc>(
                                   create: (context) => checkboxBloc,
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
                                       return NewCheck(
-                                        text: '',
-                                        value: state.checkboxStates['control3'] ??
-                                            false,
-                                        checkboxBloc: checkboxBloc,
-                                        checkboxId: 'control3',
-                                        enabled: enabled
-                                      );
+                                          text: '',
+                                          value: state.checkboxStates['control3'] ?? false,
+                                          checkboxBloc: checkboxBloc,
+                                          checkboxId: 'control3',
+                                          enabled: enabled);
                                     },
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -545,15 +605,15 @@ class _Art_beginState extends State<Art_begin> {
                                   readOnly: readOnly,
                                 ),
                               ),
-                              Expanded(flex: 1,
+                              Expanded(
+                                flex: 1,
                                 child: BlocProvider<CheckboxBloc>(
                                   create: (context) => checkboxBloc,
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
                                       return NewCheck(
                                         text: '',
-                                        value: state.checkboxStates['control4'] ??
-                                            false,
+                                        value: state.checkboxStates['control4'] ?? false,
                                         checkboxBloc: checkboxBloc,
                                         checkboxId: 'control4',
                                         enabled: enabled,
@@ -564,7 +624,9 @@ class _Art_beginState extends State<Art_begin> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -578,15 +640,15 @@ class _Art_beginState extends State<Art_begin> {
                                   readOnly: readOnly,
                                 ),
                               ),
-                              Expanded(flex: 1,
+                              Expanded(
+                                flex: 1,
                                 child: BlocProvider<CheckboxBloc>(
                                   create: (context) => checkboxBloc,
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
                                       return NewCheck(
                                         text: '',
-                                        value: state.checkboxStates['control5'] ??
-                                            false,
+                                        value: state.checkboxStates['control5'] ?? false,
                                         checkboxBloc: checkboxBloc,
                                         checkboxId: 'control5',
                                         enabled: enabled,
@@ -603,8 +665,7 @@ class _Art_beginState extends State<Art_begin> {
                               builder: (context, state) {
                                 return NewCheck(
                                   text: 'Составить заявку на игрушки',
-                                  value:
-                                      state.checkboxStates['toyOrder'] ?? false,
+                                  value: state.checkboxStates['toyOrder'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'toyOrder',
                                   enabled: enabled,
@@ -622,99 +683,98 @@ class _Art_beginState extends State<Art_begin> {
                           ShowCommentDirector(
                             valueDirector: commentDirectorToyOrder,
                           ),
-
                           const SizedBox(height: 20),
                           Center(
-                                child: enabled == true
-                                    ? ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    minimumSize: const Size(100, 50),
-                                    textStyle: const TextStyle(fontSize: 20),
-                                    backgroundColor: Colors.green[800],
+                              child: enabled == true
+                                  ? ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(100, 50),
+                                  textStyle: const TextStyle(fontSize: 20),
+                                  backgroundColor: Colors.green[800],
+                                ),
+                                onPressed: () async {
+                                  DateTime now = DateTime.now();
+                                  String date = '${now.year}-${now.month}-${now.day}';
+                                  String time = '${now.hour}:${now.minute}:${now.second}';
+
+                                  final state = checkboxBloc.state;
+                                  listArtist = state.checkboxStates['listArtist'] ?? false;
+                                  readiness = state.checkboxStates['readiness'] ?? false;
+                                  sendListOfGirls = state.checkboxStates['sendListOfGirls'] ?? false;
+                                  listDJ = state.checkboxStates['listDJ'] ?? false;
+                                  analyzeGraph = state.checkboxStates['analyzeGraph'] ?? false;
+                                  controlArtistAnalize = state.checkboxStates['controlArtistAnalize'] ?? false;
+                                  fiveMinutes = state.checkboxStates['fiveMinutes'] ?? false;
+                                  firstCard = state.checkboxStates['firstCard'] ?? false;
+                                  secondCard = state.checkboxStates['secondCard'] ?? false;
+                                  thirdCard = state.checkboxStates['thirdCard'] ?? false;
+                                  control1 = state.checkboxStates['control1'] ?? false;
+                                  control2 = state.checkboxStates['control2'] ?? false;
+                                  control3 = state.checkboxStates['control3'] ?? false;
+                                  control4 = state.checkboxStates['control4'] ?? false;
+                                  control5 = state.checkboxStates['control5'] ?? false;
+                                  toyOrder = state.checkboxStates['toyOrder'] ?? false;
+
+                                  await Api().artBegin(
+                                      date,
+                                      time,
+                                      listArtist,
+                                      commentListArtist,
+                                      commentDirectorListArtist,
+                                      readiness,
+                                      commentReadiness,
+                                      commentDirectorReadiness,
+                                      sendListOfGirls,
+                                      commentSendListOfGirls,
+                                      commentDirectorSendListOfGirls,
+                                      listDJ,
+                                      commentListDJ,
+                                      commentDirectorListDJ,
+                                      analyzeGraph,
+                                      commentAnalyzeGraph,
+                                      commentDirectorAnalyzeGraph,
+                                      controlArtistAnalize,
+                                      commentControlArtistAnalize,
+                                      commentDirectorControlArtistAnalize,
+                                      fiveMinutes,
+                                      commentFiveMinutes,
+                                      commentDirectorFiveMinutes,
+                                      firstCard,
+                                      secondCard,
+                                      thirdCard,
+                                      commentCard,
+                                      commentDirectorCard,
+                                      control1,
+                                      commentControl1,
+                                      control2,
+                                      commentControl2,
+                                      control3,
+                                      commentControl3,
+                                      control4,
+                                      commentControl4,
+                                      control5,
+                                      commentControl5,
+                                      toyOrder,
+                                      commentToyOrder,
+                                      commentDirectorToyOrder,
+                                      3);
+                                  Navigator.pop(context);
+                                  readOnly = true;
+                                  enabled = false;
+                                },
+                                child: const Text(
+                                  'Отправить отчет',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    height: 1.3,
+                                    color: Colors.white,
                                   ),
-                                  onPressed: () async {
-                                    DateTime now = DateTime.now();
-                                    String date = '${now.year}-${now.month}-${now.day}';
-                                    String time = '${now.hour}:${now.minute}:${now.second}';
-
-                                    final state = checkboxBloc.state;
-
-                                    final listArtist = state.checkboxStates['listArtist'] ?? false;
-                                    final readiness = state.checkboxStates['readiness'] ?? false;
-                                    final sendListOfGirls = state.checkboxStates['sendListOfGirls'] ?? false;
-                                    final listDJ = state.checkboxStates['listDJ'] ?? false;
-                                    final analyzeGraph = state.checkboxStates['analyzeGraph'] ?? false;
-                                    final controlArtistAnalize = state.checkboxStates['controlArtistAnalize'] ?? false;
-                                    final fiveMinutes = state.checkboxStates['fiveMinutes'] ?? false;
-                                    final firstCard = state.checkboxStates['firstCard'] ?? false;
-                                    final secondCard = state.checkboxStates['secondCard'] ?? false;
-                                    final thirdCard = state.checkboxStates['thirdCard'] ?? false;
-                                    final control1 = state.checkboxStates['control1'] ?? false;
-                                    final control2 = state.checkboxStates['control2'] ?? false;
-                                    final control3 = state.checkboxStates['control3'] ?? false;
-                                    final control4 = state.checkboxStates['control4'] ?? false;
-                                    final control5 = state.checkboxStates['control5'] ?? false;
-                                    final toyOrder = state.checkboxStates['toyOrder'] ?? false;
-
-                                    await Api().artBegin(
-                                        date,
-                                        time,
-                                        listArtist,
-                                        commentListArtist,
-                                        commentDirectorListArtist,
-                                        readiness,
-                                        commentReadiness,
-                                        commentDirectorReadiness,
-                                        sendListOfGirls,
-                                        commentSendListOfGirls,
-                                        commentDirectorSendListOfGirls,
-                                        listDJ,
-                                        commentListDJ,
-                                        commentDirectorListDJ,
-                                        analyzeGraph,
-                                        commentAnalyzeGraph,
-                                        commentDirectorAnalyzeGraph,
-                                        controlArtistAnalize,
-                                        commentControlArtistAnalize,
-                                        commentDirectorControlArtistAnalize,
-                                        fiveMinutes,
-                                        commentFiveMinutes,
-                                        commentDirectorFiveMinutes,
-                                        firstCard,
-                                        secondCard,
-                                        thirdCard,
-                                        commentCard,
-                                        commentDirectorCard,
-                                        control1,
-                                        commentControl1,
-                                        control2,
-                                        commentControl2,
-                                        control3,
-                                        commentControl3,
-                                        control4,
-                                        commentControl4,
-                                        control5,
-                                        commentControl5,
-                                        toyOrder,
-                                        commentToyOrder,
-                                        commentDirectorToyOrder,
-                                        3);
-                                    Navigator.pop(context);
-                                    readOnly = true;
-                                    enabled = false;
-                                    },
-                                  child: const Text(
-                                    'Отправить отчет',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      height: 1.3,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                ),
                               )
-                                    : const SizedBox(height: 0,)
-                            ),
+                                  : const SizedBox(
+                                height: 0,
+                              )),
                         ],
                       ),
                     ),
@@ -726,5 +786,5 @@ class _Art_beginState extends State<Art_begin> {
         ],
       ),
     );
-    }
   }
+}
