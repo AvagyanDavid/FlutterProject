@@ -19,7 +19,6 @@ class host_end extends StatelessWidget {
   PhotoBloc photoBloc = PhotoBloc();
 
   String? cleanlinessWorkplaceHostPath = null;
-  String? cleanlinessWorkplaceHostName = null;
 
   String commentChargeRadioTerminalTelephone = '';
   String commentCleanlinessWorkplaceHost = '';
