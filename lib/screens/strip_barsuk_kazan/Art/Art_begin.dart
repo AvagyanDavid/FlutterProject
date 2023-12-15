@@ -7,8 +7,8 @@ import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
 
 class Art_begin extends StatefulWidget {
-  int idUser;
-  DateTime now;
+  final int idUser;
+  final DateTime now;
 
   Art_begin({super.key, required this.idUser, required this.now});
 
@@ -259,14 +259,21 @@ class _Art_beginState extends State<Art_begin> {
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(builder: (context, state) {
-                              return NewCheck(
-                                text:
-                                'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
-                                value: state.checkboxStates['readiness'] ?? false,
-                                checkboxBloc: checkboxBloc,
-                                checkboxId: 'readiness',
-                                enabled: enabled,
-                              );
+                              if (enabled == false) {
+                                return ShowCheck(
+                                    text: 'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
+                                    value: readiness
+                                );
+                              } else {
+                                return NewCheck(
+                                  text:
+                                  'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
+                                  value: state.checkboxStates['readiness'] ?? false,
+                                  checkboxBloc: checkboxBloc,
+                                  checkboxId: 'readiness',
+                                  enabled: enabled,
+                                );
+                              }
                             }),
                           ),
                           const SizedBox(
@@ -286,13 +293,20 @@ class _Art_beginState extends State<Art_begin> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: 'Скинуть список девочек в чат Арт ',
-                                  value: state.checkboxStates['sendListOfGirls'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'sendListOfGirls',
-                                  enabled: enabled,
-                                );
+                                if (enabled == false) {
+                                  return ShowCheck(
+                                      text: 'Скинуть список девочек в чат Арт ',
+                                      value: sendListOfGirls
+                                  );
+                                } else {
+                                  return NewCheck(
+                                    text: 'Скинуть список девочек в чат Арт ',
+                                    value: state.checkboxStates['sendListOfGirls'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'sendListOfGirls',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -310,13 +324,20 @@ class _Art_beginState extends State<Art_begin> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: 'Составить список для диджея ',
-                                  value: state.checkboxStates['listDJ'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'listDJ',
-                                  enabled: enabled,
-                                );
+                                if (enabled == false) {
+                                  return ShowCheck(
+                                      text: 'Составить список для диджея',
+                                      value: listDJ
+                                  );
+                                } else {
+                                  return NewCheck(
+                                    text: 'Составить список для диджея',
+                                    value: state.checkboxStates['listDJ'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'listDJ',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -335,13 +356,20 @@ class _Art_beginState extends State<Art_begin> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: "Проанализировать график на ближайшие 7 дней",
-                                  value: state.checkboxStates['analyzeGraph'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'analyzeGraph',
-                                  enabled: enabled,
-                                );
+                                if (enabled == false) {
+                                  return ShowCheck(
+                                      text: 'Проанализировать график на ближайшие 7 дней',
+                                      value: analyzeGraph
+                                  );
+                                } else {
+                                  return NewCheck(
+                                    text: "Проанализировать график на ближайшие 7 дней",
+                                    value: state.checkboxStates['analyzeGraph'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'analyzeGraph',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -359,13 +387,20 @@ class _Art_beginState extends State<Art_begin> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: "Контроль наличия анализов у артисток",
-                                  value: state.checkboxStates['controlArtistAnalize'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'controlArtistAnalize',
-                                  enabled: enabled,
-                                );
+                                if (enabled == false) {
+                                  return ShowCheck(
+                                      text: 'Контроль наличия анализов у артисток',
+                                      value: controlArtistAnalize
+                                  );
+                                } else {
+                                  return NewCheck(
+                                    text: "Контроль наличия анализов у артисток",
+                                    value: state.checkboxStates['controlArtistAnalize'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'controlArtistAnalize',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -386,13 +421,20 @@ class _Art_beginState extends State<Art_begin> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: "Пятиминутка",
-                                  value: state.checkboxStates['fiveMinutes'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'fiveMinutes',
-                                  enabled: enabled,
-                                );
+                                if (enabled == false) {
+                                  return ShowCheck(
+                                      text: 'Пятиминутка',
+                                      value: fiveMinutes
+                                  );
+                                } else {
+                                  return NewCheck(
+                                    text: "Пятиминутка",
+                                    value: state.checkboxStates['fiveMinutes'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'fiveMinutes',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -425,13 +467,20 @@ class _Art_beginState extends State<Art_begin> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: '1 карта',
-                                  value: state.checkboxStates['firstCard'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'firstCard',
-                                  enabled: enabled,
-                                );
+                                if (enabled == false) {
+                                  return ShowCheck(
+                                      text: '1 карта',
+                                      value: firstCard
+                                  );
+                                } else {
+                                  return NewCheck(
+                                    text: '1 карта',
+                                    value: state.checkboxStates['firstCard'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'firstCard',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -439,13 +488,20 @@ class _Art_beginState extends State<Art_begin> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: '2 карта',
-                                  value: state.checkboxStates['secondCard'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'secondCard',
-                                  enabled: enabled,
-                                );
+                                if (enabled == false) {
+                                  return ShowCheck(
+                                      text: '2 карта',
+                                      value: secondCard
+                                  );
+                                } else {
+                                  return NewCheck(
+                                    text: '2 карта',
+                                    value: state.checkboxStates['secondCard'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'secondCard',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -453,13 +509,20 @@ class _Art_beginState extends State<Art_begin> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: '3 карта',
-                                  value: state.checkboxStates['thirdCard'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'thirdCard',
-                                  enabled: enabled,
-                                );
+                                if (enabled == false) {
+                                  return ShowCheck(
+                                      text: '3 карта',
+                                      value: thirdCard
+                                  );
+                                } else {
+                                  return NewCheck(
+                                    text: '3 карта',
+                                    value: state.checkboxStates['thirdCard'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'thirdCard',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -509,13 +572,20 @@ class _Art_beginState extends State<Art_begin> {
                                   create: (context) => checkboxBloc,
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
-                                      return NewCheck(
-                                        text: '',
-                                        value: state.checkboxStates['control1'] ?? false,
-                                        checkboxBloc: checkboxBloc,
-                                        checkboxId: 'control1',
-                                        enabled: enabled,
-                                      );
+                                      if (enabled == false) {
+                                        return ShowCheck(
+                                            text: '',
+                                            value: control1
+                                        );
+                                      } else {
+                                        return NewCheck(
+                                          text: '',
+                                          value: state.checkboxStates['control1'] ?? false,
+                                          checkboxBloc: checkboxBloc,
+                                          checkboxId: 'control1',
+                                          enabled: enabled,
+                                        );
+                                      }
                                     },
                                   ),
                                 ),
@@ -542,13 +612,20 @@ class _Art_beginState extends State<Art_begin> {
                                   create: (context) => checkboxBloc,
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
-                                      return NewCheck(
-                                        text: '',
-                                        value: state.checkboxStates['control2'] ?? false,
-                                        checkboxBloc: checkboxBloc,
-                                        checkboxId: 'control2',
-                                        enabled: enabled,
-                                      );
+                                      if (enabled == false) {
+                                        return ShowCheck(
+                                            text: '',
+                                            value: control2
+                                        );
+                                      } else {
+                                        return NewCheck(
+                                          text: '',
+                                          value: state.checkboxStates['control2'] ?? false,
+                                          checkboxBloc: checkboxBloc,
+                                          checkboxId: 'control2',
+                                          enabled: enabled,
+                                        );
+                                      }
                                     },
                                   ),
                                 ),
@@ -577,12 +654,20 @@ class _Art_beginState extends State<Art_begin> {
                                   create: (context) => checkboxBloc,
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
-                                      return NewCheck(
-                                          text: '',
-                                          value: state.checkboxStates['control3'] ?? false,
-                                          checkboxBloc: checkboxBloc,
-                                          checkboxId: 'control3',
-                                          enabled: enabled);
+                                      if (enabled == false) {
+                                        return ShowCheck(
+                                            text: '',
+                                            value: control3
+                                        );
+                                      } else {
+                                        return NewCheck(
+                                            text: '',
+                                            value: state.checkboxStates['control3'] ?? false,
+                                            checkboxBloc: checkboxBloc,
+                                            checkboxId: 'control3',
+                                            enabled: enabled
+                                        );
+                                      }
                                     },
                                   ),
                                 ),
@@ -611,13 +696,20 @@ class _Art_beginState extends State<Art_begin> {
                                   create: (context) => checkboxBloc,
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
-                                      return NewCheck(
-                                        text: '',
-                                        value: state.checkboxStates['control4'] ?? false,
-                                        checkboxBloc: checkboxBloc,
-                                        checkboxId: 'control4',
-                                        enabled: enabled,
-                                      );
+                                      if (enabled == false) {
+                                        return ShowCheck(
+                                            text: '',
+                                            value: control4
+                                        );
+                                      } else {
+                                        return NewCheck(
+                                          text: '',
+                                          value: state.checkboxStates['control4'] ?? false,
+                                          checkboxBloc: checkboxBloc,
+                                          checkboxId: 'control4',
+                                          enabled: enabled,
+                                        );
+                                      }
                                     },
                                   ),
                                 ),
@@ -646,13 +738,20 @@ class _Art_beginState extends State<Art_begin> {
                                   create: (context) => checkboxBloc,
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
-                                      return NewCheck(
-                                        text: '',
-                                        value: state.checkboxStates['control5'] ?? false,
-                                        checkboxBloc: checkboxBloc,
-                                        checkboxId: 'control5',
-                                        enabled: enabled,
-                                      );
+                                      if (enabled == false) {
+                                        return ShowCheck(
+                                            text: '',
+                                            value: control5
+                                        );
+                                      } else {
+                                        return NewCheck(
+                                          text: '',
+                                          value: state.checkboxStates['control5'] ?? false,
+                                          checkboxBloc: checkboxBloc,
+                                          checkboxId: 'control5',
+                                          enabled: enabled,
+                                        );
+                                      }
                                     },
                                   ),
                                 ),
@@ -663,13 +762,20 @@ class _Art_beginState extends State<Art_begin> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: 'Составить заявку на игрушки',
-                                  value: state.checkboxStates['toyOrder'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'toyOrder',
-                                  enabled: enabled,
-                                );
+                                if (enabled == false) {
+                                  return ShowCheck(
+                                      text: 'Составить заявку на игрушки',
+                                      value: toyOrder
+                                  );
+                                } else {
+                                  return NewCheck(
+                                    text: 'Составить заявку на игрушки',
+                                    value: state.checkboxStates['toyOrder'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'toyOrder',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
