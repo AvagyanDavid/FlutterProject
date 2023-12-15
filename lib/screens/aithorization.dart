@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:test_form/api/api.dart';
-import 'package:test_form/main.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Art/Art.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Barman/barman.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Host/host.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Manager.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/Waiter/waiter.dart';
-import '../connection/database.dart';
 import 'Director.dart';
 
 class Autorization extends StatelessWidget {
@@ -91,70 +89,8 @@ class Autorization extends StatelessWidget {
                     backgroundColor: const Color(0xff866940),
                   ),
                   onPressed: () async {
-                    // db.getConnection().then(
-                    //   (conn) {
-                    //     conn.query(
-                    //         'Select * from Users where Login = ? and Password = ?',
-                    //         [login, password]).then((results) {
-                    //       if (results.isEmpty) {
-                    //         showDialog(
-                    //           context: context,
-                    //           builder: (context) => AlertDialog(
-                    //             title: const Text('Ошибка'),
-                    //             content: const Text(
-                    //                 'Неверное имя пользователя или пароль'),
-                    //             actions: [
-                    //               TextButton(
-                    //                 child: Text('OK'),
-                    //                 onPressed: () =>
-                    //                     Navigator.of(context).pop(),
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         );
-                    //       } else {
-                    //         for (var row in results) {
-                    //           idUser = row[0];
-                    //           Login = row[1];
-                    //           Post = row[3];
-                    //         }
-                    //         print('${idUser} ${Post}');
-                    //         switch (Post) {
-                    //           case 'Owner':
-                    //             // Navigator.push(
-                    //             //   context,
-                    //             //   MaterialPageRoute(
-                    //             //       builder: (context) => Director()),
-                    //             // );
-                    //           case 'Art':
-                    //             Navigator.push(
-                    //               context,
-                    //               MaterialPageRoute(
-                    //                   builder: (context) => Art()),
-                    //             );
-                    //           case 'Waiter':
-                    //             Navigator.push(
-                    //               context,
-                    //               MaterialPageRoute(
-                    //                   builder: (context) => Waiter()),
-                    //             );
-                    //           case 'Barman':
-                    //             Navigator.push(
-                    //               context,
-                    //               MaterialPageRoute(
-                    //                   builder: (context) => Barman()),
-                    //             );
-                    //           case 'Host':
-                    //             Navigator.push(
-                    //               context,
-                    //               MaterialPageRoute(
-                    //                   builder: (context) => Host()),
-                    //             );
-                    //         }
-                    //       }
-                    //     });
-                    //   },
-                    // );
+                    login = 'art';
+                    password = 'art';
                     final response = await Api().authorization(
                         login!, password!);
                     if (response == 'Error') {

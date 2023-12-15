@@ -6,11 +6,36 @@ import 'package:test_form/component/Forms.dart';
 import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
 
-class Art_begin extends StatelessWidget {
-  Art_begin({super.key});
+class Art_begin extends StatefulWidget {
+  int idUser;
+  DateTime now;
+
+  Art_begin({super.key, required this.idUser, required this.now});
+
+  @override
+  State<Art_begin> createState() => _Art_beginState();
+}
+
+class _Art_beginState extends State<Art_begin> {
 
   bool readOnly = false;
   bool enabled = true;
+
+  void getStatusReport() async {
+    String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
+    final response = await Api().checkReportArtBegin(date);
+    if (response != null) {
+      readOnly = true;
+      enabled = false;
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    getStatusReport();
+    super.initState();
+  }
 
   CheckboxBloc checkboxBloc = CheckboxBloc();
 
@@ -24,12 +49,10 @@ class Art_begin extends StatelessWidget {
   String? commentCard;
   String? commentControl1;
   String? commentControl2;
-
   String? commentControl3;
   String? commentControl4;
   String? commentControl5;
   String? commentToyOrder;
-
   String? commentDirectorListArtist;
   String? commentDirectorReadiness;
   String? commentDirectorSendListOfGirls;
@@ -41,350 +64,8 @@ class Art_begin extends StatelessWidget {
   String? commentDirectorToyOrder;
 
   // List? checkBox = [];
-  // checkBox.append("false")
-
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String date = '${now.year}-${now.month}-${now.day}';
-    final response = Api().checkReportArtBegin(date);
-    if (response != null){
-      readOnly = true;
-
-      return Scaffold(
-        body: SizedBox(
-          width: 400,
-          height: double.infinity,
-          child: Column(
-            children: [
-            SizedBox(
-            width: double.infinity,
-            // decoration: const BoxDecoration (
-            /// разделяющая линия приветсвие и филиал (207:6)
-            //   color: Colors.white,
-            // ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
-                  padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
-                  width: double.infinity,
-                  height: 174,
-                  decoration: const BoxDecoration(
-                    color: Color(0xff000000),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
-                        width: 173,
-                        height: double.infinity,
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
-                          width: double.infinity,
-                          height: 63.17,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin:
-                                const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
-                                child: const Text(
-                                  'Отчет Арта',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.3,
-                                    color: Color(0xffffffff),
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                'Отчет за:  ${widget.formatterdate}',
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.3,
-                                  color: Color(0xffffffff),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 150,
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: Image.asset("assets/emblem.png")),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            // BD1 (231:55)
-            margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
-            child: const Text(
-              'Начало смены',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w400,
-                height: 1.2999999523,
-                color: Color(0xffffffff),
-              ),
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                  padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
-                  width: double.infinity,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                  Container(
-                  margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
-                  width: double.infinity,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                      ShowCheck(
-                      text: 'Составить список артисток на смене',
-                      value: listArtist
-                  ),
-                  ShowCommentWorker(commentValue: commentListArtist,),
-                  const SizedBox(height: 20,),
-                  CommentDirector(valueDirector: commentDirectorListArtist,onChanged: (value){
-                    commentDirectorListArtist = value!;
-                  },
-                    readOnly: readOnly,),
-                  const SizedBox(height: 20),
-                  ShowCheck(
-                      text: 'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
-                      value: readiness
-                  ),
-                  const SizedBox(height: 20,),
-                  ShowCommentWorker(
-                    commentValue: commentReadiness,
-                  ),
-                  const SizedBox(height: 20,),
-                  CommentDirector(valueDirector: commentDirectorReadiness,onChanged: (value){
-                    commentDirectorReadiness = value!;
-                  },
-                    readOnly: readOnly,),
-                  ShowCheck(
-                      text: 'Скинуть список девочек в чат Арт ',
-                      value: sendListOfGirls
-                  ),
-                  ShowCommentWorker(
-                    commentValue: commentSendListOfGirls,
-                  ),
-                  const SizedBox(height: 20,),
-                  CommentDirector(valueDirector: commentDirectorSendListOfGirls,onChanged: (value){
-                    commentDirectorSendListOfGirls = value!;
-                  },
-                    readOnly: readOnly,),
-                  ShowCheck(
-                      text: 'Составить список для диджея ',
-                      value: listDJ
-                  ),
-                  ShowCommentWorker(
-                    commentValue: commentListDJ,
-                  ),
-                  const SizedBox(height: 10),
-                  CommentDirector(valueDirector: commentDirectorListDJ,onChanged: (value){
-                    commentDirectorListDJ = value!;
-                  },
-                    readOnly: readOnly,),
-                  const SizedBox(height: 20,),
-                  ShowCheck(
-                      text:
-                      "Проанализировать график на ближайшие 7 дней",
-                      value: analyzeGraph
-                  ),
-                  ShowCommentWorker(
-                      commentValue: commentAnalyzeGraph
-                  ),
-                  const SizedBox(height: 10,),
-                  CommentDirector(valueDirector: commentDirectorAnalyzeGraph,onChanged: (value){
-                    commentDirectorAnalyzeGraph = value!;
-                  },
-                    readOnly: readOnly,),
-                  ShowCheck(
-                      text: "Контроль наличия анализов у артисток",
-                      value: controlArtistAnalize
-                  ),
-                  ShowCommentWorker(
-                    commentValue: commentControlArtistAnalize,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CommentDirector(valueDirector: commentDirectorControlArtistAnalize,onChanged: (value){
-                    commentDirectorControlArtistAnalize = value!;
-                  },readOnly: readOnly),
-                  const SizedBox(height: 20,),
-                  ShowCheck(
-                      text: "Пятиминутка",
-                      value: fiveMinutes
-                  ),
-                  ShowCommentWorker(
-                    commentValue: commentFiveMinutes,
-                  ),
-                  const SizedBox(height: 20,),
-                  CommentDirector(valueDirector: commentFiveMinutes,onChanged: (value){
-                    commentDirectorFiveMinutes = value!;
-                  },
-                    readOnly: readOnly,),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Container(
-                      // ANK (211:310)
-                      child: const Text(
-                        'Выдача карт:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          height: 1.3,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  ShowCheck(
-                      text: '1 карта',
-                      value: firstCard
-                  ),
-                  ShowCheck(
-                    text: '2 карта',
-                    value: secondCard,
-                  ),
-                  ShowCheck(
-                      text: '3 карта',
-                      value: thirdCard
-                  ),
-                  ShowCommentWorker(commentValue: commentCard),
-                  const SizedBox(height: 20,),
-                  CommentDirector(valueDirector: commentDirectorCard,onChanged: (value){
-                    commentDirectorCard = value!;
-                  },
-                    readOnly: readOnly,),
-                  const SizedBox(height: 20,),
-                  const Text(
-                    'Контроль:',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      height: 1.3,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 20,),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ShowCommentWorker(
-                          commentValue: commentControl1,
-                        ),
-                      ),
-                      Expanded(flex: 1,
-                        child: ShowCheck(
-                            text: '',
-                            value: control1
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ShowCommentWorker(commentValue: commentControl2,),
-                      ),
-                      Expanded(flex: 1,
-                        child:ShowCheck(
-                            text: '',
-                            value: control2
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20,),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ShowCommentWorker(
-                          commentValue: commentControl3,
-                        ),
-                      ),
-                      Expanded(flex: 1,
-                        child: ShowCheck(
-                            text: '',
-                            value: control3
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20,),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ShowCommentWorker(
-                          commentValue: commentControl4,
-                        ),
-                      ),
-                      Expanded(flex: 1,
-                        child: ShowCheck(
-                          text: '',
-                          value: control4,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20,),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ShowCommentWorker(
-                          commentValue: commentControl5,
-                        ),
-                      ),
-                      Expanded(flex: 1,
-                        child: ShowCheck(
-                            text: '',
-                            value: control5
-                        ),
-                      ),
-                    ],
-                  ),
-                  ShowCheck(
-                      text: 'Составить заявку на игрушки',
-                      value: toyOrder),
-                  ShowCommentWorker(commentValue: commentToyOrder,),
-                  const SizedBox(height: 20,),
-                  CommentDirector(valueDirector: commentDirectorToyOrder,onChanged: (value){
-                    commentDirectorToyOrder = value!;
-                  },
-                      readOnly: readOnly),
-    }
-
     return Scaffold(
       body: Column(
         children: [
@@ -438,7 +119,7 @@ class Art_begin extends StatelessWidget {
                                 height: 10,
                               ),
                               Text(
-                                'сегодня $date',
+                                'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
@@ -944,13 +625,14 @@ class Art_begin extends StatelessWidget {
 
                           const SizedBox(height: 20),
                           Center(
-                                child: ElevatedButton(
+                                child: enabled == true
+                                    ? ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     minimumSize: const Size(100, 50),
                                     textStyle: const TextStyle(fontSize: 20),
                                     backgroundColor: Colors.green[800],
                                   ),
-                                  onPressed: () {
+                                  onPressed: () async {
                                     DateTime now = DateTime.now();
                                     String date = '${now.year}-${now.month}-${now.day}';
                                     String time = '${now.hour}:${now.minute}:${now.second}';
@@ -974,7 +656,7 @@ class Art_begin extends StatelessWidget {
                                     final control5 = state.checkboxStates['control5'] ?? false;
                                     final toyOrder = state.checkboxStates['toyOrder'] ?? false;
 
-                                    Api().artBegin(
+                                    await Api().artBegin(
                                         date,
                                         time,
                                         listArtist,
@@ -1030,7 +712,8 @@ class Art_begin extends StatelessWidget {
                                       color: Colors.white,
                                     ),
                                   ),
-                              ),
+                              )
+                                    : const SizedBox(height: 0,)
                             ),
                         ],
                       ),
@@ -1043,5 +726,5 @@ class Art_begin extends StatelessWidget {
         ],
       ),
     );
+    }
   }
-}

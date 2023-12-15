@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +6,6 @@ import 'package:test_form/api/api.dart';
 
 import 'package:test_form/component/Forms.dart';
 import 'package:test_form/component/photo/bloc/photo_bloc.dart';
-import 'package:test_form/connection/database.dart';
-import 'package:test_form/main.dart';
-import 'package:test_form/screens/strip_barsuk_kazan/Barman/barman.dart';
 
 import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';

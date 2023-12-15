@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 
 class Api {
   /// Симферополь
-  String baseUrl = 'http://192.168.0.102:3000';
+  // String baseUrl = 'http://192.168.0.102:3000';
+
+  // Ви
+  static const String baseUrl = 'http://192.168.0.104:3000';
 
   /// Севастополь
   // String baseUrl = 'http://192.168.1.55:3000';
@@ -352,7 +355,7 @@ class Api {
     bool toyOrder,
     String? commentToyOrder,
     String? commentDirectorToyOrder,
-      int idUser) async {
+    int idUser) async {
     Map<String, dynamic> data = {
       'date': date,
       'time': time,
@@ -689,11 +692,10 @@ class Api {
   Future<String?> checkReportHostEnd(String? date) async {
     final response = await Dio().post('$baseUrl/CheckReportHostEnd', data: {"Date": date});
     // debugPrint('reponse HostEnd ${response.data['Login'].toString()}');
-    if(response.data == null) {
-      return null;
+    if(response.data != null) {
+      return response.data['Login'] as String;
     }
-    return response.data['Login'] as String;
-
+    return null;
   }
 
   Future<String?> checkReportArtEnd(String? date) async {

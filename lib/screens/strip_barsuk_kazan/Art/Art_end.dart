@@ -2,29 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_form/api/api.dart';
 import 'package:test_form/component/Forms.dart';
-import 'package:test_form/screens/strip_barsuk_kazan/Art/Art.dart';
 import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
 import '../../../component/photo/bloc/photo_bloc.dart';
 import '../../../component/photo/photo.dart';
 
-class Art_end extends StatelessWidget {
-  Art_end({super.key});
+class Art_end extends StatefulWidget {
+  int idUser;
+  DateTime now;
 
+  Art_end({super.key, required this.idUser, required this.now});
+
+  @override
+  State<Art_end> createState() => _Art_endState();
+}
+
+class _Art_endState extends State<Art_end> {
   bool readOnly = false;
   bool enabled = true;
 
+  void getStatusReport() async {
+    String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
+    final response = await Api().checkReportArtEnd(date);
+    if (response != null) {
+      readOnly = true;
+      enabled = false;
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    getStatusReport();
+    super.initState();
+  }
+
   CheckboxBloc checkboxBloc = CheckboxBloc();
   PhotoBloc photoBloc = PhotoBloc();
-
   String? commentReportCompletedArt;
   String? commentReportCompleteMarket;
   String? commentSendReportChat;
   String? commentOrderDressingRoom;
-
   String? orderDressingRoomPhotoPath = null;
   String? orderDressingRoomPhotoName = null;
-
   String? commentDirectorReportCompletedArt;
   String? commentDirectorReportCompleteMarket;
   String? commentDirectorSendReportChat;
@@ -32,14 +52,6 @@ class Art_end extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String date = '${now.year}-${now.month}-${now.day}';
-    final response = Api().showArtEnd(date);
-    if (response != null){
-      readOnly = true;
-      enabled = false;
-    }
-
     return Scaffold(
       body: Column(
         children: [
@@ -100,7 +112,7 @@ class Art_end extends StatelessWidget {
                               ),
                               Text(
                                 // 6oq (207:28)
-                                'сегодня $date',
+                                'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
@@ -115,9 +127,7 @@ class Art_end extends StatelessWidget {
                       Container(
                         width: 100,
                         height: 100,
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: Image.asset("assets/emblem.png")),
+                        child: Align(alignment: Alignment.topRight, child: Image.asset("assets/emblem.png")),
                       ),
                     ],
                   ),
@@ -160,9 +170,7 @@ class Art_end extends StatelessWidget {
                               builder: (context, state) {
                                 return NewCheck(
                                   text: 'Заполнить отчет арта',
-                                  value:
-                                  state.checkboxStates['reportCompletedArt'] ??
-                                      false,
+                                  value: state.checkboxStates['reportCompletedArt'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'reportCompletedArt',
                                   enabled: enabled,
@@ -180,17 +188,16 @@ class Art_end extends StatelessWidget {
                           ShowCommentDirector(
                             valueDirector: commentDirectorReportCompletedArt,
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 return NewCheck(
                                   text: 'Заполнить отчет маркетолога',
-                                  value:
-                                  state
-                                      .checkboxStates['reportCompleteMarket'] ??
-                                      false,
+                                  value: state.checkboxStates['reportCompleteMarket'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'reportCompleteMarket',
                                   enabled: enabled,
@@ -208,19 +215,21 @@ class Art_end extends StatelessWidget {
                           ShowCommentDirector(
                             valueDirector: commentDirectorReportCompleteMarket,
                           ),
-                          const SizedBox(height: 20,),
                           const SizedBox(
-                              // ANK (211:310)
-                              child: Text(
-                                'Скинуть все отчеты в чат:',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.3,
-                                  color: Colors.white,
-                                ),
+                            height: 20,
+                          ),
+                          const SizedBox(
+                            // ANK (211:310)
+                            child: Text(
+                              'Скинуть все отчеты в чат:',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                height: 1.3,
+                                color: Colors.white,
                               ),
                             ),
+                          ),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
@@ -241,10 +250,7 @@ class Art_end extends StatelessWidget {
                               builder: (context, state) {
                                 return NewCheck(
                                   text: 'Бар',
-                                  value:
-                                  state
-                                      .checkboxStates['bar'] ??
-                                      false,
+                                  value: state.checkboxStates['bar'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'bar',
                                   enabled: enabled,
@@ -258,10 +264,7 @@ class Art_end extends StatelessWidget {
                               builder: (context, state) {
                                 return NewCheck(
                                   text: 'Маркетологи',
-                                  value:
-                                  state
-                                      .checkboxStates['market'] ??
-                                      false,
+                                  value: state.checkboxStates['market'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'market',
                                   enabled: enabled,
@@ -275,10 +278,7 @@ class Art_end extends StatelessWidget {
                               builder: (context, state) {
                                 return NewCheck(
                                   text: 'хостес',
-                                  value:
-                                  state
-                                      .checkboxStates['hostes'] ??
-                                      false,
+                                  value: state.checkboxStates['hostes'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'hostes',
                                   enabled: enabled,
@@ -302,8 +302,7 @@ class Art_end extends StatelessWidget {
                               builder: (context, state) {
                                 return NewCheck(
                                   text: 'Проверить порядок в гримерке',
-                                  value: state.checkboxStates['orderDressingRoom'] ??
-                                      false,
+                                  value: state.checkboxStates['orderDressingRoom'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'orderDressingRoom',
                                   enabled: enabled,
@@ -323,7 +322,9 @@ class Art_end extends StatelessWidget {
                               },
                             ),
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           CommentWorker(
                             commentValue: commentOrderDressingRoom,
                             onChanged: (value) {
@@ -334,50 +335,72 @@ class Art_end extends StatelessWidget {
                           ShowCommentDirector(
                             valueDirector: commentDirectorOrderDressingRoom,
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Center(
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(100, 50),
-                                  textStyle: const TextStyle(fontSize: 20),
-                                  backgroundColor: Colors.green,
-                                ),
-                                onPressed: () {
-                                  final photostate = photoBloc.state;
-                                  final orderDressingRoomPhoto = photostate
-                                      .photoStates['orderDressingRoomPhoto'];
-                                  if(orderDressingRoomPhoto != null) {
-                                    orderDressingRoomPhotoPath = orderDressingRoomPhoto.path;
-                                  }
+                            child: enabled == true
+                                ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(100, 50),
+                                textStyle: const TextStyle(fontSize: 20),
+                                backgroundColor: Colors.green,
+                              ),
+                              onPressed: () {
+                                final photostate = photoBloc.state;
+                                final orderDressingRoomPhoto = photostate.photoStates['orderDressingRoomPhoto'];
+                                if (orderDressingRoomPhoto != null) {
+                                  orderDressingRoomPhotoPath = orderDressingRoomPhoto.path;
+                                }
 
-                                  DateTime now = DateTime.now();
-                                  String date = '${now.year}-${now.month}-${now.day}';
-                                  String time = '${now.hour}:${now.minute}:${now.second}';
+                                DateTime now = DateTime.now();
+                                String date = '${now.year}-${now.month}-${now.day}';
+                                String time = '${now.hour}:${now.minute}:${now.second}';
 
-                                  final state = checkboxBloc.state;
-                                  final reportCompletedArt = state.checkboxStates['reportCompletedArt'] ?? false;
-                                  final reportCompleteMarket = state.checkboxStates['reportCompleteMarket'] ?? false;
-                                  final art = state.checkboxStates['art'] ?? false;
-                                  final bar = state.checkboxStates['bar'] ?? false;
-                                  final market = state.checkboxStates['market'] ?? false;
-                                  final hostes = state.checkboxStates['hostes'] ?? false;
-                                  final orderDressingRoom = state.checkboxStates['orderDressingRoom'] ?? false;
+                                final state = checkboxBloc.state;
+                                final reportCompletedArt = state.checkboxStates['reportCompletedArt'] ?? false;
+                                final reportCompleteMarket = state.checkboxStates['reportCompleteMarket'] ?? false;
+                                final art = state.checkboxStates['art'] ?? false;
+                                final bar = state.checkboxStates['bar'] ?? false;
+                                final market = state.checkboxStates['market'] ?? false;
+                                final hostes = state.checkboxStates['hostes'] ?? false;
+                                final orderDressingRoom = state.checkboxStates['orderDressingRoom'] ?? false;
 
-                                  Api().artEnd(date, time, reportCompletedArt, commentReportCompletedArt, commentDirectorReportCompletedArt, reportCompleteMarket, commentReportCompleteMarket, commentDirectorReportCompleteMarket, art, bar, market, hostes, commentSendReportChat, commentDirectorSendReportChat, orderDressingRoom, orderDressingRoomPhotoPath, commentOrderDressingRoom, commentDirectorOrderDressingRoom, 3);
+                                Api().artEnd(
+                                    date,
+                                    time,
+                                    reportCompletedArt,
+                                    commentReportCompletedArt,
+                                    commentDirectorReportCompletedArt,
+                                    reportCompleteMarket,
+                                    commentReportCompleteMarket,
+                                    commentDirectorReportCompleteMarket,
+                                    art,
+                                    bar,
+                                    market,
+                                    hostes,
+                                    commentSendReportChat,
+                                    commentDirectorSendReportChat,
+                                    orderDressingRoom,
+                                    orderDressingRoomPhotoPath,
+                                    commentOrderDressingRoom,
+                                    commentDirectorOrderDressingRoom,
+                                    3);
 
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  'Отправить отчет',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    height: 1.3,
-                                    color: Colors.white,
-                                  ),
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                'Отправить отчет',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  height: 1.3,
+                                  color: Colors.white,
                                 ),
                               ),
-                            ),
+                            )
+                                : const SizedBox(height: 0,)
+                          ),
                         ],
                       ),
                     ),

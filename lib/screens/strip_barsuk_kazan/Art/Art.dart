@@ -11,10 +11,9 @@ class Art extends StatelessWidget {
 
   Art({super.key,required this.id, required this.login, required this.post});
 
-   var date = DateTime.now;
-
   @override
   Widget build(BuildContext context) {
+    DateTime date = DateTime.now();
     return Scaffold(
       body: Container(
         // frame5Sco (207:23)
@@ -120,7 +119,7 @@ class Art extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Art_begin()),
+                                  builder: (context) => Art_begin(idUser: id, now: date)),
                             );
                           },
                           child: const Text(
@@ -152,7 +151,7 @@ class Art extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Art_end()),
+                                  builder: (context) => Art_end(idUser: id, now: date,)),
                             );
                           },
                           child: const Text(
@@ -177,11 +176,11 @@ class Art extends StatelessWidget {
                             backgroundColor: Colors.red[900],
                           ),
                           onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => Autorization()),
-                            // );
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Autorization()),
+                            );
                             idUser = 0;
                             Post = '';
                             Login = '';
