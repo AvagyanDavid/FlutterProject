@@ -8,36 +8,69 @@ import 'package:test_form/screens/strip_barsuk_kazan/Waiter/waiter.dart';
 
 import '../../../component/checkbox/checkbox.dart';
 
-class Waiter_end extends StatelessWidget {
-  Waiter_end({super.key});
+class Waiter_end extends StatefulWidget {
+  final int idUser;
+  final DateTime now;
+  
+  Waiter_end({super.key, required this.idUser, required this.now});
+
+  @override
+  State<Waiter_end> createState() => _Waiter_endState();
+}
+
+class _Waiter_endState extends State<Waiter_end> {
+  bool readOnly = false;
+  bool enabled = true;
 
   CheckboxBloc checkboxBloc = CheckboxBloc();
 
-  String commentChargerCandle = '';
-  String commentFixOttomansAndTables = '';
-  String commentCleanTables = '';
-  String commentPutAwayTheNapkins = '';
-
+  String? commentChargerCandle = '';
+  String? commentFixOttomansAndTables = '';
+  String? commentCleanTables = '';
+  String? commentPutAwayTheNapkins = '';
   String? commentDirectorChargerCandle;
   String? commentDirectorFixOttomansAndTables;
   String? commentDirectorCleanTables;
   String? commentDirectorPutAwayTheNapkins;
+  bool chargerCandle = false;
+  bool fixOttomansAndTables =  false;
+  bool cleanTables = false;
+  bool putAwayTheNapkins = false;
 
-  bool readOnly = false;
-  bool enabled = true;
+
+  void getStatusReport() async {
+    String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
+    final results = await Api().checkReportWaiterEnd(date);
+    if (results != null) {
+      readOnly = true;
+      enabled = false;
+      final response = await Api().showWaiterEnd(date);
+      chargerCandle = response['ChargerCandle'] != 0 ? true : false;
+      commentChargerCandle = response['Comment_ChargerCandle'] as String?;
+      commentDirectorChargerCandle = response['CommentDirector_ChargerCandle'] as String?;
+      fixOttomansAndTables = response['FixOttomansAndTables'] != 0 ? true : false;
+      commentFixOttomansAndTables = response['Comment_FixOttomansAndTables'] as String?;
+      commentDirectorFixOttomansAndTables = response['CommentDirector_FixOttomansAndTables'] as String?;
+      cleanTables = response['CleanTables'] != 0 ? true : false;
+      commentCleanTables = response['Comment_CleanTables'] as String?;
+      commentDirectorCleanTables = response['CommentDirector_CleanTables'] as String?;
+      putAwayTheNapkins = response['PutAwayTheNapkins'] != 0 ? true : false;
+      commentPutAwayTheNapkins = response['Comment_PutAwayTheNapkins'] as String?;
+      commentDirectorPutAwayTheNapkins = response['CommentDirector_PutAwayTheNapkins'] as String?;
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    getStatusReport();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String date = '${now.year}-${now.month}-${now.day}';
-    final response = Api().showWaiterEnd(date);
-    if (response != null){
-      readOnly = true;
-      enabled = false;
-    }
     return Scaffold(
-      body: Container(
-        // frame5Sco (207:23)
+      body: SizedBox(
         width: 400,
         height: double.infinity,
         child: Column(
@@ -85,9 +118,9 @@ class Waiter_end extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const Text(
-                                  'сегодня',
-                                  style: TextStyle(
+                                Text(
+                                  'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
+                                  style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
                                     height: 1.3,
@@ -114,7 +147,7 @@ class Waiter_end extends StatelessWidget {
             Container(
               margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
               child: const Text(
-                'Смена:',
+                'Конец смены',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w400,
@@ -141,6 +174,11 @@ class Waiter_end extends StatelessWidget {
                               create: (context) => checkboxBloc,
                               child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                 builder: (context, state) {
+                                  if(enabled == false){
+                                    return ShowCheck(
+                                        text: 'Убрать на зарядку свечи',
+                                        value: chargerCandle);
+                                  }
                                   return NewCheck(
                                       text: "Убрать на зарядку свечи",
                                       value: state.checkboxStates['chargerCandle'] ?? false,
@@ -161,12 +199,18 @@ class Waiter_end extends StatelessWidget {
                               create: (context) => checkboxBloc,
                               child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                 builder: (context, state) {
-                                  return NewCheck(
+                                  if(enabled == false){
+                                    return ShowCheck(
+                                        text: 'Поправить пуфы и столики',
+                                        value: fixOttomansAndTables);
+                                  } else {
+                                    return NewCheck(
                                       text: "Поправить пуфы и столики",
                                       value: state.checkboxStates['fixOttomansAndTables'] ?? false,
                                       checkboxBloc: checkboxBloc,
-                                    checkboxId: 'fixOttomansAndTables',
-                                  enabled: enabled,);
+                                      checkboxId: 'fixOttomansAndTables',
+                                      enabled: enabled,);
+                                  }
                                 },
                               ),
                             ),
@@ -179,12 +223,18 @@ class Waiter_end extends StatelessWidget {
                               create: (context) => checkboxBloc,
                               child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                 builder: (context, state) {
-                                  return NewCheck(
+                                  if(enabled == false){
+                                    return ShowCheck(
+                                        text: 'Протереть столы',
+                                        value: cleanTables);
+                                  } else {
+                                    return NewCheck(
                                       text: "Протереть столы",
                                       value: state.checkboxStates['cleanTables'] ?? false,
-                                      checkboxBloc:checkboxBloc,
-                                    checkboxId: 'cleanTables',
-                                  enabled: enabled,);
+                                      checkboxBloc: checkboxBloc,
+                                      checkboxId: 'cleanTables',
+                                      enabled: enabled,);
+                                  }
                                 },
                               ),
                             ),
@@ -198,12 +248,18 @@ class Waiter_end extends StatelessWidget {
                               create: (context) => checkboxBloc,
                               child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                 builder: (context, state) {
-                                  return NewCheck(
+                                  if(enabled == false){
+                                    return ShowCheck(
+                                        text: 'Убрать все салфетки (которыми протирали пилон) от зеркала',
+                                        value: putAwayTheNapkins);
+                                  } else {
+                                    return NewCheck(
                                       text: "Убрать все салфетки (которыми протирали пилон) от зеркала",
                                       value: state.checkboxStates['putAwayTheNapkins'] ?? false,
-                                      checkboxBloc:checkboxBloc,
-                                    checkboxId: 'putAwayTheNapkins',
-                                  enabled: enabled,);
+                                      checkboxBloc: checkboxBloc,
+                                      checkboxId: 'putAwayTheNapkins',
+                                      enabled: enabled,);
+                                  }
                                 },
                               ),
                             ),
@@ -218,25 +274,25 @@ class Waiter_end extends StatelessWidget {
                         ),
                       ),
                       Center(
-                          child: ElevatedButton(
+                          child: enabled == true ? ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(100, 50),
                                   textStyle: const TextStyle(fontSize: 20),
                                   backgroundColor: Colors.green,
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   DateTime now = DateTime.now();
                                   String date = '${now.year}-${now.month}-${now.day}';
                                   String time = '${now.hour}:${now.minute}:${now.second}';
 
                                   final state = checkboxBloc.state;
 
-                                  final chargerCandle = state.checkboxStates['chargerCandle'] ?? false;
-                                  final fixOttomansAndTables = state.checkboxStates['fixOttomansAndTables'] ?? false;
-                                  final cleanTables = state.checkboxStates['cleanTables'] ?? false;
-                                  final putAwayTheNapkins = state.checkboxStates['putAwayTheNapkins'] ?? false;
+                                  chargerCandle = state.checkboxStates['chargerCandle'] ?? false;
+                                  fixOttomansAndTables = state.checkboxStates['fixOttomansAndTables'] ?? false;
+                                  cleanTables = state.checkboxStates['cleanTables'] ?? false;
+                                  putAwayTheNapkins = state.checkboxStates['putAwayTheNapkins'] ?? false;
 
-                                  Api().waiterEnd(
+                                  await Api().waiterEnd(
                                     date,
                                     time,
                                     chargerCandle,
@@ -265,6 +321,7 @@ class Waiter_end extends StatelessWidget {
                                   ),
                                 ),
                               )
+                              : const SizedBox(height: 0,)
                           ),
                     ],
                   ),

@@ -402,7 +402,7 @@ class _Art_endState extends State<Art_end> {
                                 textStyle: const TextStyle(fontSize: 20),
                                 backgroundColor: Colors.green,
                               ),
-                              onPressed: () {
+                              onPressed: () async{
                                 final photostate = photoBloc.state;
                                 final orderDressingRoomPhoto = photostate.photoStates['orderDressingRoomPhoto'];
                                 if (orderDressingRoomPhoto != null) {
@@ -414,15 +414,15 @@ class _Art_endState extends State<Art_end> {
                                 String time = '${now.hour}:${now.minute}:${now.second}';
 
                                 final state = checkboxBloc.state;
-                                final reportCompletedArt = state.checkboxStates['reportCompletedArt'] ?? false;
-                                final reportCompleteMarket = state.checkboxStates['reportCompleteMarket'] ?? false;
-                                final art = state.checkboxStates['art'] ?? false;
-                                final bar = state.checkboxStates['bar'] ?? false;
-                                final market = state.checkboxStates['market'] ?? false;
-                                final hostes = state.checkboxStates['hostes'] ?? false;
-                                final orderDressingRoom = state.checkboxStates['orderDressingRoom'] ?? false;
+                                reportCompletedArt = state.checkboxStates['reportCompletedArt'] ?? false;
+                                reportCompleteMarket = state.checkboxStates['reportCompleteMarket'] ?? false;
+                                art = state.checkboxStates['art'] ?? false;
+                                bar = state.checkboxStates['bar'] ?? false;
+                                market = state.checkboxStates['market'] ?? false;
+                                hostes = state.checkboxStates['hostes'] ?? false;
+                                orderDressingRoom = state.checkboxStates['orderDressingRoom'] ?? false;
 
-                                Api().artEnd(
+                                await Api().artEnd(
                                     date,
                                     time,
                                     reportCompletedArt,
