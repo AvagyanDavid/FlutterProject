@@ -13,13 +13,13 @@ class Host extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime date = DateTime.now();
     return Scaffold(
-      body: Container(
-        // frame5Sco (207:23)
+      body: SizedBox(
         width: 400,
         height: double.infinity,
         child: Column(children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             // decoration: const BoxDecoration (
             /// разделяющая линия приветсвие и филиал (207:6)
@@ -29,7 +29,6 @@ class Host extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  // appbar7Yb (207:165)
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
                   padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
                   width: double.infinity,
@@ -41,12 +40,10 @@ class Host extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // group5Pm1 (207:166)
                         margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
                         width: 173,
                         height: double.infinity,
                         child: Container(
-                          // autogroupc5usX6X (Qd8Af2EBZv8YZ9YRmLC5Us)
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
                           width: double.infinity,
                           height: 63.17,
@@ -54,9 +51,7 @@ class Host extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                // qd1 (207:27)
-                                margin:
-                                const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
+                                margin: const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
                                 child: const Text(
                                   'Привет Хостес',
                                   style: TextStyle(
@@ -67,10 +62,9 @@ class Host extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const Text(
-                                // 6oq (207:28)
-                                'сегодня',
-                                style: TextStyle(
+                              Text(
+                                'сегодня $date',
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
                                   height: 1.3,
@@ -81,7 +75,7 @@ class Host extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 100,
                         height: 150,
                         child: Align(
@@ -97,16 +91,13 @@ class Host extends StatelessWidget {
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              // autogrouptfuqVzP (Qd88RFd5Sycz9vo7TbtFuq)
               padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Center(
-                    child: Container(
-                      // group167uy (231:53)
-                      //width: double.infinity,
+                    child: SizedBox(
                       height: 51,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -118,7 +109,7 @@ class Host extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => host_begin()),
+                                  builder: (context) => Host_begin(idUser: id, now: date,)),
                             );
                           },
                           child: const Text(
@@ -135,9 +126,7 @@ class Host extends StatelessWidget {
                   const SizedBox(
                     height: 20),
                   Center(
-                    child: Container(
-                      // group167uy (231:53)
-                      //width: double.infinity,
+                    child: SizedBox(
                       height: 51,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -149,7 +138,7 @@ class Host extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => host_end()),
+                                  builder: (context) => Host_end(idUser: id, now: date,)),
                             );
                           },
                           child: const Text(
@@ -165,7 +154,7 @@ class Host extends StatelessWidget {
                   ),
                   const SizedBox(height: 40,),
                   Center(
-                    child: Container(
+                    child: SizedBox(
                       height: 51,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -174,11 +163,11 @@ class Host extends StatelessWidget {
                             backgroundColor: Colors.red[900],
                           ),
                           onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => Autorization()),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Autorization()),
+                            );
                             idUser = 0;
                             Post = '';
                             Login = '';

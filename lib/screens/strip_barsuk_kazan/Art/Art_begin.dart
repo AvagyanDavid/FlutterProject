@@ -124,7 +124,7 @@ class _Art_beginState extends State<Art_begin> {
     return Scaffold(
       body: Column(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             // decoration: const BoxDecoration (
             /// разделяющая линия приветсвие и филиал (207:6)
@@ -152,13 +152,11 @@ class _Art_beginState extends State<Art_begin> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
+                              const Expanded(
                                 child: SingleChildScrollView(
-                                  child: Container(
-                                    // qd1 (207:27)
-                                    // margin: const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
+                                  child: SizedBox(
                                     width: 200,
-                                    child: const Text(
+                                    child: Text(
                                       'Привет АртМенеджер',
                                       style: TextStyle(
                                         fontSize: 20,
@@ -186,7 +184,7 @@ class _Art_beginState extends State<Art_begin> {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 100,
                         height: 100,
                         child: Align(alignment: Alignment.topRight, child: Image.asset("assets/emblem.png")),
@@ -197,10 +195,8 @@ class _Art_beginState extends State<Art_begin> {
               ],
             ),
           ),
-          Container(
-            // BD1 (231:55)
-            // margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
-            child: const Text(
+          const SizedBox(
+            child: Text(
               'Начало смены',
               style: TextStyle(
                 fontSize: 32,
@@ -213,14 +209,12 @@ class _Art_beginState extends State<Art_begin> {
           Expanded(
             child: SingleChildScrollView(
               child: Container(
-                // autogrouptfuqVzP (Qd88RFd5Sycz9vo7TbtFuq)
                 padding: const EdgeInsets.fromLTRB(0, 31.5, 0, 62),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      // frame6qHZ (211:334)
                       margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
                       width: double.infinity,
                       child: Column(

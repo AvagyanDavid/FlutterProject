@@ -3,15 +3,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_form/api/api.dart';
 import 'package:test_form/component/Forms.dart';
 import 'package:test_form/component/photo/photo.dart';
-import 'package:test_form/screens/strip_barsuk_kazan/Host/host.dart';
-
+import 'package:test_form/main.dart';
 import '../../../component/photo/bloc/photo_bloc.dart';
 import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
 
-class host_end extends StatelessWidget {
-  host_end({Key? key});
+class Host_end extends StatefulWidget {
+  final int idUser;
+  final DateTime now;
+  
+  Host_end({super.key, required this.idUser, required this.now});
 
+  @override
+  State<Host_end> createState() => _Host_endState();
+}
+
+class _Host_endState extends State<Host_end> {
   bool readOnly = false;
   bool enabled = true;
 
@@ -19,29 +26,44 @@ class host_end extends StatelessWidget {
   PhotoBloc photoBloc = PhotoBloc();
 
   String? cleanlinessWorkplaceHostPath = null;
+  String? commentChargerRadioTerminalTelephone;
+  String? commentWorkplace;
+  String? commentDirectorChargerRadioTerminalTelephone;
+  String? commentDirectorWorkplace;
+  bool chargerRadioTerminalTelephone = false;
+  bool cleanWorkplace = false;
 
-  String commentChargeRadioTerminalTelephone = '';
-  String commentCleanlinessWorkplaceHost = '';
-
-  String? commentDirectorChargeRadioTerminalTelephone;
-  String? commentDirectorCleanlinessWorkplaceHost;
-
-  @override
-  Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String date = '${now.year}-${now.month}-${now.day}';
-    final response = Api().showHostEnd(date);
-    if (response != null){
+  void getStatusReport() async {
+    String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
+    final results = await Api().checkReportHostEnd(date);
+    if (results != null) {
       readOnly = true;
       enabled = false;
+      final response = await Api().showHostEnd(date);
+      chargerRadioTerminalTelephone = response['ChargerRadioTerminalTelephone'] != 0 ? true : false;
+      commentChargerRadioTerminalTelephone = response['Comment_ChargerRadioTerminalTelephone'] as String?;
+      commentDirectorChargerRadioTerminalTelephone = response['CommentDirector_ChargerRadioTerminalTelephone'] as String?;
+      cleanWorkplace = response['CleanWorkplace'] != 0 ? true : false;
+      commentWorkplace = response['Comment_Workplace'] as String?;
+      commentDirectorWorkplace = response['CommentDirector_Workplace'] as String?;
+      setState(() {});
     }
+  }
+
+  @override
+  void initState() {
+    getStatusReport();
+    super.initState();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SizedBox(
-        // frame5Sco (207:23)
         width: 400,
         height: double.infinity,
         child: Column(children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             // decoration: const BoxDecoration (
             /// разделяющая линия приветсвие и филиал (207:6)
@@ -51,7 +73,6 @@ class host_end extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  // appbar7Yb (207:165)
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
                   padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
                   width: double.infinity,
@@ -87,7 +108,7 @@ class host_end extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                'сегодня $date',
+                                'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
@@ -113,7 +134,6 @@ class host_end extends StatelessWidget {
             ),
           ),
           Container(
-            // BD1 (231:55)
             margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
             child: const Text(
               'Конец смены',
@@ -128,14 +148,12 @@ class host_end extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Container(
-                // autogrouptfuqVzP (Qd88RFd5Sycz9vo7TbtFuq)
                 padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      // frame6qHZ (211:334)
                       margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
                       width: double.infinity,
                       child: Column(
@@ -145,9 +163,13 @@ class host_end extends StatelessWidget {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
+                                if(enabled == false){
+                                  return ShowCheck(
+                                      text: 'Поставить на зарядку рацию, терминал, телефон',
+                                      value: chargerRadioTerminalTelephone);
+                                }
                                 return NewCheck(
-                                  text:
-                                      "Поставить на зарядку рацию, терминал, телефон",
+                                  text: "Поставить на зарядку рацию, терминал, телефон",
                                   value: state.checkboxStates['chargeRadioTerminalTelephone'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'chargeRadioTerminalTelephone',
@@ -161,28 +183,33 @@ class host_end extends StatelessWidget {
                           ),
                           CommentWorker(
                               commentValue:
-                                  commentChargeRadioTerminalTelephone,
+                                  commentChargerRadioTerminalTelephone,
                             onChanged: (value) {
-                                commentChargeRadioTerminalTelephone = value!;
+                                commentChargerRadioTerminalTelephone = value!;
                                 },
                             readOnly: readOnly,
                           ),
                           const SizedBox(
                             height: 20,
                           ),
-                          ShowCommentDirector(valueDirector: commentDirectorChargeRadioTerminalTelephone,),
+                          ShowCommentDirector(valueDirector: commentDirectorChargerRadioTerminalTelephone,),
                           BlocProvider<CheckboxBloc>(
                             create: (context) => checkboxBloc,
-                            // BlocBuilder(builder: builder)
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: "Навести порядок на рабочем месте",
-                                  value: state.checkboxStates['cleanlinessWorkplaceHost'] ?? false,
-                                  checkboxBloc:checkboxBloc,
-                                  checkboxId: 'cleanlinessWorkplaceHost',
-                                  enabled: enabled,
-                                );
+                                if(enabled == false){
+                                  return ShowCheck(
+                                      text: 'Навести порядок на рабочем месте',
+                                      value: cleanWorkplace);
+                                } else {
+                                  return NewCheck(
+                                    text: "Навести порядок на рабочем месте",
+                                    value: state.checkboxStates['cleanlinessWorkplaceHost'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'cleanlinessWorkplaceHost',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -201,20 +228,20 @@ class host_end extends StatelessWidget {
                             height: 20,
                           ),
                           CommentWorker(
-                              commentValue: commentCleanlinessWorkplaceHost,onChanged: (value) {
-                                commentCleanlinessWorkplaceHost = value!;
+                              commentValue: commentWorkplace,onChanged: (value) {
+                            commentWorkplace = value!;
                                 },
                             readOnly: readOnly,
                           ),
                           const SizedBox(
                             height: 0,
                           ),
-                          ShowCommentDirector(valueDirector: commentDirectorCleanlinessWorkplaceHost,),
+                          ShowCommentDirector(valueDirector: commentDirectorWorkplace,),
                         ],
                       ),
                     ),
                     Center(
-                      child: ElevatedButton(
+                      child: enabled == true ? ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(100, 50),
                             textStyle: const TextStyle(fontSize: 20),
@@ -231,10 +258,10 @@ class host_end extends StatelessWidget {
                             String time = '${now.hour}:${now.minute}:${now.second}';
 
                             final state = checkboxBloc.state;
-                            final chargeRadioTerminalTelephone = state.checkboxStates['chargeRadioTerminalTelephone'] ?? false;
-                            final cleanlinessWorkplaceHost = state.checkboxStates['cleanlinessWorkplaceHost'] ?? false;
+                            chargerRadioTerminalTelephone = state.checkboxStates['chargeRadioTerminalTelephone'] ?? false;
+                            cleanWorkplace = state.checkboxStates['cleanlinessWorkplaceHost'] ?? false;
 
-                            Api().hostEnd(date,time,chargeRadioTerminalTelephone,commentChargeRadioTerminalTelephone,commentDirectorChargeRadioTerminalTelephone,cleanlinessWorkplaceHost,cleanlinessWorkplaceHostPath,commentCleanlinessWorkplaceHost,commentDirectorCleanlinessWorkplaceHost,1);
+                            Api().hostEnd(date,time,chargerRadioTerminalTelephone,commentChargerRadioTerminalTelephone,commentDirectorChargerRadioTerminalTelephone,cleanWorkplace,cleanlinessWorkplaceHostPath,commentWorkplace,commentDirectorWorkplace,idUser);
 
                             Navigator.pop(context);
                           },
@@ -247,7 +274,7 @@ class host_end extends StatelessWidget {
                               color: Colors.white,
                             ),
                           ),
-                        ),
+                        ) : const SizedBox(height: 0,),
                       ),
                   ],
                 ),
