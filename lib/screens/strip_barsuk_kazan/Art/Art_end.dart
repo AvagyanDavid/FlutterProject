@@ -21,12 +21,53 @@ class _Art_endState extends State<Art_end> {
   bool readOnly = false;
   bool enabled = true;
 
+  CheckboxBloc checkboxBloc = CheckboxBloc();
+  PhotoBloc photoBloc = PhotoBloc();
+
+
+
+  String? commentReportCompleteArt;
+  String? commentReportCompleteMarket;
+  String? commentSendReportChat;
+  String? commentOrderDressingRoom;
+  String? orderDressingRoomPhotoPath = null;
+  String? commentDirectorReportCompletedArt;
+  String? commentDirectorReportCompleteMarket;
+  String? commentDirectorSendReportChat;
+  String? commentDirectorOrderDressingRoom;
+  bool reportCompletedArt = false;
+  bool reportCompleteMarket = false;
+  bool art = false;
+  bool bar = false;
+  bool market = false;
+  bool hostes =  false;
+  bool orderDressingRoom =  false;
+
   void getStatusReport() async {
     String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
-    final response = await Api().checkReportArtEnd(date);
-    if (response != null) {
+    final results = await Api().checkReportArtEnd(date);
+    if (results != null) {
       readOnly = true;
       enabled = false;
+      final response = await Api().showArtEnd(date);
+      reportCompletedArt = response['ReportCompletedArt'] != 0 ? true : false;
+      commentReportCompleteArt = response['Comment_ReportCompleteArt'] as String?;
+      commentDirectorReportCompletedArt = response['CommentDirector_ReportCompletedArt'] as String?;
+      reportCompleteMarket = response['ReportCompleteMarket'] != 0 ? true : false;
+      commentReportCompleteMarket= response['Comment_ReportCompleteMarket'] as String?;
+      commentDirectorReportCompleteMarket = response['CommentDirector_ReportCompleteMarket'] as String?;
+      art = response['Art'] != 0 ? true : false;
+      bar = response['Bar'] != 0 ? true : false;
+      market = response['Market'] != 0 ? true : false;
+      hostes = response['Hostes'] != 0 ? true : false;
+      commentSendReportChat = response['Comment_SendReportChat'] as String?;
+      commentDirectorSendReportChat = response['CommentDirector_SendReportChat'] as String?;
+      orderDressingRoom = response['OrderDressingRoom'] != 0 ? true : false;
+      commentOrderDressingRoom = response['Comment_OrderDressingRoom'] as String?;
+      commentDirectorOrderDressingRoom = response['CommentDirector_OrderDressingRoom'] as String?;
+
+      orderDressingRoomPhotoPath = response['OrderDressingRoomPhoto'] == null ? null : Api().getPhoto(response['OrderDressingRoomPhoto']);
+
       setState(() {});
     }
   }
@@ -37,25 +78,12 @@ class _Art_endState extends State<Art_end> {
     super.initState();
   }
 
-  CheckboxBloc checkboxBloc = CheckboxBloc();
-  PhotoBloc photoBloc = PhotoBloc();
-  String? commentReportCompletedArt;
-  String? commentReportCompleteMarket;
-  String? commentSendReportChat;
-  String? commentOrderDressingRoom;
-  String? orderDressingRoomPhotoPath = null;
-  String? orderDressingRoomPhotoName = null;
-  String? commentDirectorReportCompletedArt;
-  String? commentDirectorReportCompleteMarket;
-  String? commentDirectorSendReportChat;
-  String? commentDirectorOrderDressingRoom;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             // decoration: const BoxDecoration (
             /// разделяющая линия приветсвие и филиал (207:6)
@@ -65,37 +93,29 @@ class _Art_endState extends State<Art_end> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  // appbar7Yb (207:165)
-                  // margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
                   padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
-                  // width: double.infinity,
                   height: 200,
                   decoration: const BoxDecoration(
                     color: Color(0xff000000),
                   ),
                   child: Row(
-                    // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // group5Pm1 (207:166)
                         margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
                         width: 173,
                         height: double.infinity,
                         child: Container(
-                          // autogroupc5usX6X (Qd8Af2EBZv8YZ9YRmLC5Us)
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
                           width: double.infinity,
                           height: 63.17,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
+                              const Expanded(
                                 child: SingleChildScrollView(
-                                  child: Container(
-                                    // qd1 (207:27)
-                                    // margin: const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
+                                  child: SizedBox(
                                     width: 200,
-                                    child: const Text(
+                                    child: Text(
                                       'Привет АртМенеджер',
                                       style: TextStyle(
                                         fontSize: 20,
@@ -124,7 +144,7 @@ class _Art_endState extends State<Art_end> {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 100,
                         height: 100,
                         child: Align(alignment: Alignment.topRight, child: Image.asset("assets/emblem.png")),
@@ -135,10 +155,8 @@ class _Art_endState extends State<Art_end> {
               ],
             ),
           ),
-          Container(
-            // BD1 (231:55)
-            // margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
-            child: const Text(
+          const SizedBox(
+            child: Text(
               'Конец смены',
               style: TextStyle(
                 fontSize: 32,
@@ -151,14 +169,12 @@ class _Art_endState extends State<Art_end> {
           Expanded(
             child: SingleChildScrollView(
               child: Container(
-                // autogrouptfuqVzP (Qd88RFd5Sycz9vo7TbtFuq)
                 padding: const EdgeInsets.fromLTRB(0, 31.5, 0, 0),
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      // frame6qHZ (211:334)
                       margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
                       width: double.infinity,
                       child: Column(
@@ -168,20 +184,25 @@ class _Art_endState extends State<Art_end> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: 'Заполнить отчет арта',
-                                  value: state.checkboxStates['reportCompletedArt'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'reportCompletedArt',
-                                  enabled: enabled,
-                                );
-                              },
-                            ),
+                                if(enabled == false) {
+                                  return ShowCheck(
+                                      text: 'Заполнить отчет арта',
+                                      value: reportCompletedArt);
+                                } else {
+                                  return NewCheck(
+                                    text: 'Заполнить отчет арта',
+                                    value: state.checkboxStates['reportCompletedArt'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'reportCompletedArt',
+                                    enabled: enabled,
+                                  );
+                                }
+                              }),
                           ),
                           CommentWorker(
-                            commentValue: commentReportCompletedArt,
+                            commentValue: commentReportCompleteArt,
                             onChanged: (value) {
-                              commentReportCompletedArt = value!;
+                              commentReportCompleteArt = value!;
                             },
                             readOnly: readOnly,
                           ),
@@ -195,15 +216,20 @@ class _Art_endState extends State<Art_end> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: 'Заполнить отчет маркетолога',
-                                  value: state.checkboxStates['reportCompleteMarket'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'reportCompleteMarket',
-                                  enabled: enabled,
-                                );
-                              },
-                            ),
+                                if(enabled == false){
+                                  return ShowCheck(
+                                      text:'Заполнить отчет маркетолога',
+                                      value: reportCompleteMarket);
+                                } else {
+                                  return NewCheck(
+                                    text: 'Заполнить отчет маркетолога',
+                                    value: state.checkboxStates['reportCompleteMarket'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'reportCompleteMarket',
+                                    enabled: enabled,
+                                  );
+                                }
+                              }),
                           ),
                           CommentWorker(
                             commentValue: commentReportCompleteMarket,
@@ -234,13 +260,19 @@ class _Art_endState extends State<Art_end> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: 'Арт',
-                                  value: state.checkboxStates['art'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'art',
-                                  enabled: enabled,
-                                );
+                                if(enabled == false){
+                                  return ShowCheck(
+                                      text: 'Арт',
+                                      value: art);
+                                } else {
+                                  return NewCheck(
+                                    text: 'Арт',
+                                    value: state.checkboxStates['art'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'art',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -248,13 +280,19 @@ class _Art_endState extends State<Art_end> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: 'Бар',
-                                  value: state.checkboxStates['bar'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'bar',
-                                  enabled: enabled,
-                                );
+                                if (enabled == false){
+                                  return ShowCheck(
+                                      text: 'Бар',
+                                      value: bar);
+                                } else {
+                                  return NewCheck(
+                                    text: 'Бар',
+                                    value: state.checkboxStates['bar'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'bar',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -262,13 +300,19 @@ class _Art_endState extends State<Art_end> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: 'Маркетологи',
-                                  value: state.checkboxStates['market'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'market',
-                                  enabled: enabled,
-                                );
+                                if(enabled == false){
+                                  return ShowCheck(
+                                      text: 'Маркетолог',
+                                      value: market);
+                                } else {
+                                  return NewCheck(
+                                    text: 'Маркетолог',
+                                    value: state.checkboxStates['market'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'market',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -276,13 +320,19 @@ class _Art_endState extends State<Art_end> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: 'хостес',
-                                  value: state.checkboxStates['hostes'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'hostes',
-                                  enabled: enabled,
-                                );
+                                if(enabled == false){
+                                  return ShowCheck(
+                                      text: 'хостес',
+                                      value: hostes);
+                                } else {
+                                  return NewCheck(
+                                    text: 'хостес',
+                                    value: state.checkboxStates['hostes'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'hostes',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -300,13 +350,19 @@ class _Art_endState extends State<Art_end> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
-                                return NewCheck(
-                                  text: 'Проверить порядок в гримерке',
-                                  value: state.checkboxStates['orderDressingRoom'] ?? false,
-                                  checkboxBloc: checkboxBloc,
-                                  checkboxId: 'orderDressingRoom',
-                                  enabled: enabled,
-                                );
+                                if(enabled == false){
+                                  return ShowCheck(
+                                      text: 'Проверить порядок в гримерке',
+                                      value: orderDressingRoom);
+                                } else {
+                                  return NewCheck(
+                                    text: 'Проверить порядок в гримерке',
+                                    value: state.checkboxStates['orderDressingRoom'] ?? false,
+                                    checkboxBloc: checkboxBloc,
+                                    checkboxId: 'orderDressingRoom',
+                                    enabled: enabled,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -370,7 +426,7 @@ class _Art_endState extends State<Art_end> {
                                     date,
                                     time,
                                     reportCompletedArt,
-                                    commentReportCompletedArt,
+                                    commentReportCompleteArt,
                                     commentDirectorReportCompletedArt,
                                     reportCompleteMarket,
                                     commentReportCompleteMarket,
