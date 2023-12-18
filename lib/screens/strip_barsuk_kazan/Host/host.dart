@@ -13,7 +13,8 @@ class Host extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime date = DateTime.now();
+    DateTime now = DateTime.now();
+    String date = '${now.day}-${now.month}-${now.year}';
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -109,7 +110,7 @@ class Host extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Host_begin(idUser: id, now: date,)),
+                                  builder: (context) => Host_begin(idUser: id, now: now,)),
                             );
                           },
                           child: const Text(
@@ -125,33 +126,33 @@ class Host extends StatelessWidget {
                   ),
                   const SizedBox(
                     height: 20),
-                  Center(
-                    child: SizedBox(
-                      height: 51,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(100, 50),
-                            textStyle: const TextStyle(fontSize: 20),
-                            backgroundColor: Colors.brown[900],
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Host_end(idUser: id, now: date,)),
-                            );
-                          },
-                          child: const Text(
-                            'Конец смены',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 30,
-                              height: 1.3,
-                              color: Colors.white,
-                            ),
-                          )),
-                    ),
-                  ),
+                  // Center(
+                  //   child: SizedBox(
+                  //     height: 51,
+                  //     child: ElevatedButton(
+                  //         style: ElevatedButton.styleFrom(
+                  //           minimumSize: const Size(100, 50),
+                  //           textStyle: const TextStyle(fontSize: 20),
+                  //           backgroundColor: Colors.brown[900],
+                  //         ),
+                  //         onPressed: () {
+                  //           Navigator.push(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //                 builder: (context) => Host_end(idUser: id, now: now,)),
+                  //           );
+                  //         },
+                  //         child: const Text(
+                  //           'Конец смены',
+                  //           textAlign: TextAlign.center,
+                  //           style: TextStyle(
+                  //             fontSize: 30,
+                  //             height: 1.3,
+                  //             color: Colors.white,
+                  //           ),
+                  //         )),
+                  //   ),
+                  // ),
                   const SizedBox(height: 40,),
                   Center(
                     child: SizedBox(

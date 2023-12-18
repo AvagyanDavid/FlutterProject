@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class CommentWorker extends StatelessWidget {
-  late String? commentValue;
+  TextEditingController commentValue;
   final Function(String?)? onChanged;
   final bool readOnly;
 
-  CommentWorker({super.key, this.commentValue = '', this.onChanged, required this.readOnly});
+  CommentWorker({super.key,required this.commentValue, this.onChanged, required this.readOnly});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class CommentWorker extends StatelessWidget {
                   fillColor: Colors.white,
                 ),
                 textInputAction: TextInputAction.next,
-                initialValue: commentValue,
+                controller: commentValue,
                 onChanged: onChanged,
                 readOnly: readOnly,
               ),

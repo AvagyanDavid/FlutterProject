@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class Api {
   /// Симферополь
-  // String baseUrl = 'http://192.168.0.102:3000';
+  String baseUrl = 'http://192.168.0.102:3000';
 
-  // Ви
-  static const String baseUrl = 'http://192.168.0.104:3000';
+  // Ви)
+  // static const String baseUrl = 'http://192.168.0.104:3000';
 
   /// Севастополь
   // String baseUrl = 'http://192.168.1.55:3000';
@@ -27,15 +27,12 @@ class Api {
       'date': date,
       'time': time,
       'chargeRadioTerminalTelephone': chargeRadioTerminalTelephone,
-      'commentChargeRadioTerminalTelephone':
-          commentChargeRadioTerminalTelephone,
-      'commentDirectorChargeRadioTerminalTelephone':
-          commentDirectorChargeRadioTerminalTelephone,
+      'commentChargeRadioTerminalTelephone': commentChargeRadioTerminalTelephone,
+      'commentDirectorChargeRadioTerminalTelephone': commentDirectorChargeRadioTerminalTelephone,
       'cleanlinessWorkplaceHost': cleanlinessWorkplaceHost,
       'cleanlinessWorkplaceHostFile': cleanlinessWorkplaceHostFile,
       'commentCleanlinessWorkplaceHost': commentCleanlinessWorkplaceHost,
-      'commentDirectorCleanlinessWorkplaceHost':
-          commentDirectorCleanlinessWorkplaceHost,
+      'commentDirectorCleanlinessWorkplaceHost': commentDirectorCleanlinessWorkplaceHost,
       'idUser': idUser,
     };
     debugPrint(data.toString());

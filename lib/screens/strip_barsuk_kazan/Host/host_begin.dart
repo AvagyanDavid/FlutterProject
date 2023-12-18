@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_form/api/api.dart';
 import 'package:test_form/component/Forms.dart';
+import 'package:test_form/main.dart';
 import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
 
@@ -18,13 +19,14 @@ class Host_begin extends StatefulWidget {
 class _Host_beginState extends State<Host_begin> {
   CheckboxBloc checkboxBloc = CheckboxBloc();
 
+  TextEditingController commentTakeRadioTerminalTelephone = TextEditingController();
+  TextEditingController commentSendMessage = TextEditingController();
+
   bool readOnly = false;
   bool enabled = true;
 
   String? cleanlinessWorkplaceHostPath = null;
   String? cleanlinessWorkplaceHostName = null;
-  String? commentTakeRadioTerminalTelephone;
-  String? commentSendMessage;
   String? commentDirectorTakeRadioTerminalTelephone;
   String? commentDirectorSendMessage;
   bool takeRadioTerminalTelephone = false;
@@ -39,12 +41,11 @@ class _Host_beginState extends State<Host_begin> {
       enabled = false;
       final response = await Api().showHostBegin(date);
       takeRadioTerminalTelephone = response['TakeRadioTerminalTelephone'] != 0 ? true : false;
-      commentTakeRadioTerminalTelephone = response['CommentWorker_TakeRadioTerminalTelephone'] as String?;
-      commentDirectorTakeRadioTerminalTelephone =
-      response['CommentDirector_TakeRadioTerminalTelephone'] as String?;
+      commentTakeRadioTerminalTelephone.text = response['Comment_TakeRadioTerminalTelephone'];
+      commentDirectorTakeRadioTerminalTelephone = response['CommentDirector_TakeRadioTerminalTelephone'] as String?;
       sendMessageWatsApp = response['SendMessageWatsApp'] != 0 ? true : false;
       sendMessageTelegram = response['SendMessageTelegram'] != 0 ? true : false;
-      commentSendMessage = response['CommentWorker_SendMessage'] as String?;
+      commentSendMessage.text = response['Comment_SendMessage'];
       commentDirectorSendMessage = response['CommentDirector_SendMessage'] as String?;
       setState(() {});
     }
@@ -181,10 +182,9 @@ class _Host_beginState extends State<Host_begin> {
                                   },
                                 ),
                               ),
-                              CommentWorker(commentValue: commentTakeRadioTerminalTelephone, onChanged: (value) {
-                                commentTakeRadioTerminalTelephone = value!;
-                              },
-                                readOnly: readOnly,),
+                              CommentWorker(
+                                commentValue: commentTakeRadioTerminalTelephone,
+                                readOnly: readOnly, ),
                               ShowCommentDirector(valueDirector: commentDirectorTakeRadioTerminalTelephone),
                               const SizedBox(
                                 height: 20,
@@ -221,7 +221,7 @@ class _Host_beginState extends State<Host_begin> {
                                 create: (context) => checkboxBloc,
                                 child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                   builder: (context, state) {
-                                    if(enabled == true){
+                                    if(enabled == false){
                                       return ShowCheck(
                                           text: 'Telegram',
                                           value: sendMessageTelegram);
@@ -236,10 +236,8 @@ class _Host_beginState extends State<Host_begin> {
                                   },
                                 ),
                               ),
-                              CommentWorker(commentValue: commentSendMessage,
-                                onChanged: (value) {
-                                  commentSendMessage = value!;
-                                },
+                              CommentWorker(
+                                commentValue: commentSendMessage,
                                 readOnly: readOnly,
                               ),
                               ShowCommentDirector(valueDirector: commentDirectorSendMessage),
@@ -268,13 +266,13 @@ class _Host_beginState extends State<Host_begin> {
                                     date,
                                     time,
                                     takeRadioTerminalTelephone,
-                                    commentTakeRadioTerminalTelephone,
+                                    commentTakeRadioTerminalTelephone.text,
                                     commentDirectorTakeRadioTerminalTelephone,
                                     sendMessageWatsApp,
                                     sendMessageTelegram,
-                                    commentSendMessage,
+                                    commentSendMessage.text,
                                     commentDirectorSendMessage,
-                                    1);
+                                    idUser);
 
                                 Navigator.pop(context);
                               },
