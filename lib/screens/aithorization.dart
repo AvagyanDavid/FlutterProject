@@ -89,8 +89,6 @@ class Autorization extends StatelessWidget {
                     backgroundColor: const Color(0xff866940),
                   ),
                   onPressed: () async {
-                    // login = 'art';
-                    // password = 'art';
                     final response = await Api().authorization(
                         login!, password!);
                     if (response == 'Error') {
@@ -127,23 +125,23 @@ class Autorization extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => Manager(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],)),
                   );
-              // case 'Art':
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => Art(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],)),
-              //   );
-              // case 'Waiter':
-              //   Navigator.pushReplacement(context,
-              //     MaterialPageRoute(
-              //     builder: (context) => Waiter(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],),
-              //     ));
-              //
-              // case 'Barman':
-              //   Navigator.pushReplacement(context,
-              //     MaterialPageRoute(
-              //     builder: (context) => Barman(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],),
-              //     ));
+              case 'Art':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Art(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],)),
+                );
+              case 'Waiter':
+                Navigator.pushReplacement(context,
+                  MaterialPageRoute(
+                  builder: (context) => Waiter(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],),
+                  ));
+
+              case 'Barman':
+                Navigator.pushReplacement(context,
+                  MaterialPageRoute(
+                  builder: (context) => Barman(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],),
+                  ));
               case 'Host':
                 Navigator.pushReplacement(
                   context,

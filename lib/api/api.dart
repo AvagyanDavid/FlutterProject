@@ -601,7 +601,7 @@ class Api {
       'commentCleanlinessWorkplace': commentCleanlinessWorkplace,
       'commentDirectorCleanlinessWorkplace': commentDirectorCleanlinessWorkplace,
       'wipeDustShelvingEnd' : wipeDustShelvingEnd,
-      'wipeDustShelvingBeginFile': wipeDustShelvingEndFile,
+      'wipeDustShelvingEndFile': wipeDustShelvingEndFile,
       'commentWipeDustShelvingEnd': commentWipeDustShelvingEnd,
       'commentDirectorWipeDustShelvingEnd' : commentDirectorWipeDustShelvingEnd,
       'idUser': idUser,
