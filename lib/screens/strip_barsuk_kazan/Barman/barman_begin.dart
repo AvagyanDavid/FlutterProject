@@ -50,6 +50,7 @@ class _barman_beginState extends State<barman_begin> {
   String? PhotoCheckAndTakeAlcogol = null;
   String? PhotoRubTheDishes = null;
   String? PhotoCleaning = null;
+  String? PhotoWipeDustShelving = null;
 
   void getStatusReport() async {
     String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
@@ -80,6 +81,7 @@ class _barman_beginState extends State<barman_begin> {
       PhotoCheckAndTakeAlcogol = response['CheckAndTakeAlcogolPhoto'] == null ? null : Api().getPhoto(response['CheckAndTakeAlcogolPhoto']);
       PhotoRubTheDishes = response['RubTheDishesPhoto'] == null ? null : Api().getPhoto(response['RubTheDishesPhoto']);
       PhotoCleaning = response['CleaningPhoto'] == null ? null : Api().getPhoto(response['CleaningPhoto']);
+      PhotoWipeDustShelving = response['CleaningPhoto'] == null ? null : Api().getPhoto(response['WipeDustShelvingPhoto']);
     }
   }
 
