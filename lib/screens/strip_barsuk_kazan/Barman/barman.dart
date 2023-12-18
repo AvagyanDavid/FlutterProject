@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:test_form/main.dart';
-import 'package:test_form/screens/aithorization.dart';
 import 'barman_begin.dart';
 import 'barman_end.dart';
 
@@ -15,6 +14,7 @@ class Barman extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime date = DateTime.now();
     return Scaffold(
       body: Container(
         // frame5Sco (207:23)
@@ -69,9 +69,9 @@ class Barman extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const Text(
+                              Text(
                                 // 6oq (207:28)
-                                'сегодня',
+                                'сегодня ${date.year}-${date.month}-${date.day}',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
@@ -120,7 +120,7 @@ class Barman extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => barman_begin()),
+                                  builder: (context) => barman_begin(idUser: id, now: date,)),
                             );
                           },
                           child: const Text(
@@ -152,7 +152,7 @@ class Barman extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => barman_end()),
+                                  builder: (context) => barman_end(idUser: id, now: date,)),
                             );
                           },
                           child: const Text(

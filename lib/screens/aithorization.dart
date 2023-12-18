@@ -89,8 +89,8 @@ class Autorization extends StatelessWidget {
                     backgroundColor: const Color(0xff866940),
                   ),
                   onPressed: () async {
-                    login = 'art';
-                    password = 'art';
+                    login = 'barman';
+                    password = 'barman';
                     final response = await Api().authorization(
                         login!, password!);
                     if (response == 'Error') {

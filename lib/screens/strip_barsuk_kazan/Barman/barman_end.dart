@@ -11,40 +11,46 @@ import '../../../component/checkbox/bloc/checkbox_bloc.dart';
 import '../../../component/checkbox/checkbox.dart';
 import '../../../component/photo/photo.dart';
 
-class barman_end extends StatelessWidget {
+class barman_end extends StatefulWidget {
+  int idUser;
+  DateTime now;
 
+  barman_end({super.key, required this.idUser, required this.now});
+
+  @override
+  State<barman_end> createState() => _barman_endState();
+}
+
+class _barman_endState extends State<barman_end> {
   bool readOnly = false;
   bool enabled = true;
 
   CheckboxBloc checkboxBloc = CheckboxBloc();
   PhotoBloc photoBloc = PhotoBloc();
-
   String? cleanlinessWorkplacePath = null;
   String? wipeDustShelvingEndPath = null;
-
   String commentCleanlinessWorkplace = '';
   String commentCloseShift = '';
   String commentFillOutReport = '';
   String commentApplication = '';
   String commentWipeDustShelvingEnd = '';
-
   String? commentDirectorApplication;
   String? commentDirectorFillOutReport;
   String? commentDirectorCloseShift;
   String? commentDirectorCleanlinessWorkplace;
   String? commentDirectorWipeDustShelvingEnd;
 
-  barman_end({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String date = '${now.year}-${now.month}-${now.day}';
+  void getStatusReport() async {
+    String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
     final response = Api().showBarmanEnd(date);
     if (response != null){
       readOnly = true;
       enabled = false;
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SizedBox(
         // frame5Sco (207:23)a
@@ -98,7 +104,7 @@ class barman_end extends StatelessWidget {
                               ),
                               Text(
                                 // 6oq (207:28)
-                                'сегодня $date',
+                                'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,

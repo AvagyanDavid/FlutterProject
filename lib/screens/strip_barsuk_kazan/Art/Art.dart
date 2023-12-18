@@ -64,7 +64,7 @@ class Art extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                'сегодня $date',
+                                'сегодня ${date.year}-${date.month}-${date.day}',
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,

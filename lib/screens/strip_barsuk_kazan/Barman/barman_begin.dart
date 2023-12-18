@@ -7,20 +7,26 @@ import 'package:test_form/component/checkbox/checkbox.dart';
 import 'package:test_form/component/photo/bloc/photo_bloc.dart';
 import 'package:test_form/component/photo/photo.dart';
 
-class barman_begin extends StatelessWidget {
+class barman_begin extends StatefulWidget {
+  final int idUser;
+  final DateTime now;
+
+  barman_begin({super.key, required this.idUser, required this.now});
+
+  @override
+  State<barman_begin> createState() => _barman_beginState();
+}
+
+class _barman_beginState extends State<barman_begin> {
   bool readOnly = false;
   bool enabled = true;
 
   CheckboxBloc checkboxBloc = CheckboxBloc();
   PhotoBloc photoBloc = PhotoBloc();
-
-  DateTime now = DateTime.now();
-
   String? checkAndTakeAlcogolPath = null;
   String? cleaningPath = null;
   String? rubTheDishesPath = null;
   String? wipeDustShelvingPath = null;
-
   String? commentOpenCheckout;
   String? commentCheckAndTakeAlcogol;
   String? commentExtractorHumidifier;
@@ -28,7 +34,6 @@ class barman_begin extends StatelessWidget {
   String? commentRubTheDishes;
   String? commentCleaning;
   String? commentWipeDustShelvingBegin;
-
   String? commentDirectorOpenCheckout;
   String? commentDirectorCheckAndTakeAlcogol;
   String? commentDirectorExtractorHumidifier;
@@ -36,18 +41,50 @@ class barman_begin extends StatelessWidget {
   String? commentDirectorRubTheDishes;
   String? commentDirectorCleaning;
   String? commentDirectorWipeDustShelvingBegin;
+  bool openCheckout = false;
+  bool checkAndTakeAlcogol = false;
+  bool extractorHumidifier = false;
+  bool writeStopList = false;
+  bool rubTheDishes = false;
+  bool cleaning = false;
+  String? PhotoCheckAndTakeAlcogol = null;
+  String? PhotoRubTheDishes = null;
+  String? PhotoCleaning = null;
 
-  barman_begin({super.key});
+  void getStatusReport() async {
+    String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
+    final results = await Api().checkReportBarmanBegin(date);
+    if (results != null){
+      readOnly = true;
+      enabled = false;
+      final response = await Api().showBarmanBegin(date);
+      openCheckout = response['OpenCheckout']  != 0 ? true : false;
+      commentOpenCheckout = response ['Comment_OpenCheckout'] as String?;
+      commentDirectorOpenCheckout = response ['CommentDirector_OpenCheckout'] as String?;
+      checkAndTakeAlcogol = response['CheckAndTakeAlcogol']  != 0 ? true : false;
+      commentCheckAndTakeAlcogol = response ['Comment_CheckAndTakeAlcogol'] as String?;
+      commentDirectorCheckAndTakeAlcogol = response ['CommentDirector_CheckAndTakeAlcogol'] as String?;
+      extractorHumidifier = response['ExtractorHumidifier']  != 0 ? true : false;
+      commentExtractorHumidifier = response ['Comment_ExtractorHumidifier'] as String?;
+      commentDirectorExtractorHumidifier = response ['CommentDirector_ExtractorHumidifier'] as String?;
+      writeStopList = response['WriteStopList']  != 0 ? true : false;
+      commentWriteStopList = response ['Comment_WriteStopList'] as String?;
+      commentDirectorWriteStopList = response ['CommentDirector_WriteStopList'] as String?;
+      rubTheDishes = response['RubTheDishes']  != 0 ? true : false;
+      commentRubTheDishes = response ['Comment_RubTheDishes'] as String?;
+      commentDirectorRubTheDishes = response ['CommentDirector_RubTHeDishes'] as String?;
+      cleaning = response['Cleaning']  != 0 ? true : false;
+      commentCleaning = response ['Comment_Cleaning'] as String?;
+      commentDirectorCleaning = response ['CommentDirector_Cleaning'] as String?;
+
+      PhotoCheckAndTakeAlcogol = response['CheckAndTakeAlcogolPhoto'] == null ? null : Api().getPhoto(response['CheckAndTakeAlcogolPhoto']);
+      PhotoRubTheDishes = response['RubTheDishesPhoto'] == null ? null : Api().getPhoto(response['RubTheDishesPhoto']);
+      PhotoCleaning = response['CleaningPhoto'] == null ? null : Api().getPhoto(response['CleaningPhoto']);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String date = '${now.year}-${now.month}-${now.day}';
-    final response = Api().showBarmanBegin(date);
-    if (response != null){
-      readOnly = true;
-      enabled = false;
-    }
     return Scaffold(
       body: SizedBox(
         width: 400,
@@ -100,7 +137,7 @@ class barman_begin extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  'сегодня $date',
+                                  'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
                                   style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
@@ -150,14 +187,21 @@ class barman_begin extends StatelessWidget {
                         create: (context) => CheckboxBloc(),
                         child: BlocBuilder<CheckboxBloc, CheckboxState>(
                           builder: (context, state) {
-                            return NewCheck(
-                              text: "Открыть кассовую смену",
-                              value:
-                                  state.checkboxStates['openCheckout'] ?? false,
-                              checkboxBloc: checkboxBloc,
-                              checkboxId: 'openCheckout',
-                              enabled: enabled,
-                            );
+                            if (enabled == false) {
+                              return ShowCheck(
+                                  text: 'Открыть кассовую смену',
+                                  value: openCheckout
+                              );
+                            } else {
+                              return NewCheck(
+                                text: "Открыть кассовую смену",
+                                value:
+                                state.checkboxStates['openCheckout'] ?? false,
+                                checkboxBloc: checkboxBloc,
+                                checkboxId: 'openCheckout',
+                                enabled: enabled,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -175,15 +219,22 @@ class barman_begin extends StatelessWidget {
                         create: (context) => CheckboxBloc(),
                         child: BlocBuilder<CheckboxBloc, CheckboxState>(
                           builder: (context, state) {
-                            return NewCheck(
-                              text: "Проверить и принять алкоголь",
-                              value:
-                                  state.checkboxStates['checkAndTakeAlcogol'] ??
-                                      false,
-                              checkboxBloc: checkboxBloc,
-                              checkboxId: 'checkAndTakeAlcogol',
-                              enabled: enabled,
-                            );
+                            if (enabled == false) {
+                              return ShowCheck(
+                                  text: 'Проверить и принять алкоголь',
+                                  value: checkAndTakeAlcogol
+                              );
+                            } else {
+                              return NewCheck(
+                                text: "Проверить и принять алкоголь",
+                                value:
+                                state.checkboxStates['checkAndTakeAlcogol'] ??
+                                    false,
+                                checkboxBloc: checkboxBloc,
+                                checkboxId: 'checkAndTakeAlcogol',
+                                enabled: enabled,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -191,10 +242,16 @@ class barman_begin extends StatelessWidget {
                         create: (context) => photoBloc,
                         child: BlocBuilder<PhotoBloc, PhotoState>(
                           builder: (context, state) {
-                            return NewPhoto(
-                              photoBloc: photoBloc,
-                              photoId: 'checkAndTakeAlcogolPhoto',
-                            );
+                            if (enabled == false) {
+                              return ShowPhoto(
+                                  image: PhotoCheckAndTakeAlcogol
+                              );
+                            } else {
+                              return NewPhoto(
+                                photoBloc: photoBloc,
+                                photoId: 'checkAndTakeAlcogolPhoto',
+                              );
+                            }
                           },
                         ),
                       ),
@@ -214,15 +271,22 @@ class barman_begin extends StatelessWidget {
                         create: (context) => CheckboxBloc(),
                         child: BlocBuilder<CheckboxBloc, CheckboxState>(
                           builder: (context, state) {
-                            return NewCheck(
-                              text: "Включить вытяжку и увлажнитель",
-                              value:
-                                  state.checkboxStates['extractorHumidifier'] ??
-                                      false,
-                              checkboxBloc: checkboxBloc,
-                              checkboxId: 'extractorHumidifier',
-                              enabled: enabled,
-                            );
+                            if (enabled == false) {
+                              return ShowCheck(
+                                  text: 'Включить вытяжку и увлажнитель',
+                                  value: extractorHumidifier
+                              );
+                            } else {
+                              return NewCheck(
+                                text: "Включить вытяжку и увлажнитель",
+                                value:
+                                state.checkboxStates['extractorHumidifier'] ??
+                                    false,
+                                checkboxBloc: checkboxBloc,
+                                checkboxId: 'extractorHumidifier',
+                                enabled: enabled,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -241,14 +305,21 @@ class barman_begin extends StatelessWidget {
                         create: (context) => CheckboxBloc(),
                         child: BlocBuilder<CheckboxBloc, CheckboxState>(
                           builder: (context, state) {
-                            return NewCheck(
-                              text: "Написать стоп-лист",
-                              value: state.checkboxStates['writeStopList'] ??
-                                  false,
-                              checkboxBloc: checkboxBloc,
-                              checkboxId: 'writeStopList',
-                              enabled: enabled,
-                            );
+                            if (enabled == false) {
+                              return ShowCheck(
+                                  text: 'Написать стоп-лист',
+                                  value: writeStopList
+                              );
+                            } else {
+                              return NewCheck(
+                                text: "Написать стоп-лист",
+                                value: state.checkboxStates['writeStopList'] ??
+                                    false,
+                                checkboxBloc: checkboxBloc,
+                                checkboxId: 'writeStopList',
+                                enabled: enabled,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -266,14 +337,21 @@ class barman_begin extends StatelessWidget {
                         create: (context) => CheckboxBloc(),
                         child: BlocBuilder<CheckboxBloc, CheckboxState>(
                           builder: (context, state) {
-                            return NewCheck(
-                              text: "Натереть посуду",
-                              value:
-                                  state.checkboxStates['rubTheDishes'] ?? false,
-                              checkboxBloc: checkboxBloc,
-                              checkboxId: 'rubTheDishes',
-                              enabled: enabled,
-                            );
+                            if (enabled == false) {
+                              return ShowCheck(
+                                  text: 'Натереть посуду',
+                                  value: rubTheDishes
+                              );
+                            } else {
+                              return NewCheck(
+                                text: "Натереть посуду",
+                                value:
+                                state.checkboxStates['rubTheDishes'] ?? false,
+                                checkboxBloc: checkboxBloc,
+                                checkboxId: 'rubTheDishes',
+                                enabled: enabled,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -281,10 +359,14 @@ class barman_begin extends StatelessWidget {
                         create: (context) => PhotoBloc(),
                         child: BlocBuilder<PhotoBloc, PhotoState>(
                           builder: (context, state) {
-                            return NewPhoto(
-                              photoBloc: photoBloc,
-                              photoId: 'rubTheDishesPhoto',
-                            );
+                            if (enabled == false) {
+                              return ShowPhoto(image: PhotoRubTheDishes);
+                            } else {
+                              return NewPhoto(
+                                photoBloc: photoBloc,
+                                photoId: 'rubTheDishesPhoto',
+                              );
+                            }
                           },
                         ),
                       ),
@@ -305,14 +387,21 @@ class barman_begin extends StatelessWidget {
                         create: (context) => CheckboxBloc(),
                         child: BlocBuilder<CheckboxBloc, CheckboxState>(
                           builder: (context, state) {
-                            return NewCheck(
-                              text: "Протереть пыль со стеллажа",
-                              value: state.checkboxStates['wipeDustShelvingBegin'] ??
-                                  false,
-                              checkboxBloc: checkboxBloc,
-                              checkboxId: 'cleaning',
-                              enabled: enabled,
-                            );
+                            if (enabled == false) {
+                              return ShowCheck(
+                                  text: 'Протереть пыль со стеллажа',
+                                  value: cleaning
+                              );
+                            } else {
+                              return NewCheck(
+                                text: "Протереть пыль со стеллажа",
+                                value: state.checkboxStates['wipeDustShelvingBegin'] ??
+                                    false,
+                                checkboxBloc: checkboxBloc,
+                                checkboxId: 'cleaning',
+                                enabled: enabled,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -320,6 +409,9 @@ class barman_begin extends StatelessWidget {
                         create: (context) => PhotoBloc(),
                         child: BlocBuilder<PhotoBloc, PhotoState>(
                           builder: (context, state) {
+                            if (enabled == false) {
+                              return ShowPhoto(image: Ph);
+                            }
                             return NewPhoto(
                               photoId: 'wipeDustShelvingBeginPhoto',
                               photoBloc: photoBloc,
@@ -333,7 +425,7 @@ class barman_begin extends StatelessWidget {
                       CommentDirector(valueDirector: commentDirectorWipeDustShelvingBegin,onChanged: (value){
                         commentDirectorWipeDustShelvingBegin = value!;
                       }, readOnly: false),
-                      if (now.weekday == DateTime.sunday)
+                      if (widget.now.weekday == DateTime.sunday)
                         Column(
                           children: [
                             BlocProvider<CheckboxBloc>(
