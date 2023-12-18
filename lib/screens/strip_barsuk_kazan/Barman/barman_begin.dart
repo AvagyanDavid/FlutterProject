@@ -27,13 +27,13 @@ class _barman_beginState extends State<barman_begin> {
   String? cleaningPath = null;
   String? rubTheDishesPath = null;
   String? wipeDustShelvingPath = null;
-  String? commentOpenCheckout;
-  String? commentCheckAndTakeAlcogol;
-  String? commentExtractorHumidifier;
-  String? commentWriteStopList;
-  String? commentRubTheDishes;
-  String? commentCleaning;
-  String? commentWipeDustShelvingBegin;
+  TextEditingController commentOpenCheckout = TextEditingController();
+  TextEditingController commentCheckAndTakeAlcogol = TextEditingController();
+  TextEditingController commentExtractorHumidifier = TextEditingController();
+  TextEditingController commentWriteStopList = TextEditingController();
+  TextEditingController commentRubTheDishes = TextEditingController();
+  TextEditingController commentCleaning = TextEditingController();
+  TextEditingController commentWipeDustShelvingBegin = TextEditingController();
   String? commentDirectorOpenCheckout;
   String? commentDirectorCheckAndTakeAlcogol;
   String? commentDirectorExtractorHumidifier;
@@ -60,22 +60,22 @@ class _barman_beginState extends State<barman_begin> {
       enabled = false;
       final response = await Api().showBarmanBegin(date);
       openCheckout = response['OpenCheckout']  != 0 ? true : false;
-      commentOpenCheckout = response ['Comment_OpenCheckout'] as String?;
+      commentOpenCheckout.text = response ['Comment_OpenCheckout'];
       commentDirectorOpenCheckout = response ['CommentDirector_OpenCheckout'] as String?;
       checkAndTakeAlcogol = response['CheckAndTakeAlcogol']  != 0 ? true : false;
-      commentCheckAndTakeAlcogol = response ['Comment_CheckAndTakeAlcogol'] as String?;
+      commentCheckAndTakeAlcogol.text = response ['Comment_CheckAndTakeAlcogol'];
       commentDirectorCheckAndTakeAlcogol = response ['CommentDirector_CheckAndTakeAlcogol'] as String?;
       extractorHumidifier = response['ExtractorHumidifier']  != 0 ? true : false;
-      commentExtractorHumidifier = response ['Comment_ExtractorHumidifier'] as String?;
+      commentExtractorHumidifier = response ['Comment_ExtractorHumidifier'];
       commentDirectorExtractorHumidifier = response ['CommentDirector_ExtractorHumidifier'] as String?;
       writeStopList = response['WriteStopList']  != 0 ? true : false;
-      commentWriteStopList = response ['Comment_WriteStopList'] as String?;
+      commentWriteStopList.text = response ['Comment_WriteStopList'];
       commentDirectorWriteStopList = response ['CommentDirector_WriteStopList'] as String?;
       rubTheDishes = response['RubTheDishes']  != 0 ? true : false;
-      commentRubTheDishes = response ['Comment_RubTheDishes'] as String?;
+      commentRubTheDishes.text = response ['Comment_RubTheDishes'];
       commentDirectorRubTheDishes = response ['CommentDirector_RubTHeDishes'] as String?;
       cleaning = response['Cleaning']  != 0 ? true : false;
-      commentCleaning = response ['Comment_Cleaning'] as String?;
+      commentCleaning.text = response ['Comment_Cleaning'];
       commentDirectorCleaning = response ['CommentDirector_Cleaning'] as String?;
 
       PhotoCheckAndTakeAlcogol = response['CheckAndTakeAlcogolPhoto'] == null ? null : Api().getPhoto(response['CheckAndTakeAlcogolPhoto']);
@@ -127,7 +127,7 @@ class _barman_beginState extends State<barman_begin> {
                                 Container(
                                   // qd1 (207:27)
                                   margin:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
+                                  const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
                                   child: const Text(
                                     'Привет Бармен',
                                     style: TextStyle(
@@ -209,9 +209,6 @@ class _barman_beginState extends State<barman_begin> {
                       ),
                       CommentWorker(
                         commentValue: commentOpenCheckout,
-                        onChanged: (value) {
-                          commentOpenCheckout = value!;
-                        },
                         readOnly: readOnly,
                       ),
                       ShowCommentDirector(
@@ -260,9 +257,6 @@ class _barman_beginState extends State<barman_begin> {
                       const SizedBox(height: 20),
                       CommentWorker(
                         commentValue: commentCheckAndTakeAlcogol,
-                        onChanged: (value) {
-                          commentCheckAndTakeAlcogol = value!;
-                        },
                         readOnly: readOnly,
                       ),
                       ShowCommentDirector(
@@ -295,9 +289,6 @@ class _barman_beginState extends State<barman_begin> {
                       const SizedBox(height: 10),
                       CommentWorker(
                         commentValue: commentExtractorHumidifier,
-                        onChanged: (value) {
-                          commentCheckAndTakeAlcogol = value!;
-                        },
                         readOnly: readOnly,
                       ),
                       ShowCommentDirector(
@@ -327,9 +318,6 @@ class _barman_beginState extends State<barman_begin> {
                       ),
                       CommentWorker(
                         commentValue: commentWriteStopList,
-                        onChanged: (value) {
-                          commentWriteStopList = value!;
-                        },
                         readOnly: readOnly,
                       ),
                       ShowCommentDirector(
@@ -377,9 +365,6 @@ class _barman_beginState extends State<barman_begin> {
                       ),
                       CommentWorker(
                         commentValue: commentRubTheDishes,
-                        onChanged: (value) {
-                          commentRubTheDishes = value!;
-                        },
                         readOnly: readOnly,
                       ),
                       ShowCommentDirector(
@@ -412,7 +397,7 @@ class _barman_beginState extends State<barman_begin> {
                         child: BlocBuilder<PhotoBloc, PhotoState>(
                           builder: (context, state) {
                             if (enabled == false) {
-                              return ShowPhoto(image: Ph);
+                              return ShowPhoto(image: PhotoWipeDustShelving);
                             }
                             return NewPhoto(
                               photoId: 'wipeDustShelvingBeginPhoto',
@@ -421,12 +406,14 @@ class _barman_beginState extends State<barman_begin> {
                           },
                         ),
                       ),
-                      CommentWorker( commentValue: commentWipeDustShelvingBegin, onChanged: (value){
-                        commentWipeDustShelvingBegin = value!;
-                      },readOnly: readOnly),
-                      CommentDirector(valueDirector: commentDirectorWipeDustShelvingBegin,onChanged: (value){
-                        commentDirectorWipeDustShelvingBegin = value!;
-                      }, readOnly: false),
+                      CommentWorker(
+                          commentValue: commentWipeDustShelvingBegin,
+                          readOnly: readOnly),
+                      CommentDirector(
+                          valueDirector: commentDirectorWipeDustShelvingBegin,
+                          onChanged: (value) {
+                            commentDirectorWipeDustShelvingBegin = value!;
+                          }, readOnly: false),
                       if (widget.now.weekday == DateTime.sunday)
                         Column(
                           children: [
@@ -434,14 +421,21 @@ class _barman_beginState extends State<barman_begin> {
                               create: (context) => CheckboxBloc(),
                               child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                 builder: (context, state) {
-                                  return NewCheck(
-                                    text: "Уборка",
-                                    value: state.checkboxStates['cleaning'] ??
-                                        false,
-                                    checkboxBloc: checkboxBloc,
-                                    checkboxId: 'cleaning',
-                                    enabled: enabled,
-                                  );
+                                  if (enabled == false) {
+                                    return ShowCheck(
+                                        text: 'Уборка',
+                                        value: cleaning
+                                    );
+                                  } else {
+                                    return NewCheck(
+                                      text: "Уборка",
+                                      value: state.checkboxStates['cleaning'] ??
+                                          false,
+                                      checkboxBloc: checkboxBloc,
+                                      checkboxId: 'cleaning',
+                                      enabled: enabled,
+                                    );
+                                  }
                                 },
                               ),
                             ),
@@ -449,10 +443,14 @@ class _barman_beginState extends State<barman_begin> {
                               create: (context) => PhotoBloc(),
                               child: BlocBuilder<PhotoBloc, PhotoState>(
                                 builder: (context, state) {
-                                  return NewPhoto(
-                                    photoBloc: photoBloc,
-                                    photoId: 'cleaningPhoto',
-                                  );
+                                  if (enabled == false) {
+                                    return ShowPhoto(image: PhotoCleaning);
+                                  } else {
+                                    return NewPhoto(
+                                      photoBloc: photoBloc,
+                                      photoId: 'cleaningPhoto',
+                                    );
+                                  }
                                 },
                               ),
                             ),
@@ -461,9 +459,6 @@ class _barman_beginState extends State<barman_begin> {
                             ),
                             CommentWorker(
                               commentValue: commentCleaning,
-                              onChanged: (value) {
-                                commentCleaning = value!;
-                              },
                               readOnly: readOnly,
                             ),
                             ShowCommentDirector(
@@ -493,13 +488,13 @@ class _barman_beginState extends State<barman_begin> {
                             }
 
                             final rubTheDishesPhoto =
-                                photostate.photoStates['rubTheDishesPhoto'];
+                            photostate.photoStates['rubTheDishesPhoto'];
                             if (rubTheDishesPhoto != null) {
                               rubTheDishesPath = rubTheDishesPhoto.path;
                             }
 
                             final cleaningPhoto =
-                                photostate.photoStates['cleaningPhoto'];
+                            photostate.photoStates['cleaningPhoto'];
                             if (cleaningPhoto != null) {
                               cleaningPath = cleaningPhoto.path;
                             }
@@ -526,29 +521,29 @@ class _barman_beginState extends State<barman_begin> {
                                 date,
                                 time,
                                 openCheckout,
-                                commentOpenCheckout,
+                                commentOpenCheckout.text,
                                 commentDirectorOpenCheckout,
                                 checkAndTakeAlcogol,
                                 checkAndTakeAlcogolPath,
-                                commentCheckAndTakeAlcogol,
+                                commentCheckAndTakeAlcogol.text,
                                 commentDirectorCheckAndTakeAlcogol,
                                 extractorHumidifier,
-                                commentExtractorHumidifier,
+                                commentExtractorHumidifier.text,
                                 commentDirectorExtractorHumidifier,
                                 writeStopList,
-                                commentWriteStopList,
+                                commentWriteStopList.text,
                                 commentDirectorWriteStopList,
                                 rubTheDishes,
                                 rubTheDishesPath,
-                                commentRubTheDishes,
+                                commentRubTheDishes.text,
                                 commentDirectorRubTheDishes,
                                 wipeDustShelvingBegin,
                                 wipeDustShelvingPath,
-                                commentWipeDustShelvingBegin,
+                                commentWipeDustShelvingBegin.text,
                                 commentDirectorWipeDustShelvingBegin,
                                 cleaning,
                                 cleaningPath,
-                                commentCleaning,
+                                commentCleaning.text,
                                 commentDirectorCleaning,
                                 4);
                             Navigator.pop(context);
