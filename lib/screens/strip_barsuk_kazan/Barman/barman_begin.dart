@@ -478,23 +478,20 @@ class _barman_beginState extends State<barman_begin> {
                             textStyle: const TextStyle(fontSize: 20),
                             backgroundColor: Colors.green,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             final photostate = photoBloc.state;
-                            final checkAndTakeAlcogolPhoto = photostate
-                                .photoStates['checkAndTakeAlcogolPhoto'];
+                            final checkAndTakeAlcogolPhoto = photostate.photoStates['checkAndTakeAlcogolPhoto'];
                             if (checkAndTakeAlcogolPhoto != null) {
                               checkAndTakeAlcogolPath =
                                   checkAndTakeAlcogolPhoto.path;
                             }
 
-                            final rubTheDishesPhoto =
-                            photostate.photoStates['rubTheDishesPhoto'];
+                            final rubTheDishesPhoto = photostate.photoStates['rubTheDishesPhoto'];
                             if (rubTheDishesPhoto != null) {
                               rubTheDishesPath = rubTheDishesPhoto.path;
                             }
 
-                            final cleaningPhoto =
-                            photostate.photoStates['cleaningPhoto'];
+                            final cleaningPhoto = photostate.photoStates['cleaningPhoto'];
                             if (cleaningPhoto != null) {
                               cleaningPath = cleaningPhoto.path;
                             }
@@ -505,8 +502,7 @@ class _barman_beginState extends State<barman_begin> {
 
                             DateTime now = DateTime.now();
                             String date = '${now.year}-${now.month}-${now.day}';
-                            String time =
-                                '${now.hour}:${now.minute}:${now.second}';
+                            String time = '${now.hour}:${now.minute}:${now.second}';
 
                             final state = checkboxBloc.state;
                             final openCheckout = state.checkboxStates['openCheckout'] ?? false;
@@ -517,7 +513,7 @@ class _barman_beginState extends State<barman_begin> {
                             final cleaning = state.checkboxStates['cleaning'] ?? false;
                             final wipeDustShelvingBegin = state.checkboxStates['wipeDustShelvingBegin'] ?? false;
 
-                            Api().barmanBegin(
+                            await Api().barmanBegin(
                                 date,
                                 time,
                                 openCheckout,
@@ -545,7 +541,7 @@ class _barman_beginState extends State<barman_begin> {
                                 cleaningPath,
                                 commentCleaning.text,
                                 commentDirectorCleaning,
-                                4);
+                                widget.idUser);
                             Navigator.pop(context);
                           },
                           child: const Text(

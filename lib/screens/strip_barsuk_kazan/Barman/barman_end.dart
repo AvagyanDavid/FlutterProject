@@ -1,5 +1,3 @@
-// import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_form/api/api.dart';
@@ -25,27 +23,52 @@ class _barman_endState extends State<barman_end> {
   bool readOnly = false;
   bool enabled = true;
 
+  bool alcogol  = false;
+  bool nonAlcogol  = false;
+  bool tobacco  = false;
+  bool fillOutReport = false;
+  bool closeShift = false;
+  bool cleanlinessWorkplace = false;
   CheckboxBloc checkboxBloc = CheckboxBloc();
   PhotoBloc photoBloc = PhotoBloc();
   String? cleanlinessWorkplacePath = null;
   String? wipeDustShelvingEndPath = null;
-  String commentCleanlinessWorkplace = '';
-  String commentCloseShift = '';
-  String commentFillOutReport = '';
-  String commentApplication = '';
-  String commentWipeDustShelvingEnd = '';
+  TextEditingController commentCleanlinessWorkplace = TextEditingController();
+  TextEditingController commentCloseShift = TextEditingController();
+  TextEditingController commentFillOutReport = TextEditingController();
+  TextEditingController commentApplication = TextEditingController();
+  TextEditingController commentWipeDustShelvingEnd = TextEditingController();
   String? commentDirectorApplication;
   String? commentDirectorFillOutReport;
   String? commentDirectorCloseShift;
   String? commentDirectorCleanlinessWorkplace;
   String? commentDirectorWipeDustShelvingEnd;
 
+  String? PhotoCleanlinessWorkplace;
+
   void getStatusReport() async {
     String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
-    final response = Api().showBarmanEnd(date);
-    if (response != null){
+    final results = await Api().checkReportBarmanEnd(date);
+    if (results != null) {
       readOnly = true;
       enabled = false;
+      final response = await Api().showBarmanEnd(date);
+      alcogol = response['Alcogol'] != 0 ? true : false;
+      nonAlcogol = response['NonAlcogol'] != 0 ? true : false;
+      tobacco = response['Tobacco'] != 0 ? true : false;
+      commentApplication.text = response['Comment_Application'];
+      commentDirectorApplication = response['CommentDirector_Application'] as String?;
+      fillOutReport = response['FillOutReport'] != 0 ? true : false;
+      commentFillOutReport.text = response['CommentFillOutReport'];
+      commentDirectorFillOutReport = response['CommentDirector_FillOutReport'] as String?;
+      closeShift = response['CloseShift'] != 0 ? true : false;
+      commentCloseShift.text = response['Comment_CloseShift'];
+      commentDirectorCloseShift = response['CommentDirector_CloseShift'] as String?;
+      cleanlinessWorkplace= response['CleanlinessWorkplace'] != 0 ? true : false;
+      commentCleanlinessWorkplace.text = response['Comment_CleanlinessWorkplace'];
+      commentDirectorCleanlinessWorkplace = response['CommentDirector_CleanlinessWorkplace'] as String?;
+
+      PhotoCleanlinessWorkplace = response['CleanlinessWorkplacePhoto'] == null ? null : Api().getPhoto(response['CleanlinessWorkplacePhoto']);
     }
   }
 
@@ -167,12 +190,20 @@ class _barman_endState extends State<barman_end> {
                       // BlocBuilder(builder: builder)
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
                         builder: (context, state) {
-                          return NewCheck(
+                          if (enabled == false) {
+                            return ShowCheck(
+                                text: "Алкоголь",
+                                value: alcogol
+                            );
+                          } else {
+                            return NewCheck(
                               text: "Алкоголь",
                               value: state.checkboxStates['alcogol'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'alcogol',
-                          enabled: enabled,);
+                              checkboxId: 'alcogol',
+                              enabled: enabled,
+                            );
+                          }
                         },
                       ),
                     ),
@@ -181,12 +212,20 @@ class _barman_endState extends State<barman_end> {
                       // BlocBuilder(builder: builder)
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
                         builder: (context, state) {
-                          return NewCheck(
+                          if (enabled == false) {
+                            return ShowCheck(
+                                text: "Б/а",
+                                value: nonAlcogol
+                            );
+                          } else {
+                            return NewCheck(
                               text: "Б/а",
                               value: state.checkboxStates['nonalcogol'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'nonalcogol',
-                          enabled: enabled,);
+                              checkboxId: 'nonalcogol',
+                              enabled: enabled,
+                            );
+                          }
                         },
                       ),
                     ),
@@ -195,18 +234,25 @@ class _barman_endState extends State<barman_end> {
                       // BlocBuilder(builder: builder)
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
                         builder: (context, state) {
-                          return NewCheck(
+                          if (enabled == false) {
+                            return ShowCheck(
+                                text: "Табак",
+                                value: tobacco
+                            );
+                          } else {
+                            return NewCheck(
                               text: "Табак",
                               value: state.checkboxStates['tobacco'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'tobacco',
-                          enabled: enabled,);
+                              checkboxId: 'tobacco',
+                              enabled: enabled,
+                            );
+                          }
                         },
                       ),
                     ),
-                    CommentWorker(commentValue: commentApplication, onChanged: (value){
-                      commentApplication = value!;
-                    },
+                    CommentWorker(
+                      commentValue: commentApplication,
                       readOnly: readOnly,
                     ),
                     ShowCommentDirector(valueDirector: commentDirectorApplication,),
@@ -214,18 +260,25 @@ class _barman_endState extends State<barman_end> {
                       create: (context) => checkboxBloc,
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
                         builder: (context, state) {
-                          return NewCheck(
+                          if (enabled == false) {
+                            return ShowCheck(
+                                text: "Заполнить отчет",
+                                value: fillOutReport
+                            );
+                          } else {
+                            return NewCheck(
                               text: "Заполнить отчет",
                               value: state.checkboxStates['fillOutReport'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'fillOutReport',
-                          enabled: enabled,);
+                              checkboxId: 'fillOutReport',
+                              enabled: enabled,
+                            );
+                          }
                         },
                       ),
                     ),
-                    CommentWorker(commentValue: commentFillOutReport, onChanged: (value){
-                      commentFillOutReport = value!;
-                    },
+                    CommentWorker(
+                      commentValue: commentFillOutReport,
                       readOnly: readOnly,
                     ),
                     ShowCommentDirector(valueDirector: commentDirectorFillOutReport,),
@@ -234,18 +287,25 @@ class _barman_endState extends State<barman_end> {
                       // BlocBuilder(builder: builder)
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
                         builder: (context, state) {
-                          return NewCheck(
+                          if (enabled == false) {
+                            return ShowCheck(
+                                text: "Закрыть смену",
+                                value: closeShift
+                            );
+                          } else {
+                            return NewCheck(
                               text: "Закрыть смену",
                               value: state.checkboxStates['closeShift'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'closeShift',
-                          enabled: enabled,);
+                              checkboxId: 'closeShift',
+                              enabled: enabled,
+                            );
+                          }
                         },
                       ),
                     ),
-                    CommentWorker(commentValue: commentCloseShift,onChanged: (value){
-                      commentCloseShift = value!;
-                    },
+                    CommentWorker(
+                      commentValue: commentCloseShift,
                       readOnly: readOnly,
                     ),
                     ShowCommentDirector(valueDirector: commentDirectorCloseShift,),
@@ -254,12 +314,20 @@ class _barman_endState extends State<barman_end> {
                       // BlocBuilder(builder: builder)
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
                         builder: (context, state) {
-                          return NewCheck(
+                          if (enabled == false) {
+                            return ShowCheck(
+                                text: "Навести порядок на рабочем месте",
+                                value: cleanlinessWorkplace
+                            );
+                          } else {
+                            return NewCheck(
                               text: "Навести порядок на рабочем месте",
                               value: state.checkboxStates['cleanlinessWorkplace'] ?? false,
                               checkboxBloc:checkboxBloc,
-                          checkboxId: 'cleanlinessWorkplace',
-                          enabled: enabled,);
+                              checkboxId: 'cleanlinessWorkplace',
+                              enabled: enabled,
+                            );
+                          }
                         },
                       ),
                     ),
@@ -267,6 +335,9 @@ class _barman_endState extends State<barman_end> {
                       create: (context) => photoBloc,
                       child: BlocBuilder<PhotoBloc, PhotoState>(
                         builder: (context, state) {
+                          if (enabled == false) {
+                            return ShowPhoto(image: cleanlinessWorkplacePath);
+                          }
                           return NewPhoto(
                             photoBloc: photoBloc,
                             photoId: 'cleanlinessWorkplacePhoto',);
@@ -276,12 +347,10 @@ class _barman_endState extends State<barman_end> {
                     const SizedBox(
                       height: 20,
                     ),
-                    CommentWorker(commentValue: commentCleanlinessWorkplace,
-                      onChanged:(value){
-                        commentCleanlinessWorkplace= value!;
-                      },
+                    CommentWorker(
+                      commentValue: commentCleanlinessWorkplace,
                       readOnly: false,
-                      ),
+                    ),
                     ShowCommentDirector(valueDirector: commentDirectorCleanlinessWorkplace,),
                     const SizedBox(
                       height: 20,
@@ -290,6 +359,9 @@ class _barman_endState extends State<barman_end> {
                       create: (context) => photoBloc,
                       child: BlocBuilder<PhotoBloc, PhotoState>(
                         builder: (context, state) {
+                          if (enabled == false) {
+                            return ShowPhoto(image: wipeDustShelvingEndPath);
+                          }
                           return NewPhoto(
                             photoBloc: photoBloc,
                             photoId: 'wipeDustShelvingEnd',);
@@ -322,7 +394,7 @@ class _barman_endState extends State<barman_end> {
                           textStyle: const TextStyle(fontSize: 20),
                           backgroundColor: Colors.green,
                         ),
-                        onPressed: () {
+                        onPressed: () async {
 
                           final photostate = photoBloc.state;
                           final cleanlinessWorkplacePhoto = photostate.photoStates['cleanlinessWorkplacePhoto'];
@@ -330,10 +402,10 @@ class _barman_endState extends State<barman_end> {
                             cleanlinessWorkplacePath = cleanlinessWorkplacePhoto.path;
                           }
 
-                          final wipeDustShelvingEndPhoto = photostate.photoStates['wipeDustShelvingPhoto'];
-                          // if(wipeDustShelvingPhoto != null) {
-                          //   wipeDustShelvingEndPath = wipeDustShelvingEndPhoto.path;
-                          // }
+                          final wipeDustShelvingPhoto = photostate.photoStates['wipeDustShelvingPhoto'];
+                          if(wipeDustShelvingPhoto != null) {
+                            wipeDustShelvingEndPath = wipeDustShelvingPhoto.path;
+                          }
 
                           DateTime now = DateTime.now().toUtc();
                           String date = '${now.year}-${now.month}-${now.day}';
@@ -348,14 +420,29 @@ class _barman_endState extends State<barman_end> {
                           final cleanlinessWorkplace = state.checkboxStates['cleanlinessWorkplace'] ?? false;
                           final wipeDustShelvingEnd = state.checkboxStates['wipeDustShelvingEnd'] ?? false;
 
-                          // Api().barmanEnd(
-                          //     date,
-                          //     time,
-                          //     alcogol, nonAlcogol, tobacco, commentApplication, commentDirectorApplication,
-                          //     fillOutReport, commentFillOutReport, commentDirectorFillOutReport,
-                          //     closeShift, commentCloseShift, commentDirectorCloseShift,
-                          //     cleanlinessWorkplace, cleanlinessWorkplacePath, commentCleanlinessWorkplace, commentDirectorCleanlinessWorkplace,
-                          //     wipeDustShelvingEnd, wipeDustShelvingEndFile, 4);
+                          await Api().barmanEnd(
+                              date,
+                              time,
+                              alcogol,
+                              nonAlcogol,
+                              tobacco,
+                              commentApplication.text,
+                              commentDirectorApplication,
+                              fillOutReport,
+                              commentFillOutReport.text,
+                              commentDirectorFillOutReport,
+                              closeShift,
+                              commentCloseShift.text,
+                              commentDirectorCloseShift,
+                              cleanlinessWorkplace,
+                              cleanlinessWorkplacePath,
+                              commentCleanlinessWorkplace.text,
+                              commentDirectorCleanlinessWorkplace,
+                              wipeDustShelvingEnd,
+                              wipeDustShelvingEndPath,
+                              commentWipeDustShelvingEnd.text,
+                              commentDirectorWipeDustShelvingEnd,
+                              widget.idUser);
 
                           Navigator.pop(context);
                         },
