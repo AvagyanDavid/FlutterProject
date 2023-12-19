@@ -206,7 +206,7 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
                             if (widget.post == 'Manager')
                               ElevatedButton(
                                 onPressed: () {
-                                  Api().updateHostBegin(commentDirectorTakeRadioTerminalTelephone, commentDirectorSendMessage, widget.id);
+                                  Api().updateHostBegin(commentDirectorTakeRadioTerminalTelephone, commentDirectorSendMessage, widget.id,widget.formatterdate);
                                 },
                                 child: const Text('Отправить комментарии'),
                               ),

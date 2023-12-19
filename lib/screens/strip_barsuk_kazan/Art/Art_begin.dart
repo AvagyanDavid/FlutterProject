@@ -833,9 +833,7 @@ class _Art_beginState extends State<Art_begin> {
                                   ),
                                 ),
                               )
-                                  : const SizedBox(
-                                height: 0,
-                              )),
+                                  : const SizedBox(height: 0,)),
                         ],
                       ),
                     ),

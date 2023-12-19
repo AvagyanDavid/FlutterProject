@@ -181,7 +181,7 @@ class _ShowHostEndState extends State<ShowHostEnd> {
                             if (widget.post == 'Manager')
                               ElevatedButton(
                                 onPressed: () {
-                                  Api().updateHostEnd(commentDirectorChargerRadioTerminalTelephone, commentDirectorWorkplace, widget.id);
+                                  Api().updateHostEnd(commentDirectorChargerRadioTerminalTelephone, commentDirectorWorkplace, widget.id, widget.formatterdate);
                                 },
                                 child: const Text('Отправить комментарии'),
                               ),

@@ -95,11 +95,13 @@ class Api {
   Future<Map<String, dynamic>> updateHostBegin(
       String? commentDirectorTakeRadioTerminalTelephone,
       String? commentDirectorSendMessage,
-      int idUser) async {
+      int idUser,
+      String date) async {
     Map<String, dynamic> data = {
       'commentDirectorTakeRadioTerminalTelephone': commentDirectorTakeRadioTerminalTelephone,
       'commentDirectorSendMessage': commentDirectorSendMessage,
       'idUsers': idUser,
+      'date' : date
     };
     debugPrint(data.toString());
     final response = await Dio().post('$baseUrl/UpdateHostBegin', data: data);
@@ -110,11 +112,13 @@ class Api {
   Future<Map<String, dynamic>> updateHostEnd(
       String? commentDirectorChargeRadioTerminalTelephone,
       String? commentDirectorCleanlinessWorkplaceHost,
-      int idUser) async {
+      int idUser,
+      String date) async {
     Map<String, dynamic> data = {
       'commentDirectorChargeRadioTerminalTelephone': commentDirectorChargeRadioTerminalTelephone,
       'commentDirectorCleanlinessWorkplaceHost': commentDirectorCleanlinessWorkplaceHost,
       'idUsers': idUser,
+      'date': date,
     };
     debugPrint(data.toString());
 
@@ -309,6 +313,66 @@ class Api {
     return response.data;
   }
 
+  Future<Map<String, dynamic>> updateWaiterBegin(
+      String? commentDirectorTableArrangment,
+      String? commentDirectorWipeTheTables,
+      String? commentDirectorInspectionOfTheHall,
+      String? commentDirectorArrangeOttomans,
+      String? commentDirectorPutEverithingOnTheTables,
+      String? commentDirectorWipeMenu,
+      String? commentDirectorCleanWineCabinet,
+      String? commentDirectorFillTheNapkinHolder,
+      String? commentDirectorGarbageEmpty,
+      String? commentDirectorPassDishesKitchen,
+      String? commentDirectorRequestStartAndStopList,
+      String? commentDirectorCleanHumidor,
+      int idUser,
+      String date) async {
+    Map<String, dynamic> data = {
+      'commentDirectorTableArrangment': commentDirectorTableArrangment,
+      'commentDirectorWipeTheTables': commentDirectorWipeTheTables,
+      'commentDirectorInspectionOfTheHall': commentDirectorInspectionOfTheHall,
+      'commentDirectorArrangeOttomans': commentDirectorArrangeOttomans,
+      'commentDirectorPutEverithingOnTheTables': commentDirectorPutEverithingOnTheTables,
+      'commentDirectorWipeMenu': commentDirectorWipeMenu,
+      'commentDirectorCleanWineCabinet': commentDirectorCleanWineCabinet,
+      'commentDirectorFillTheNapkinHolder': commentDirectorFillTheNapkinHolder,
+      'commentDirectorGarbageEmpty': commentDirectorGarbageEmpty,
+      'commentDirectorPassDishesKitchen': commentDirectorPassDishesKitchen,
+      'commentDirectorRequestStartAndStopList': commentDirectorRequestStartAndStopList,
+      'commentDirectorCleanHumidor': commentDirectorCleanHumidor,
+      'idUsers': idUser,
+      'date': date,
+    };
+    debugPrint(data.toString());
+
+    final response = await Dio().post('$baseUrl/UpdateWaiterBegin', data: data);
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> updateWaiterEnd(
+      String? commentDirectorChargerCandle,
+      String? commentDirectorFixOttomansAndTables,
+      String? commentDirectorCleanTables,
+      String? commentDirectorPutAwayTheNapkins,
+      int idUser,
+      String date) async {
+    Map<String, dynamic> data = {
+      'commentDirectorChargerCandle': commentDirectorChargerCandle,
+      'commentDirectorFixOttomansAndTables': commentDirectorFixOttomansAndTables,
+      'commentDirectorCleanTables': commentDirectorCleanTables,
+      'commentDirectorPutAwayTheNapkins': commentDirectorPutAwayTheNapkins,
+      'idUsers': idUser,
+      'date': date,
+    };
+    debugPrint(data.toString());
+
+    final response = await Dio().post('$baseUrl/UpdateWaiterEnd', data: data);
+    return response.data;
+  }
+
+
+
   /// Запросы к Art
   Future<void> artBegin(
     String date,
@@ -407,6 +471,8 @@ class Api {
     return response.data;
   }
 
+
+
   Future<Map<String, dynamic>>? artEnd(
       String date,
       String time,
@@ -470,6 +536,58 @@ class Api {
     debugPrint(response.data.toString());
     return response.data;
   }
+
+  Future<Map<String, dynamic>> updateArtBegin(
+      String? commentDirectorListArtist,
+      String? commentDirectorReadiness,
+      String? commentDirectorSendListOfGirls,
+      String? commentDirectorListDJ,
+      String? commentDirectorAnalyzeGraph,
+      String? commentDirectorControlArtistAnalize,
+      String? commentDirectorFiveMinutes,
+      String? commentDirectorCard,
+      String? commentDirectorToyOrder,
+      int idUser,
+  String date) async {
+    Map<String, dynamic> data = {
+      'commentDirectorListArtist': commentDirectorListArtist,
+      'commentDirectorReadiness': commentDirectorReadiness,
+      'commentDirectorSendListOfGirls': commentDirectorSendListOfGirls,
+      'commentDirectorListDJ': commentDirectorListDJ,
+      'commentDirectorAnalyzeGraph': commentDirectorAnalyzeGraph,
+      'commentDirectorControlArtistAnalize': commentDirectorControlArtistAnalize,
+      'commentDirectorFiveMinutes': commentDirectorFiveMinutes,
+      'commentDirectorCard': commentDirectorCard,
+      'commentDirectorToyOrder': commentDirectorToyOrder,
+      'idUsers': idUser,
+      'date': date,
+    };
+    debugPrint(data.toString());
+    final response = await Dio().post('$baseUrl/UpdateArtBegin', data: data);
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> updateArtEnd(
+      String? commentDirectorReportCompletedArt,
+      String? commentDirectorReportCompleteMarket,
+      String? commentDirectorSendReportChat,
+      String? commentDirectorOrderDressingRoom,
+      int idUser,
+      String date) async {
+    Map<String, dynamic> data = {
+      'commentDirectorReportCompletedArt': commentDirectorReportCompletedArt,
+      'commentDirectorReportCompleteMarket': commentDirectorReportCompleteMarket,
+      'commentDirectorSendReportChat': commentDirectorSendReportChat,
+      'commentDirectorOrderDressingRoom': commentDirectorOrderDressingRoom,
+      'idUsers': idUser,
+      'date': date,
+    };
+    debugPrint(data.toString());
+    final response = await Dio().post('$baseUrl/UpdateArtEnd', data: data);
+    return response.data;
+  }
+
+
 
 
 /// Все запросы к Barman
