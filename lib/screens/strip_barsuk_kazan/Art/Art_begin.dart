@@ -18,7 +18,6 @@ class Art_begin extends StatefulWidget {
 }
 
 class _Art_beginState extends State<Art_begin> {
-
   TextEditingController commentListArtist = TextEditingController();
   TextEditingController commentReadiness = TextEditingController();
   TextEditingController commentSendListOfGirls = TextEditingController();
@@ -64,14 +63,19 @@ class _Art_beginState extends State<Art_begin> {
   bool control4 = false;
   bool control5 = false;
   bool toyOrder = false;
+  int id = 0;
+  int status = 0;
 
   void getStatusReport() async {
     String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
     final results = await Api().checkReportArtBegin(date);
     if (results != null) {
-      readOnly = true;
-      enabled = false;
       final response = await Api().showArtBegin(date);
+      if (response['Status'] != 0) {
+        readOnly = true;
+        enabled = false;
+      }
+      id = response['idArtManager'];
       listArtist = response['ListArtist'] != 0 ? true : false;
       commentListArtist.text = response['Comment_ListArtist'];
       commentDirectorListArtist = response['CommentDirector_ListArtist'] as String?;
@@ -227,10 +231,7 @@ class _Art_beginState extends State<Art_begin> {
                             create: (context) => checkboxBloc,
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(builder: (context, state) {
                               if (enabled == false) {
-                                return ShowCheck(
-                                 text: 'Составить список артисток на смене',
-                                 value: listArtist
-                                );
+                                return ShowCheck(text: 'Составить список артисток на смене', value: listArtist);
                               } else {
                                 return NewCheck(
                                   text: 'Составить список артисток на смене',
@@ -255,13 +256,13 @@ class _Art_beginState extends State<Art_begin> {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(builder: (context, state) {
                               if (enabled == false) {
                                 return ShowCheck(
-                                    text: 'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
-                                    value: readiness
-                                );
+                                    text:
+                                        'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
+                                    value: readiness);
                               } else {
                                 return NewCheck(
                                   text:
-                                  'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
+                                      'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
                                   value: state.checkboxStates['readiness'] ?? false,
                                   checkboxBloc: checkboxBloc,
                                   checkboxId: 'readiness',
@@ -285,10 +286,7 @@ class _Art_beginState extends State<Art_begin> {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 if (enabled == false) {
-                                  return ShowCheck(
-                                      text: 'Скинуть список девочек в чат Арт ',
-                                      value: sendListOfGirls
-                                  );
+                                  return ShowCheck(text: 'Скинуть список девочек в чат Арт ', value: sendListOfGirls);
                                 } else {
                                   return NewCheck(
                                     text: 'Скинуть список девочек в чат Арт ',
@@ -313,10 +311,7 @@ class _Art_beginState extends State<Art_begin> {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 if (enabled == false) {
-                                  return ShowCheck(
-                                      text: 'Составить список для диджея',
-                                      value: listDJ
-                                  );
+                                  return ShowCheck(text: 'Составить список для диджея', value: listDJ);
                                 } else {
                                   return NewCheck(
                                     text: 'Составить список для диджея',
@@ -342,10 +337,7 @@ class _Art_beginState extends State<Art_begin> {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 if (enabled == false) {
-                                  return ShowCheck(
-                                      text: 'Проанализировать график на ближайшие 7 дней',
-                                      value: analyzeGraph
-                                  );
+                                  return ShowCheck(text: 'Проанализировать график на ближайшие 7 дней', value: analyzeGraph);
                                 } else {
                                   return NewCheck(
                                     text: "Проанализировать график на ближайшие 7 дней",
@@ -370,10 +362,7 @@ class _Art_beginState extends State<Art_begin> {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 if (enabled == false) {
-                                  return ShowCheck(
-                                      text: 'Контроль наличия анализов у артисток',
-                                      value: controlArtistAnalize
-                                  );
+                                  return ShowCheck(text: 'Контроль наличия анализов у артисток', value: controlArtistAnalize);
                                 } else {
                                   return NewCheck(
                                     text: "Контроль наличия анализов у артисток",
@@ -401,10 +390,7 @@ class _Art_beginState extends State<Art_begin> {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 if (enabled == false) {
-                                  return ShowCheck(
-                                      text: 'Пятиминутка',
-                                      value: fiveMinutes
-                                  );
+                                  return ShowCheck(text: 'Пятиминутка', value: fiveMinutes);
                                 } else {
                                   return NewCheck(
                                     text: "Пятиминутка",
@@ -444,10 +430,7 @@ class _Art_beginState extends State<Art_begin> {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 if (enabled == false) {
-                                  return ShowCheck(
-                                      text: '1 карта',
-                                      value: firstCard
-                                  );
+                                  return ShowCheck(text: '1 карта', value: firstCard);
                                 } else {
                                   return NewCheck(
                                     text: '1 карта',
@@ -465,10 +448,7 @@ class _Art_beginState extends State<Art_begin> {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 if (enabled == false) {
-                                  return ShowCheck(
-                                      text: '2 карта',
-                                      value: secondCard
-                                  );
+                                  return ShowCheck(text: '2 карта', value: secondCard);
                                 } else {
                                   return NewCheck(
                                     text: '2 карта',
@@ -486,10 +466,7 @@ class _Art_beginState extends State<Art_begin> {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 if (enabled == false) {
-                                  return ShowCheck(
-                                      text: '3 карта',
-                                      value: thirdCard
-                                  );
+                                  return ShowCheck(text: '3 карта', value: thirdCard);
                                 } else {
                                   return NewCheck(
                                     text: '3 карта',
@@ -543,10 +520,7 @@ class _Art_beginState extends State<Art_begin> {
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
                                       if (enabled == false) {
-                                        return ShowCheck(
-                                            text: '',
-                                            value: control1
-                                        );
+                                        return ShowCheck(text: '', value: control1);
                                       } else {
                                         return NewCheck(
                                           text: '',
@@ -580,10 +554,7 @@ class _Art_beginState extends State<Art_begin> {
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
                                       if (enabled == false) {
-                                        return ShowCheck(
-                                            text: '',
-                                            value: control2
-                                        );
+                                        return ShowCheck(text: '', value: control2);
                                       } else {
                                         return NewCheck(
                                           text: '',
@@ -619,18 +590,14 @@ class _Art_beginState extends State<Art_begin> {
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
                                       if (enabled == false) {
-                                        return ShowCheck(
-                                            text: '',
-                                            value: control3
-                                        );
+                                        return ShowCheck(text: '', value: control3);
                                       } else {
                                         return NewCheck(
                                             text: '',
                                             value: state.checkboxStates['control3'] ?? false,
                                             checkboxBloc: checkboxBloc,
                                             checkboxId: 'control3',
-                                            enabled: enabled
-                                        );
+                                            enabled: enabled);
                                       }
                                     },
                                   ),
@@ -658,10 +625,7 @@ class _Art_beginState extends State<Art_begin> {
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
                                       if (enabled == false) {
-                                        return ShowCheck(
-                                            text: '',
-                                            value: control4
-                                        );
+                                        return ShowCheck(text: '', value: control4);
                                       } else {
                                         return NewCheck(
                                           text: '',
@@ -697,10 +661,7 @@ class _Art_beginState extends State<Art_begin> {
                                   child: BlocBuilder<CheckboxBloc, CheckboxState>(
                                     builder: (context, state) {
                                       if (enabled == false) {
-                                        return ShowCheck(
-                                            text: '',
-                                            value: control5
-                                        );
+                                        return ShowCheck(text: '', value: control5);
                                       } else {
                                         return NewCheck(
                                           text: '',
@@ -721,10 +682,7 @@ class _Art_beginState extends State<Art_begin> {
                             child: BlocBuilder<CheckboxBloc, CheckboxState>(
                               builder: (context, state) {
                                 if (enabled == false) {
-                                  return ShowCheck(
-                                      text: 'Составить заявку на игрушки',
-                                      value: toyOrder
-                                  );
+                                  return ShowCheck(text: 'Составить заявку на игрушки', value: toyOrder);
                                 } else {
                                   return NewCheck(
                                     text: 'Составить заявку на игрушки',
@@ -746,8 +704,143 @@ class _Art_beginState extends State<Art_begin> {
                           ),
                           const SizedBox(height: 20),
                           Center(
-                              child: enabled == true
-                                  ? ElevatedButton(
+                            child: Column(
+                              children: [
+                                ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(100, 50),
+                                  textStyle: const TextStyle(fontSize: 20),
+                                  backgroundColor: Colors.red[800],
+                                ),
+                                onPressed: () async {
+                                  DateTime now = DateTime.now();
+                                  String date = '${now.year}-${now.month}-${now.day}';
+                                  String time = '${now.hour}:${now.minute}:${now.second}';
+
+                                  final state = checkboxBloc.state;
+                                  listArtist = state.checkboxStates['listArtist'] ?? false;
+                                  readiness = state.checkboxStates['readiness'] ?? false;
+                                  sendListOfGirls = state.checkboxStates['sendListOfGirls'] ?? false;
+                                  listDJ = state.checkboxStates['listDJ'] ?? false;
+                                  analyzeGraph = state.checkboxStates['analyzeGraph'] ?? false;
+                                  controlArtistAnalize = state.checkboxStates['controlArtistAnalize'] ?? false;
+                                  fiveMinutes = state.checkboxStates['fiveMinutes'] ?? false;
+                                  firstCard = state.checkboxStates['firstCard'] ?? false;
+                                  secondCard = state.checkboxStates['secondCard'] ?? false;
+                                  thirdCard = state.checkboxStates['thirdCard'] ?? false;
+                                  control1 = state.checkboxStates['control1'] ?? false;
+                                  control2 = state.checkboxStates['control2'] ?? false;
+                                  control3 = state.checkboxStates['control3'] ?? false;
+                                  control4 = state.checkboxStates['control4'] ?? false;
+                                  control5 = state.checkboxStates['control5'] ?? false;
+                                  toyOrder = state.checkboxStates['toyOrder'] ?? false;
+
+                                  if (id == 0) {
+                                    await Api().artBegin(
+                                        date,
+                                        time,
+                                        listArtist,
+                                        commentListArtist.text,
+                                        commentDirectorListArtist,
+                                        readiness,
+                                        commentReadiness.text,
+                                        commentDirectorReadiness,
+                                        sendListOfGirls,
+                                        commentSendListOfGirls.text,
+                                        commentDirectorSendListOfGirls,
+                                        listDJ,
+                                        commentListDJ.text,
+                                        commentDirectorListDJ,
+                                        analyzeGraph,
+                                        commentAnalyzeGraph.text,
+                                        commentDirectorAnalyzeGraph,
+                                        controlArtistAnalize,
+                                        commentControlArtistAnalize.text,
+                                        commentDirectorControlArtistAnalize,
+                                        fiveMinutes,
+                                        commentFiveMinutes.text,
+                                        commentDirectorFiveMinutes,
+                                        firstCard,
+                                        secondCard,
+                                        thirdCard,
+                                        commentCard.text,
+                                        commentDirectorCard,
+                                        control1,
+                                        commentControl1.text,
+                                        control2,
+                                        commentControl2.text,
+                                        control3,
+                                        commentControl3.text,
+                                        control4,
+                                        commentControl4.text,
+                                        control5,
+                                        commentControl5.text,
+                                        toyOrder,
+                                        commentToyOrder.text,
+                                        commentDirectorToyOrder,
+                                        widget.idUser);
+                                  } else {
+                                    await Api().updateArtBegin(
+                                        date,
+                                        time,
+                                        listArtist,
+                                        commentListArtist.text,
+                                        commentDirectorListArtist,
+                                        readiness,
+                                        commentReadiness.text,
+                                        commentDirectorReadiness,
+                                        sendListOfGirls,
+                                        commentSendListOfGirls.text,
+                                        commentDirectorSendListOfGirls,
+                                        listDJ,
+                                        commentListDJ.text,
+                                        commentDirectorListDJ,
+                                        analyzeGraph,
+                                        commentAnalyzeGraph.text,
+                                        commentDirectorAnalyzeGraph,
+                                        controlArtistAnalize,
+                                        commentControlArtistAnalize.text,
+                                        commentDirectorControlArtistAnalize,
+                                        fiveMinutes,
+                                        commentFiveMinutes.text,
+                                        commentDirectorFiveMinutes,
+                                        firstCard,
+                                        secondCard,
+                                        thirdCard,
+                                        commentCard.text,
+                                        commentDirectorCard,
+                                        control1,
+                                        commentControl1.text,
+                                        control2,
+                                        commentControl2.text,
+                                        control3,
+                                        commentControl3.text,
+                                        control4,
+                                        commentControl4.text,
+                                        control5,
+                                        commentControl5.text,
+                                        toyOrder,
+                                        commentToyOrder.text,
+                                        commentDirectorToyOrder,
+                                        id,
+                                        status
+                                    );
+                                  }
+                                  Navigator.pop(context);
+                                  readOnly = true;
+                                  enabled = false;
+                                },
+                                child: const Text(
+                                  'Сохранить и выйти',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    height: 1.3,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                                ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(100, 50),
                                   textStyle: const TextStyle(fontSize: 20),
@@ -775,50 +868,53 @@ class _Art_beginState extends State<Art_begin> {
                                   control4 = state.checkboxStates['control4'] ?? false;
                                   control5 = state.checkboxStates['control5'] ?? false;
                                   toyOrder = state.checkboxStates['toyOrder'] ?? false;
+                                  status = 1;
 
-                                  await Api().artBegin(
-                                      date,
-                                      time,
-                                      listArtist,
-                                      commentListArtist.text,
-                                      commentDirectorListArtist,
-                                      readiness,
-                                      commentReadiness.text,
-                                      commentDirectorReadiness,
-                                      sendListOfGirls,
-                                      commentSendListOfGirls.text,
-                                      commentDirectorSendListOfGirls,
-                                      listDJ,
-                                      commentListDJ.text,
-                                      commentDirectorListDJ,
-                                      analyzeGraph,
-                                      commentAnalyzeGraph.text,
-                                      commentDirectorAnalyzeGraph,
-                                      controlArtistAnalize,
-                                      commentControlArtistAnalize.text,
-                                      commentDirectorControlArtistAnalize,
-                                      fiveMinutes,
-                                      commentFiveMinutes.text,
-                                      commentDirectorFiveMinutes,
-                                      firstCard,
-                                      secondCard,
-                                      thirdCard,
-                                      commentCard.text,
-                                      commentDirectorCard,
-                                      control1,
-                                      commentControl1.text,
-                                      control2,
-                                      commentControl2.text,
-                                      control3,
-                                      commentControl3.text,
-                                      control4,
-                                      commentControl4.text,
-                                      control5,
-                                      commentControl5.text,
-                                      toyOrder,
-                                      commentToyOrder.text,
-                                      commentDirectorToyOrder,
-                                      idUser);
+                                  await Api().updateArtBegin(
+                                        date,
+                                        time,
+                                        listArtist,
+                                        commentListArtist.text,
+                                        commentDirectorListArtist,
+                                        readiness,
+                                        commentReadiness.text,
+                                        commentDirectorReadiness,
+                                        sendListOfGirls,
+                                        commentSendListOfGirls.text,
+                                        commentDirectorSendListOfGirls,
+                                        listDJ,
+                                        commentListDJ.text,
+                                        commentDirectorListDJ,
+                                        analyzeGraph,
+                                        commentAnalyzeGraph.text,
+                                        commentDirectorAnalyzeGraph,
+                                        controlArtistAnalize,
+                                        commentControlArtistAnalize.text,
+                                        commentDirectorControlArtistAnalize,
+                                        fiveMinutes,
+                                        commentFiveMinutes.text,
+                                        commentDirectorFiveMinutes,
+                                        firstCard,
+                                        secondCard,
+                                        thirdCard,
+                                        commentCard.text,
+                                        commentDirectorCard,
+                                        control1,
+                                        commentControl1.text,
+                                        control2,
+                                        commentControl2.text,
+                                        control3,
+                                        commentControl3.text,
+                                        control4,
+                                        commentControl4.text,
+                                        control5,
+                                        commentControl5.text,
+                                        toyOrder,
+                                        commentToyOrder.text,
+                                        commentDirectorToyOrder,
+                                        id,
+                                        status
+                                    );
                                   Navigator.pop(context);
                                   readOnly = true;
                                   enabled = false;
@@ -833,7 +929,9 @@ class _Art_beginState extends State<Art_begin> {
                                   ),
                                 ),
                               )
-                                  : const SizedBox(height: 0,)),
+                              ],
+                            )
+                          ),
                         ],
                       ),
                     ),
