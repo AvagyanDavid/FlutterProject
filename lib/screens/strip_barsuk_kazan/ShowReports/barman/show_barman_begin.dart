@@ -6,8 +6,9 @@ import 'package:test_form/component/checkbox/checkbox.dart';
 
 class ShowBarmanBegin extends StatefulWidget {
   final String formatterdate;
+  final int id;
   final String post;
-  ShowBarmanBegin({required this.formatterdate,required this.post});
+  ShowBarmanBegin({required this.formatterdate,required this.id, required this.post});
 
   @override
   _ShowBarmanBeginState createState() => _ShowBarmanBeginState();
@@ -15,57 +16,64 @@ class ShowBarmanBegin extends StatefulWidget {
 
 class _ShowBarmanBeginState extends State<ShowBarmanBegin> {
 
-  TextEditingController commentWorkerSendMessageController = TextEditingController();
+  TextEditingController commentDirectorOpenCheckout = TextEditingController();
+  TextEditingController commentDirectorCheckAndTakeAlcogol = TextEditingController();
+  TextEditingController commentDirectorExtractorHumidifier = TextEditingController();
+  TextEditingController commentDirectorWriteStopList = TextEditingController();
+  TextEditingController commentDirectorRubTHeDishes = TextEditingController();
+  TextEditingController commentDirectorCleaning = TextEditingController();
+  TextEditingController commentDirectorRubTheDishes = TextEditingController();
+  TextEditingController commentDirectorWipeDustSelvingBegin = TextEditingController();
+
 
   bool readOnly = false;
 
   bool openCheckout  = false;
   String? commentOpenCheckout;
-  String? commentDirectorOpenCheckout;
   bool checkAndTakeAlcogol = false;
   String? commentCheckAndTakeAlcogol;
-  String? commentDirectorCheckAndTakeAlcogol;
   bool extractorHumidifier = false;
   String? commentExtractorHumidifier;
-  String? commentDirectorExtractorHumidifier;
   bool writeStopList = false;
   String? commentWriteStopList;
-  String? commentDirectorWriteStopList;
   bool  rubTheDishes = false;
   String? commentRubTheDishes;
-  String? commentDirectorRubTHeDishes;
+  bool wipeDustSelvingBegin = false;
+  String? commentWipeDustSelvingBegin;
   bool cleaning = false;
   String? commentCleaning;
-  String? commentDirectorCleaning;
 
-  String? PhotoCheckAndTakeAlcogol;
-  String? PhotoRubTheDishes;
-  String? PhotoCleaning;
+  String? photoCheckAndTakeAlcogol;
+  String? photoRubTheDishes;
+  String? photoCleaning;
 
   void getData() async {
     final response = await Api().showBarmanBegin(widget.formatterdate);
     openCheckout = response['OpenCheckout']  != 0 ? true : false;
     commentOpenCheckout = response ['Comment_OpenCheckout'] as String?;
-    commentDirectorOpenCheckout = response ['CommentDirector_OpenCheckout'] as String?;
+    commentDirectorOpenCheckout.text = response ['CommentDirector_OpenCheckout'];
     checkAndTakeAlcogol = response['CheckAndTakeAlcogol']  != 0 ? true : false;
     commentCheckAndTakeAlcogol = response ['Comment_CheckAndTakeAlcogol'] as String?;
-    commentDirectorCheckAndTakeAlcogol = response ['CommentDirector_CheckAndTakeAlcogol'] as String?;
+    commentDirectorCheckAndTakeAlcogol.text = response ['CommentDirector_CheckAndTakeAlcogol'];
     extractorHumidifier = response['ExtractorHumidifier']  != 0 ? true : false;
     commentExtractorHumidifier = response ['Comment_ExtractorHumidifier'] as String?;
-    commentDirectorExtractorHumidifier = response ['CommentDirector_ExtractorHumidifier'] as String?;
+    commentDirectorExtractorHumidifier.text = response ['CommentDirector_ExtractorHumidifier'];;
     writeStopList = response['WriteStopList']  != 0 ? true : false;
     commentWriteStopList = response ['Comment_WriteStopList'] as String?;
-    commentDirectorWriteStopList = response ['CommentDirector_WriteStopList'] as String?;
+    commentDirectorWriteStopList.text = response ['CommentDirector_WriteStopList'];
     rubTheDishes = response['RubTheDishes']  != 0 ? true : false;
     commentRubTheDishes = response ['Comment_RubTheDishes'] as String?;
-    commentDirectorRubTHeDishes = response ['CommentDirector_RubTHeDishes'] as String?;
+    commentDirectorRubTHeDishes.text = response ['CommentDirector_RubTHeDishes'];
+    wipeDustSelvingBegin = response['WipeDustSelvingBegin'] != 0 ? true : false;
+    commentWipeDustSelvingBegin = response['Comment_WipeDustSelvingBegin'] as String?;
+    commentDirectorWipeDustSelvingBegin.text = response['CommentDirector_WipeDustSelvingBegin'];
     cleaning = response['Cleaning']  != 0 ? true : false;
     commentCleaning = response ['Comment_Cleaning'] as String?;
-    commentDirectorCleaning = response ['CommentDirector_Cleaning'] as String?;
+    commentDirectorCleaning.text = response ['CommentDirector_Cleaning'];
 
-    PhotoCheckAndTakeAlcogol = response['CheckAndTakeAlcogolPhoto'] == null ? null : Api().getPhoto(response['CheckAndTakeAlcogolPhoto']);
-    PhotoRubTheDishes = response['RubTheDishesPhoto'] == null ? null : Api().getPhoto(response['RubTheDishesPhoto']);
-    PhotoCleaning = response['CleaningPhoto'] == null ? null : Api().getPhoto(response['CleaningPhoto']);
+    photoCheckAndTakeAlcogol = response['CheckAndTakeAlcogolPhoto'] == null ? null : Api().getPhoto(response['CheckAndTakeAlcogolPhoto']);
+    photoRubTheDishes = response['RubTheDishesPhoto'] == null ? null : Api().getPhoto(response['RubTheDishesPhoto']);
+    photoCleaning = response['CleaningPhoto'] == null ? null : Api().getPhoto(response['CleaningPhoto']);
 
     debugPrint(response.toString());
     setState(() {});
@@ -173,95 +181,100 @@ class _ShowBarmanBeginState extends State<ShowBarmanBegin> {
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  // autogrouptfuqVzP (Qd88RFd5Sycz9vo7TbtFuq)
                   padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
                   width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // frame6qHZ (211:334)
                         margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
                             ShowCheck(
                                 text: "Открыть кассовую смену",
                                 value: openCheckout),
                             ShowCommentWorker(commentValue: commentOpenCheckout),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorOpenCheckout,
-                                onChanged: (value){
-                              commentDirectorOpenCheckout = value!;
-                                },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorOpenCheckout,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Проверить и принять алкоголь",
                                 value: checkAndTakeAlcogol),
                             const SizedBox(height: 20,),
-                            ShowPhoto(image: PhotoCheckAndTakeAlcogol),
+                            ShowPhoto(image: photoCheckAndTakeAlcogol),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentCheckAndTakeAlcogol),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorCheckAndTakeAlcogol,
-                                onChanged: (value){
-                              commentDirectorCheckAndTakeAlcogol = value!;
-                                },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorCheckAndTakeAlcogol,
+                              readOnly: readOnly,
+                            ),
                             ShowCheck(
                                 text: "Включить вытяжку и увлажнитель",
                                 value: extractorHumidifier),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentExtractorHumidifier),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorExtractorHumidifier, onChanged: (value){
-                              commentDirectorExtractorHumidifier = value!;
-                            },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorExtractorHumidifier,
+                              readOnly: readOnly,
+                            ),
                             ShowCheck(
                                 text: "Написать стоп лист",
                                 value: writeStopList),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentWriteStopList),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorWriteStopList,
-                                onChanged: (value){
-                              commentDirectorWriteStopList = value!;
-                                },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorWriteStopList,
+                              readOnly: readOnly,
+                            ),
                             ShowCheck(
                                 text: "Натереть посуду",
                                 value: rubTheDishes),
                             const SizedBox(height: 20,),
-                            ShowPhoto(image: PhotoRubTheDishes),
+                            ShowPhoto(image: photoRubTheDishes),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentRubTheDishes),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorRubTHeDishes,onChanged: (value){
-                              commentDirectorRubTHeDishes = value!;
-                            },readOnly: readOnly),
+                            CommentDirector(
+                                valueDirector: commentDirectorRubTHeDishes,
+                                readOnly: readOnly
+                            ),
+
+                            ShowCheck(
+                              text: 'Протереть пыль со стеллажа',
+                              value: ,
+                            )
+
+
+
                             /// if (widget.formatterdate.weekday == DateTime.sunday)
                             ///
                             ///
                             ///
+                            ошибка допущена специально чтоб привлечь внимание,
+
                             ShowCheck(
                               text: "Уборка",
                               value: cleaning
                             ),
-                            ShowPhoto(image: PhotoCleaning),
+                            ShowPhoto(image: photoCleaning),
                             ShowCommentWorker(commentValue: commentCleaning),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorCleaning, onChanged: (value){
-                              commentDirectorCleaning = value!;
-                            },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorCleaning,
+                              readOnly: readOnly,
+                            ),
                             if (widget.post == 'Manager')
                               ElevatedButton(
                                 onPressed: () {
-                                  /// запрос с апдейтом
+                                  Api().updateBarmanBegin(commentDirectorOpenCheckout.text, commentDirectorCheckAndTakeAlcogol.text, commentDirectorExtractorHumidifier.text, commentDirectorWriteStopList.text, commentDirectorRubTheDishes.text, commentDirectorWipeDustSelvingBegin.text, commentDirectorCleaning.text, widget.id, widget.formatterdate);
                                 },
                                 child: const Text('Отправить комментарии'),
                               ),

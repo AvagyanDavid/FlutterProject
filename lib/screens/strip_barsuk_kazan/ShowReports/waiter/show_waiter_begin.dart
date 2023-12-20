@@ -6,107 +6,109 @@ import '../../../../component/checkbox/checkbox.dart';
 
 class ShowWaiterBegin extends StatefulWidget {
   final String formatterdate;
+  final int id;
   final String post;
-  ShowWaiterBegin({required this.formatterdate, required this.post});
+  
+  ShowWaiterBegin({required this.formatterdate,required this.id, required this.post});
+  
   @override
   _ShowWaiterBeginState createState() => _ShowWaiterBeginState();
 }
 
 class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
 
-  TextEditingController commentWorkerSendMessageController = TextEditingController();
+  TextEditingController commentDirectorTableArrangment = TextEditingController();
+  TextEditingController commentDirectorWipeTheTables = TextEditingController();
+  TextEditingController commentDirectorInspectionOfTheHall = TextEditingController();
+  TextEditingController commentDirectorArrangeOttomans = TextEditingController();
+  TextEditingController commentDirectorPutEverithingOnTheTables = TextEditingController();
+  TextEditingController commentDirectorWipeMenu = TextEditingController();
+  TextEditingController commentDirectorCleanWineCabinet = TextEditingController();
+  TextEditingController commentDirectorFillTheNapkinHolder = TextEditingController();
+  TextEditingController commentDirectorGarbageEmpty = TextEditingController();
+  TextEditingController commentDirectorPassDishesKitchen = TextEditingController();
+  TextEditingController commentDirectorRequestStartAndStopList = TextEditingController();
+  TextEditingController commentDirectorCleanHumidor = TextEditingController();
 
   bool readOnly = false;
 
   bool tableArrangement = false;
   String? commentTableArrangment;
-  String? commentDirectorTableArrangment;
   bool wipeTheTables = false;
   String? commentWipeTheTables;
-  String? commentDirectorWipeTheTables;
   bool  inspectionOfTheHall = false;
   String? commentInspectionOfTheHall;
-  String? commentDirectorInspectionOfTheHall;
   bool arrangeOttomans = false;
   String? commentArrangeOttomans;
-  String? commentDirectorArrangeOttomans;
   bool putEverythingOnTheTables = false;
   String? commentPutEverithingOnTheTables;
-  String? commentDirectorPutEverithingOnTheTables;
   bool wipeMenu = false;
   String? commentWipeMenu;
-  String? commentDirectorWipeMenu;
   bool cleanWineCabinet = false;
   String? commentCleanWineCabinet;
-  String? commentDirectorCleanWineCabinet;
   bool fillTheNapkinHolder = false;
   String? commentFillTheNapkinHolder;
-  String? commentDirectorFillTheNapkinHolder;
   bool garbageEmpty = false;
   String? commentGarbageEmpty;
-  String? commentDirectorGarbageEmpty;
   bool passDishesKitchen = false;
   String? commentPassDishesKitchen;
-  String? commentDirectorPassDishesKitchen;
   bool requestStartAndStopList = false;
   String? commentRequestStartAndStopList;
-  String? commentDirectorRequestStartAndStopList;
   bool cleanHumidor = false;
   String? commentCleanHumidor;
-  String? commentDirectorCleanHumidor;
 
-  String? PhotoTableArrangement;
-  String? PhotoWipeTheTables;
-  String? PhotoInspectionOfTheHall;
-  String? PhotoArrangeOttomans;
-  String? PhotoPutEverythingOnTheTables;
-  String? PhotoWipeMenu;
+  String? photoTableArrangement;
+  String? photoWipeTheTables;
+  String? photoInspectionOfTheHall;
+  String? photoArrangeOttomans;
+  String? photoPutEverythingOnTheTables;
+  String? photoWipeMenu;
 
   void getData() async{
     final response = await Api().showWaiterBegin(widget.formatterdate);
     tableArrangement = response['TableArrangement'] != 0 ? true : false;
     commentTableArrangment = response['Comment_TableArrangment'] as String?;
-    commentDirectorTableArrangment = response['CommentDirector_TableArrangment'] as String?;
+    commentDirectorTableArrangment.text = response['CommentDirector_TableArrangment'];
     wipeTheTables = response['WipeTheTables'] != 0 ? true : false;
     commentWipeTheTables = response['Comment_WipeTheTables'] as String?;
-    commentDirectorWipeTheTables = response['CommentDirector_WipeTheTables'] as String?;
+    commentDirectorWipeTheTables.text = response['CommentDirector_WipeTheTables'];
     inspectionOfTheHall = response['InspectionOfTheHall'] != 0 ? true : false;
     commentInspectionOfTheHall = response['Comment_InspectionOfTheHall'] as String?;
-    commentDirectorInspectionOfTheHall = response['CommentDirector_InspectionOfTheHall'] as String?;
+    commentDirectorInspectionOfTheHall.text = response['CommentDirector_InspectionOfTheHall'];
     arrangeOttomans = response['ArrangeOttomans'] != 0 ? true : false;
     commentArrangeOttomans = response['Comment_ArrangeOttomans'] as String?;
-    commentDirectorArrangeOttomans = response['CommentDirector_ArrangeOttomans'] as String?;
+    commentDirectorArrangeOttomans.text = response['CommentDirector_ArrangeOttomans'];
     putEverythingOnTheTables = response['PutEverythingOnTheTables'] != 0 ? true : false;
     commentPutEverithingOnTheTables = response['Comment_PutEverithingOnTheTables'] as String?;
-    commentDirectorPutEverithingOnTheTables = response['CommentDirector_PutEverithingOnTheTables'] as String?;
+    commentDirectorPutEverithingOnTheTables.text = response['CommentDirector_PutEverithingOnTheTables'];
     wipeMenu = response['WipeMenu'] != 0 ? true : false;
     commentWipeMenu = response['Comment_WipeMenu'] as String?;
-    commentDirectorWipeMenu = response['CommentDirector_WipeMenu'] as String?;
+    commentDirectorWipeMenu.text = response['CommentDirector_WipeMenu'];
     cleanWineCabinet = response ['CleanWineCabinet'] != 0 ? true : false;
     commentCleanWineCabinet = response['Comment_CleanWineCabinet'] as String?;
-    commentDirectorCleanWineCabinet = response['CommentDirector_CleanWineCabinet'] as String?;
+    commentDirectorCleanWineCabinet.text = response['CommentDirector_CleanWineCabinet'];
     fillTheNapkinHolder = response ['FillTheNapkinHolder'] != 0 ? true : false;
     commentFillTheNapkinHolder = response['Comment_FillTheNapkinHolder'] as String?;
-    commentDirectorFillTheNapkinHolder = response['CommentDirector_FillTheNapkinHolder'] as String?;
+    commentDirectorFillTheNapkinHolder.text = response['CommentDirector_FillTheNapkinHolder'];
     garbageEmpty = response ['GarbageEmpty'] != 0 ? true : false;
     commentGarbageEmpty = response['Comment_GarbageEmpty'] as String?;
-    commentDirectorGarbageEmpty = response['CommentDirector_GarbageEmpty'] as String?;
+    commentDirectorGarbageEmpty.text = response['CommentDirector_GarbageEmpty'];
     passDishesKitchen = response ['PassDishesKitchen'] != 0 ? true : false;
     commentPassDishesKitchen = response['Comment_PassDishesKitchen'] as String?;
-    commentDirectorPassDishesKitchen = response['CommentDirector_PassDishesKitchen'] as String?;
+    commentDirectorPassDishesKitchen.text = response['CommentDirector_PassDishesKitchen'];
     requestStartAndStopList = response['RequestStartAndStopList'] != 0 ? true : false;
     commentRequestStartAndStopList = response['Comment_RequestStartAndStopList'] as String?;
-    commentDirectorRequestStartAndStopList = response['CommentDirector_RequestStartAndStopList'] as String?;
+    commentDirectorRequestStartAndStopList.text = response['CommentDirector_RequestStartAndStopList'];
     cleanHumidor = response['CleanHumidor'] != 0 ? true : false;
     commentCleanHumidor = response['Comment_CleanHumidor'] as String?;
-    commentDirectorCleanHumidor = response['CommentDirector_CleanHumidor'] as String?;
+    commentDirectorCleanHumidor.text = response['CommentDirector_CleanHumidor'];
 
-    PhotoTableArrangement = response['TableArrangementPhoto'] == null ? null : Api().getPhoto(response['TableArrangementPhoto']);
-    PhotoWipeTheTables = response['WipeTheTablesPhoto'] == null ? null : Api().getPhoto(response['WipeTheTablesPhoto']);
-    PhotoInspectionOfTheHall = response['InspectionOfTheHallPhoto'] == null ? null : Api().getPhoto(response['InspectionOfTheHallPhoto']);
-    PhotoArrangeOttomans = response['ArrangeOttomansPhoto'] == null ? null : Api().getPhoto(response['ArrangeOttomansPhoto']);
-    PhotoPutEverythingOnTheTables = response['PutEverythingOnTheTablesPhoto'] == null ? null : Api().getPhoto(response['PutEverythingOnTheTablesPhoto']);
-    PhotoWipeMenu = response['WipeMenuPhoto'] == null ? null : Api().getPhoto(response['WipeMenuPhoto']);
+    photoTableArrangement = response['TableArrangementPhoto'] == null ? null : Api().getPhoto(response['TableArrangementPhoto']);
+    photoWipeTheTables = response['WipeTheTablesPhoto'] == null ? null : Api().getPhoto(response['WipeTheTablesPhoto']);
+    photoInspectionOfTheHall = response['InspectionOfTheHallPhoto'] == null ? null : Api().getPhoto(response['InspectionOfTheHallPhoto']);
+    photoArrangeOttomans = response['ArrangeOttomansPhoto'] == null ? null : Api().getPhoto(response['ArrangeOttomansPhoto']);
+    photoPutEverythingOnTheTables = response['PutEverythingOnTheTablesPhoto'] == null ? null : Api().getPhoto(response['PutEverythingOnTheTablesPhoto']);
+    photoWipeMenu = response['WipeMenuPhoto'] == null ? null : Api().getPhoto(response['WipeMenuPhoto']);
 
     debugPrint(response.toString());
     setState(() {});
@@ -243,63 +245,66 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                                 text: "Расставить столы на равном расстоянии от диванов",
                                 value: tableArrangement),
                             const SizedBox(height: 20,),
-                            ShowPhoto(image: PhotoTableArrangement),
+                            ShowPhoto(image: photoTableArrangement),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentTableArrangment,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorTableArrangment,onChanged: (value){
-                              commentDirectorTableArrangment = value!;
-                            }, readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorTableArrangment,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Протереть столы во всех местах",
                                 value: wipeTheTables),
                             const SizedBox(height: 20,),
-                            ShowPhoto(image: PhotoWipeTheTables),
+                            ShowPhoto(image: photoWipeTheTables),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentWipeTheTables,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorWipeTheTables,onChanged: (value){
-                              commentDirectorWipeTheTables = value!;
-                            }, readOnly: readOnly,
+                            CommentDirector(
+                              valueDirector: commentDirectorWipeTheTables,
+                              readOnly: readOnly,
                             ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Осмотреть зал на предмет мелкого мусора. При необходимость убрать",
                                 value: inspectionOfTheHall),
                             const SizedBox(height: 20,),
-                            ShowPhoto(image: PhotoInspectionOfTheHall),
+                            ShowPhoto(image: photoInspectionOfTheHall),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentInspectionOfTheHall),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorInspectionOfTheHall, onChanged: (value){
-                              commentDirectorInspectionOfTheHall = value!;
-                            },readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorInspectionOfTheHall,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Расставить ровно все пуфики",
                                 value: arrangeOttomans),
                             const SizedBox(height: 20,),
-                            ShowPhoto(image: PhotoArrangeOttomans),
+                            ShowPhoto(image: photoArrangeOttomans),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentArrangeOttomans),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorArrangeOttomans,onChanged: (value){
-                              commentDirectorArrangeOttomans = value!;
-                            },readOnly: readOnly,
+                            CommentDirector(
+                              valueDirector: commentDirectorArrangeOttomans,
+                              readOnly: readOnly,
                             ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Выставить все ровно на столах: салфетницы справа от кнопки, свечи слева от кнопки и крейзи меню слева от свечи",
                                 value: putEverythingOnTheTables),
                             const SizedBox(height: 20,),
-                            ShowPhoto(image: PhotoPutEverythingOnTheTables),
+                            ShowPhoto(image: photoPutEverythingOnTheTables),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentPutEverithingOnTheTables,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorPutEverithingOnTheTables,onChanged: (value){
-                              commentDirectorPutEverithingOnTheTables = value!;
-                            },readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorPutEverithingOnTheTables,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Протереть все крейзи меню и меню бара",
@@ -307,9 +312,10 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentWipeMenu,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorWipeMenu,onChanged: (value){
-                              commentDirectorWipeMenu = value!;
-                            },readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorWipeMenu,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Протереть винный шкаф",
@@ -317,10 +323,9 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentCleanWineCabinet,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorCleanWineCabinet,
-                              onChanged: (value){
-                                commentDirectorCleanWineCabinet = value!;
-                              }, readOnly: readOnly,
+                            CommentDirector(
+                              valueDirector: commentDirectorCleanWineCabinet,
+                              readOnly: readOnly,
                             ),
                             ShowCheck(
                                 text: "Заполнить все салфетницы",
@@ -328,9 +333,10 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentFillTheNapkinHolder,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorFillTheNapkinHolder,onChanged: (value){
-                              commentDirectorFillTheNapkinHolder = value!;
-                            },readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorFillTheNapkinHolder,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Ведерко для муссора должно быть пустым",
@@ -338,9 +344,10 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentGarbageEmpty,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorGarbageEmpty,onChanged: (value){
-                              commentDirectorGarbageEmpty = value!;
-                            },readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorGarbageEmpty,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Передать посуду на кухню",
@@ -348,18 +355,20 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentPassDishesKitchen,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorPassDishesKitchen,onChanged: (value){
-                              commentDirectorPassDishesKitchen = value!;
-                            },readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorPassDishesKitchen,
+                              readOnly: readOnly,
+                            ),
                             ShowCheck(
                                 text: "Запросить стоп-лист и старт-лист по кухне и бару",
                                 value: requestStartAndStopList),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentRequestStartAndStopList,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorRequestStartAndStopList,onChanged: (value){
-                              commentDirectorRequestStartAndStopList = value!;
-                            },readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorRequestStartAndStopList,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Протереть хьюмидор и поднять в нем влажность",
@@ -367,16 +376,22 @@ class _ShowWaiterBeginState extends State<ShowWaiterBegin> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentCleanHumidor,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorCleanHumidor,onChanged: (value){
-                              commentDirectorCleanHumidor = value!;
-                            },readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorCleanHumidor,
+                              readOnly: readOnly,
+                            ),
                             if (widget.post == 'Manager')
                               ElevatedButton(
                                 onPressed: () {
-                                  /// запрос с апдейтом
+                                  Api().updateWaiterBegin(commentDirectorTableArrangment.text, commentDirectorWipeTheTables.text, commentDirectorInspectionOfTheHall.text, commentDirectorArrangeOttomans.text, commentDirectorPutEverithingOnTheTables.text, commentDirectorWipeMenu.text, commentDirectorCleanWineCabinet.text, commentDirectorFillTheNapkinHolder.text, commentDirectorGarbageEmpty.text, commentDirectorPassDishesKitchen.text, commentDirectorRequestStartAndStopList.text, commentDirectorCleanHumidor.text, widget.id, widget.formatterdate);
                                 },
                                 child: const Text('Отправить комментарии'),
-                              ),
+                              )
+                            else
+                              ElevatedButton(onPressed: (){
+                                Navigator.pop(context);
+                              }, child: const Text('Выйти')
+                            )
                           ],
                         ),
                       ),

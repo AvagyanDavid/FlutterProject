@@ -245,6 +245,7 @@ class _DirectorState extends State<Director> {
                                       MaterialPageRoute(
                                           builder: (context) => ShowBarmanBegin(
                                             formatterdate: formattedDate,
+                                            id: idUser,
                                             post: widget.post,
                                           )
                                       ),
@@ -269,6 +270,7 @@ class _DirectorState extends State<Director> {
                                         MaterialPageRoute(
                                             builder: (context) => ShowBarmanEnd(
                                               formatterdate: formattedDate,
+                                              id: idUser,
                                               post: widget.post,
                                             )
                                         ),
@@ -307,6 +309,7 @@ class _DirectorState extends State<Director> {
                                         MaterialPageRoute(
                                             builder: (context) => ShowWaiterBegin(
                                               formatterdate: formattedDate,
+                                              id: idUser,
                                               post: widget.post ,
                                             )
                                         ),
@@ -328,7 +331,10 @@ class _DirectorState extends State<Director> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowWaiterEnd(formatterdate: formattedDate,post: widget.post,)
+                                            builder: (context) => ShowWaiterEnd(
+                                              formatterdate: formattedDate,
+                                              id: idUser,
+                                              post: widget.post,)
                                         ),
                                       );
                                     } else {

@@ -7,38 +7,36 @@ class ShowHostBegin extends StatefulWidget {
   final String formatterdate;
   final int id;
   final String post;
-  ShowHostBegin({required this.formatterdate,required this.id, required this.post});
+
+  ShowHostBegin({required this.formatterdate, required this.id, required this.post});
 
   @override
   _ShowHostBeginState createState() => _ShowHostBeginState();
 }
 
 class _ShowHostBeginState extends State<ShowHostBegin> {
-  TextEditingController commentWorkerSendMessageController = TextEditingController();
+  TextEditingController commentDirectorTakeRadioTerminalTelephone = TextEditingController();
+  TextEditingController commentDirectorSendMessage = TextEditingController();
 
   bool readOnly = false;
   bool enabled = true;
 
   bool takeRadioTerminalTelephone = false;
   String? commentWorkerTakeRadioTerminalTelephone;
-  String? commentDirectorTakeRadioTerminalTelephone;
   bool sendMessageTelegram = false;
   bool sendMessageWatsApp = false;
   String? commentWorkerSendMessage;
-  String? commentDirectorSendMessage;
 
   void getData() async {
     debugPrint('дата в шоу = ${widget.formatterdate}');
     final response = await Api().showHostBegin(widget.formatterdate);
     takeRadioTerminalTelephone = response['TakeRadioTerminalTelephone'] != 0 ? true : false;
     commentWorkerTakeRadioTerminalTelephone = response['CommentWorker_TakeRadioTerminalTelephone'] as String?;
-    commentDirectorTakeRadioTerminalTelephone =
-        response['CommentDirector_TakeRadioTerminalTelephone'] as String?;
+    commentDirectorTakeRadioTerminalTelephone.text = response['CommentDirector_TakeRadioTerminalTelephone'];
     sendMessageWatsApp = response['SendMessageWatsApp'] != 0 ? true : false;
     sendMessageTelegram = response['SendMessageTelegram'] != 0 ? true : false;
     commentWorkerSendMessage = response['CommentWorker_SendMessage'] as String?;
-    commentDirectorSendMessage =
-        response['CommentDirector_SendMessage'] as String?;
+    commentDirectorSendMessage.text = response['CommentDirector_SendMessage'];
     debugPrint(response.toString());
     setState(() {});
   }
@@ -51,7 +49,7 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.post == "Owner"){
+    if (widget.post == "Owner") {
       readOnly = true;
     }
     return Scaffold(
@@ -92,8 +90,7 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
+                                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
                                   child: const Text(
                                     'Отчет Хостеса',
                                     style: TextStyle(
@@ -120,9 +117,7 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
                         SizedBox(
                           width: 100,
                           height: 150,
-                          child: Align(
-                              alignment: Alignment.topRight,
-                              child: Image.asset("assets/emblem.png")),
+                          child: Align(alignment: Alignment.topRight, child: Image.asset("assets/emblem.png")),
                         ),
                       ],
                     ),
@@ -156,23 +151,15 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ShowCheck(
-                                text: "Взять рацию, терминал, телефон",
-                                value: takeRadioTerminalTelephone),
+                            ShowCheck(text: "Взять рацию, терминал, телефон", value: takeRadioTerminalTelephone),
                             ShowCommentWorker(
-                              commentValue:
-                                  commentWorkerTakeRadioTerminalTelephone,
+                              commentValue: commentWorkerTakeRadioTerminalTelephone,
                             ),
                             const SizedBox(
                               height: 20,
                             ),
                             CommentDirector(
-                              valueDirector:
-                                  commentDirectorTakeRadioTerminalTelephone,
-                              onChanged: (value) {
-                                commentDirectorTakeRadioTerminalTelephone =
-                                    value!;
-                              },
+                              valueDirector: commentDirectorTakeRadioTerminalTelephone,
                               readOnly: readOnly,
                             ),
                             const SizedBox(
@@ -187,29 +174,30 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
                                 color: Colors.white,
                               ),
                             ),
-                            ShowCheck(
-                                text: "WhatsApp", value: sendMessageWatsApp),
-                            ShowCheck(
-                                text: "Telegram", value: sendMessageTelegram),
-                            ShowCommentWorker(
-                                commentValue: commentWorkerSendMessage),
+                            ShowCheck(text: "WhatsApp", value: sendMessageWatsApp),
+                            ShowCheck(text: "Telegram", value: sendMessageTelegram),
+                            ShowCommentWorker(commentValue: commentWorkerSendMessage),
                             const SizedBox(
                               height: 20,
                             ),
                             CommentDirector(
                               valueDirector: commentDirectorSendMessage,
-                              onChanged: (value) {
-                                commentDirectorSendMessage = value!;
-                              },
                               readOnly: readOnly,
                             ),
                             if (widget.post == 'Manager')
                               ElevatedButton(
                                 onPressed: () {
-                                  Api().updateHostBegin(commentDirectorTakeRadioTerminalTelephone, commentDirectorSendMessage, widget.id,widget.formatterdate);
+                                  Api().updateHostBegin(commentDirectorTakeRadioTerminalTelephone.text, commentDirectorSendMessage.text, widget.id, widget.formatterdate);
                                 },
                                 child: const Text('Отправить комментарии'),
-                              ),
+                              )
+                            else
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Выйти'),
+                              )
                           ],
                         ),
                       ),

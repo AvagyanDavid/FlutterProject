@@ -757,6 +757,56 @@ class Api {
     return response.data;
   }
 
+  Future<Map<String, dynamic>> updateBarmanBegin(
+      String? commentDirectorOpenCheckout,
+      String? commentDirectorCheckAndTakeAlcogol,
+      String? commentDirectorExtractorHumidifier,
+      String? commentDirectorWriteStopList,
+      String? commentDirectorRubTheDishes,
+      String? commentDirectorWipeDustSelvingBegin,
+      String? commentDirectorCleaning,
+      int idUser,
+      String date) async {
+    Map<String, dynamic> data = {
+      'commentDirectorOpenCheckout': commentDirectorOpenCheckout,
+      'commentDirectorCheckAndTakeAlcogol': commentDirectorCheckAndTakeAlcogol,
+      'commentDirectorExtractorHumidifier': commentDirectorExtractorHumidifier,
+      'commentDirectorWriteStopList': commentDirectorWriteStopList,
+      'commentDirectorRubTheDishes': commentDirectorRubTheDishes,
+      'commentDirectorWipeDustSelvingBegin': commentDirectorWipeDustSelvingBegin,
+      'commentDirectorCleaning': commentDirectorCleaning,
+      'idUsers': idUser,
+      'date': date,
+    };
+    debugPrint(data.toString());
+    final response = await Dio().post('$baseUrl/UpdateBarmanBegin', data: data);
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> updateBarmanEnd(
+      String? commentDirectorApplication,
+      String? commentDirectorFillOutReport,
+      String? commentDirectorCloseShift,
+      String? commentDirectorCleanlinessWorkplace,
+      String? commentDirectorWipeDustShelvingEnd,
+      int idUser,
+      String date) async {
+    Map<String, dynamic> data = {
+      'commentDirectorApplication': commentDirectorApplication,
+      'commentDirectorFillOutReport': commentDirectorFillOutReport,
+      'commentDirectorCloseShift': commentDirectorCloseShift,
+      'commentDirectorCleanlinessWorkplace': commentDirectorCleanlinessWorkplace,
+      'commentDirectorWipeDustShelvingEnd': commentDirectorWipeDustShelvingEnd,
+      'idUsers': idUser,
+      'date': date,
+    };
+    debugPrint(data.toString());
+
+    final response = await Dio().post('$baseUrl/UpdateBarmanEnd', data: data);
+    return response.data;
+  }
+
+
   /// Проверка наличия Отчета по дате
   Future<String?> checkReportBarmanEnd(String? date) async {
     final response = await Dio().post('$baseUrl/CheckReportBarmanEnd', data: {"Date": date});

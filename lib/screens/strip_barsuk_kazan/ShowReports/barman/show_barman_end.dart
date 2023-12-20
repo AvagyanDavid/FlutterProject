@@ -6,8 +6,10 @@ import 'package:test_form/component/checkbox/checkbox.dart';
 
 class ShowBarmanEnd extends StatefulWidget {
   final String formatterdate;
+  final int id;
   final String post;
-  ShowBarmanEnd({required this.formatterdate, required this.post});
+  
+  ShowBarmanEnd({required this.formatterdate,required this.id, required this.post});
 
   @override
   _ShowBarmanEndState createState() => _ShowBarmanEndState();
@@ -15,7 +17,11 @@ class ShowBarmanEnd extends StatefulWidget {
 
 class _ShowBarmanEndState extends State<ShowBarmanEnd> {
 
-  TextEditingController commentWorkerSendMessageController = TextEditingController();
+  TextEditingController commentDirectorApplication = TextEditingController();
+  TextEditingController commentDirectorFillOutReport = TextEditingController();
+  TextEditingController commentDirectorCloseShift = TextEditingController();
+  TextEditingController commentDirectorCleanlinessWorkplace = TextEditingController();
+  TextEditingController commentDirectorWipeDustShelvingEnd = TextEditingController();
 
   bool readOnly = false;
   bool enabled = true;
@@ -24,19 +30,17 @@ class _ShowBarmanEndState extends State<ShowBarmanEnd> {
   bool nonAlcogol  = false;
   bool tobacco  = false;
   String? commentApplication;
-  String? commentDirectorApplication;
   bool fillOutReport = false;
   String? commentFillOutReport;
-  String? commentDirectorFillOutReport;
   bool closeShift = false;
   String? commentCloseShift;
-  String? commentDirectorCloseShift;
   bool cleanlinessWorkplace = false;
   String? commentCleanlinessWorkplace;
-  String? commentDirectorCleanlinessWorkplace;
-
-  String? PhotoCleanlinessWorkplace;
-
+  bool wipeDustShelvingEnd = false;
+  String? commentWipeDustShelvingEnd;
+  
+  String? photoCleanlinessWorkplace;
+  String? photoWipeDustShelvingEnd;
 
   void getData() async {
     final response = await Api().showBarmanEnd(widget.formatterdate);
@@ -44,18 +48,22 @@ class _ShowBarmanEndState extends State<ShowBarmanEnd> {
     nonAlcogol = response['NonAlcogol'] != 0 ? true : false;
     tobacco = response['Tobacco'] != 0 ? true : false;
     commentApplication = response['Comment_Application'] as String?;
-    commentDirectorApplication = response['CommentDirector_Application'] as String?;
+    commentDirectorApplication.text = response['CommentDirector_Application'];
     fillOutReport = response['FillOutReport'] != 0 ? true : false;
     commentFillOutReport = response['CommentFillOutReport'] as String?;
-    commentDirectorFillOutReport = response['CommentDirector_FillOutReport'] as String?;
+    commentDirectorFillOutReport.text = response['CommentDirector_FillOutReport'];
     closeShift = response['CloseShift'] != 0 ? true : false;
     commentCloseShift = response['Comment_CloseShift'] as String?;
-    commentDirectorCloseShift = response['CommentDirector_CloseShift'] as String?;
+    commentDirectorCloseShift.text = response['CommentDirector_CloseShift'];
+    wipeDustShelvingEnd = response['WipeDustShelvingEnd'] != 0 ? true : false;
+    commentWipeDustShelvingEnd = response['Comment_WipeDustShelvingEnd'] as String?;
+    commentDirectorWipeDustShelvingEnd.text = response['CommentDirector_WipeDustShelvingEnd'];
     cleanlinessWorkplace= response['CleanlinessWorkplace'] != 0 ? true : false;
     commentCleanlinessWorkplace = response['Comment_CleanlinessWorkplace'] as String?;
-    commentDirectorCleanlinessWorkplace = response['CommentDirector_CleanlinessWorkplace'] as String?;
+    commentDirectorCleanlinessWorkplace.text = response['CommentDirector_CleanlinessWorkplace'];
 
-    PhotoCleanlinessWorkplace = response['CleanlinessWorkplacePhoto'] == null ? null : Api().getPhoto(response['CleanlinessWorkplacePhoto']);
+    photoWipeDustShelvingEnd = response['WipeDustShelvingEndPhoto'] == null ? null : Api().getPhoto(response['WipeDustShelvingEndPhoto']);
+    photoCleanlinessWorkplace = response['CleanlinessWorkplacePhoto'] == null ? null : Api().getPhoto(response['CleanlinessWorkplacePhoto']);
     setState(() {});
   }
 
@@ -147,7 +155,6 @@ class _ShowBarmanEndState extends State<ShowBarmanEnd> {
               ),
             ),
             Container(
-              // BD1 (231:55)
               margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
               child: const Text(
                 'Конец смены',
@@ -162,22 +169,19 @@ class _ShowBarmanEndState extends State<ShowBarmanEnd> {
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  // autogrouptfuqVzP (Qd88RFd5Sycz9vo7TbtFuq)
                   padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
                   width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // frame6qHZ (211:334)
                         margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              // ANK (211:310)
-                              child: const Text(
+                            const SizedBox(
+                              child:  Text(
                                 'Составить заявку:',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -202,45 +206,53 @@ class _ShowBarmanEndState extends State<ShowBarmanEnd> {
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentApplication),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorApplication, onChanged: (value){
-                              commentDirectorApplication = value!;
-                            },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorApplication,
+                              readOnly: readOnly,
+                            ),
                             ShowCheck(
                                 text: "Заполнить отчет",
                                 value: fillOutReport),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentFillOutReport),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorFillOutReport, onChanged: (value){
-                              commentDirectorFillOutReport = value!;
-                            },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorFillOutReport,
+                              readOnly: readOnly,
+                            ),
                             ShowCheck(
                                 text: "Закрыть смену",
                                 value: closeShift),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentCloseShift),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorCloseShift,onChanged: (value){
-                              commentDirectorCloseShift = value!;
-                            },readOnly: readOnly),
+                            CommentDirector(
+                                valueDirector: commentDirectorCloseShift,
+                                readOnly: readOnly
+                            ),
                             const SizedBox(height: 20,),
+                            ShowCheck(text: 'Протереть пыль со стеллажа', value: wipeDustShelvingEnd),
+                            ShowPhoto(image: photoWipeDustShelvingEnd),
+                            const SizedBox(height: 20,),
+                            ShowCommentWorker(commentValue: commentWipeDustShelvingEnd),
+                            CommentDirector(valueDirector: commentDirectorWipeDustShelvingEnd, readOnly: readOnly,),
                             ShowCheck(
                                 text: "Навести порядок на рабочем месте",
-                                value: cleanlinessWorkplace),
+                                value: cleanlinessWorkplace
+                            ),
                             const SizedBox(height: 20,),
-                            ShowPhoto(image: PhotoCleanlinessWorkplace),
+                            ShowPhoto(image: photoCleanlinessWorkplace),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentCleanlinessWorkplace),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorCleanlinessWorkplace,onChanged: (value){
-                              commentDirectorCleanlinessWorkplace = value!;
-                            },readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorCleanlinessWorkplace,
+                              readOnly: readOnly,
+                            ),
                             if (widget.post == 'Manager')
                               ElevatedButton(
                                 onPressed: () {
-                                  /// запрос с апдейтом
+                                  Api().updateBarmanEnd(commentDirectorApplication.text, commentDirectorFillOutReport.text, commentDirectorCloseShift.text, commentDirectorCleanlinessWorkplace.text, commentDirectorWipeDustShelvingEnd.text, widget.id, widget.formatterdate);
                                 },
                                 child: const Text('Отправить комментарии'),
                               ),

@@ -81,13 +81,13 @@ class ShowCommentWorker extends StatelessWidget {
 }
 
 class CommentDirector extends StatelessWidget {
-  String? valueDirector;
+  TextEditingController valueDirector;
   final Function(String?)? onChanged;
   final bool readOnly;
 
 
   CommentDirector(
-      {Key? key, this.valueDirector, this.onChanged, required this.readOnly});
+      {Key? key, required this.valueDirector, this.onChanged, required this.readOnly});
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class CommentDirector extends StatelessWidget {
                     fillColor: Colors.white,
                   ),
                   textInputAction: TextInputAction.next,
-                  initialValue: valueDirector,
+                  controller: valueDirector,
                   onChanged: onChanged,
                   readOnly: readOnly,
                 )

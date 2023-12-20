@@ -16,30 +16,29 @@ class ShowHostEnd extends StatefulWidget {
 
 class _ShowHostEndState extends State<ShowHostEnd> {
 
-  TextEditingController commentWorkerSendMessageController = TextEditingController();
+  TextEditingController commentDirectorChargerRadioTerminalTelephone = TextEditingController();
+  TextEditingController commentDirectorWorkplace = TextEditingController();
 
   bool readOnly = false;
   bool enabled = true;
 
   bool chargerRadioTerminalTelephone = false;
   String? commentChargerRadioTerminalTelephone;
-  String? commentDirectorChargerRadioTerminalTelephone;
   bool cleanWorkplace = false;
   String? commentWorkplace;
-  String? commentDirectorWorkplace;
 
-  String? Photo;
+  String? photo;
 
   void getData() async{
     final response = await Api().showHostEnd(widget.formatterdate);
     chargerRadioTerminalTelephone = response['ChargerRadioTerminalTelephone'] != 0 ? true : false;
     commentChargerRadioTerminalTelephone = response['Comment_ChargerRadioTerminalTelephone'] as String?;
-    commentDirectorChargerRadioTerminalTelephone = response['CommentDirector_ChargerRadioTerminalTelephone'] as String?;
+    commentDirectorChargerRadioTerminalTelephone.text = response['CommentDirector_ChargerRadioTerminalTelephone'];
     cleanWorkplace = response['CleanWorkplace'] != 0 ? true : false;
     commentWorkplace = response['Comment_Workplace'] as String?;
-    commentDirectorWorkplace = response['CommentDirector_Workplace'] as String?;
+    commentDirectorWorkplace.text = response['CommentDirector_Workplace'];
 
-    Photo = response['WorkplacePhoto'] == null ? null : Api().getPhoto(response['WorkplacePhoto']);
+    photo = response['WorkplacePhoto'] == null ? null : Api().getPhoto(response['WorkplacePhoto']);
     debugPrint(response.toString());
     setState(() {});
   }
@@ -132,7 +131,6 @@ class _ShowHostEndState extends State<ShowHostEnd> {
               ),
             ),
             Container(
-              // BD1 (231:55)
               margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
               child: const Text(
                 'Конец смены',
@@ -163,28 +161,35 @@ class _ShowHostEndState extends State<ShowHostEnd> {
                                 value: chargerRadioTerminalTelephone),
                             ShowCommentWorker(commentValue: commentChargerRadioTerminalTelephone,),
                             const SizedBox(height: 20),
-                            CommentDirector(valueDirector: commentDirectorChargerRadioTerminalTelephone, onChanged: (value){
-                              commentDirectorChargerRadioTerminalTelephone = value!;
-                            }, readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorChargerRadioTerminalTelephone,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                 text: "Навести порядок на рабочем месте",
                                 value: cleanWorkplace),
                             const SizedBox(height: 20,),
-                            ShowPhoto(image: Photo),
+                            ShowPhoto(image: photo),
                             const SizedBox(height: 20,),
                             ShowCommentWorker(commentValue: commentWorkplace),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorWorkplace,onChanged: (value){
-                              commentDirectorWorkplace = value!;
-                            }, readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorWorkplace,
+                              readOnly: readOnly,
+                            ),
                             if (widget.post == 'Manager')
                               ElevatedButton(
                                 onPressed: () {
-                                  Api().updateHostEnd(commentDirectorChargerRadioTerminalTelephone, commentDirectorWorkplace, widget.id, widget.formatterdate);
+                                  Api().updateHostEnd(commentDirectorChargerRadioTerminalTelephone.text, commentDirectorWorkplace.text, widget.id, widget.formatterdate);
                                 },
                                 child: const Text('Отправить комментарии'),
-                              ),
+                              )
+                            else
+                              ElevatedButton(onPressed: (){
+                                Navigator.pop(context);
+                              }, child: const Text('Выйти')
+                            )
                           ],
                         ),
                       ),

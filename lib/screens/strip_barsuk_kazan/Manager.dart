@@ -265,6 +265,7 @@ class _ManagerState extends State<Manager> {
                                       MaterialPageRoute(
                                           builder: (context) => ShowBarmanBegin(
                                                 formatterdate: formattedDate,
+                                            id: idUser,
                                             post: widget.post,
                                               )),
                                     );
@@ -288,6 +289,7 @@ class _ManagerState extends State<Manager> {
                                         MaterialPageRoute(
                                             builder: (context) => ShowBarmanEnd(
                                                   formatterdate: formattedDate,
+                                              id: idUser,
                                               post: widget.post,
                                                 )),
                                       );
@@ -329,7 +331,7 @@ class _ManagerState extends State<Manager> {
                                             builder: (context) =>
                                                 ShowWaiterBegin(
                                                   formatterdate: formattedDate,
-                                                  post:widget.post,
+                                                  post:widget.post, id: idUser,
                                                 )),
                                       );
                                     } else {
@@ -351,6 +353,7 @@ class _ManagerState extends State<Manager> {
                                         MaterialPageRoute(
                                             builder: (context) => ShowWaiterEnd(
                                                   formatterdate: formattedDate,
+                                                  id:idUser,
                                                   post: widget.post,
                                                 )),
                                       );
