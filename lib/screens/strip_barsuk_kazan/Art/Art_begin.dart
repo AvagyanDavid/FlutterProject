@@ -778,7 +778,7 @@ class _Art_beginState extends State<Art_begin> {
                                         toyOrder,
                                         commentToyOrder.text,
                                         commentDirectorToyOrder,
-                                        idUser);
+                                        widget.idUser);
                                   } else {
                                     await Api().updateArtBegin(
                                         date,

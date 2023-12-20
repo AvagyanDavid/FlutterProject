@@ -43,14 +43,20 @@ class _Art_endState extends State<Art_end> {
   bool market = false;
   bool hostes =  false;
   bool orderDressingRoom =  false;
+  int id = 0;
+  int status = 0;
+  String? currentPathPhoto;
 
   void getStatusReport() async {
     String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
     final results = await Api().checkReportArtEnd(date);
     if (results != null) {
-      readOnly = true;
-      enabled = false;
       final response = await Api().showArtEnd(date);
+      if (response['Status'] != 0) {
+        readOnly = true;
+        enabled = false;
+      }
+      id = response['idArtManagerEnd'];
       reportCompletedArt = response['ReportCompletedArt'] != 0 ? true : false;
       commentReportCompleteArt.text = response['Comment_ReportCompleteArt'];
       commentDirectorReportCompletedArt = response['CommentDirector_ReportCompletedArt'] as String?;
@@ -68,6 +74,7 @@ class _Art_endState extends State<Art_end> {
       commentDirectorOrderDressingRoom = response['CommentDirector_OrderDressingRoom'] as String?;
 
       orderDressingRoomPhotoPath = response['OrderDressingRoomPhoto'] == null ? null : Api().getPhoto(response['OrderDressingRoomPhoto']);
+      currentPathPhoto = response['OrderDressingRoomPhoto'];
 
       setState(() {});
     }
@@ -384,67 +391,154 @@ class _Art_endState extends State<Art_end> {
                             height: 20,
                           ),
                           Center(
-                            child: enabled == true
-                                ? ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(100, 50),
-                                textStyle: const TextStyle(fontSize: 20),
-                                backgroundColor: Colors.green,
-                              ),
-                              onPressed: () async{
-                                final photostate = photoBloc.state;
-                                final orderDressingRoomPhoto = photostate.photoStates['orderDressingRoomPhoto'];
-                                if (orderDressingRoomPhoto != null) {
-                                  orderDressingRoomPhotoPath = orderDressingRoomPhoto.path;
-                                }
+                            child: Column(
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: const Size(100, 50),
+                                    textStyle: const TextStyle(fontSize: 20),
+                                    backgroundColor: Colors.red[800],
+                                  ),
+                                  onPressed: () async{
+                                    final photostate = photoBloc.state;
+                                    final orderDressingRoomPhoto = photostate.photoStates['orderDressingRoomPhoto'];
+                                    if (orderDressingRoomPhoto != null) {
+                                      orderDressingRoomPhotoPath = orderDressingRoomPhoto.path;
+                                    }
 
-                                DateTime now = DateTime.now();
-                                String date = '${now.year}-${now.month}-${now.day}';
-                                String time = '${now.hour}:${now.minute}:${now.second}';
+                                    DateTime now = DateTime.now();
+                                    String date = '${now.year}-${now.month}-${now.day}';
+                                    String time = '${now.hour}:${now.minute}:${now.second}';
 
-                                final state = checkboxBloc.state;
-                                reportCompletedArt = state.checkboxStates['reportCompletedArt'] ?? false;
-                                reportCompleteMarket = state.checkboxStates['reportCompleteMarket'] ?? false;
-                                art = state.checkboxStates['art'] ?? false;
-                                bar = state.checkboxStates['bar'] ?? false;
-                                market = state.checkboxStates['market'] ?? false;
-                                hostes = state.checkboxStates['hostes'] ?? false;
-                                orderDressingRoom = state.checkboxStates['orderDressingRoom'] ?? false;
+                                    final state = checkboxBloc.state;
+                                    reportCompletedArt = state.checkboxStates['reportCompletedArt'] ?? false;
+                                    reportCompleteMarket = state.checkboxStates['reportCompleteMarket'] ?? false;
+                                    art = state.checkboxStates['art'] ?? false;
+                                    bar = state.checkboxStates['bar'] ?? false;
+                                    market = state.checkboxStates['market'] ?? false;
+                                    hostes = state.checkboxStates['hostes'] ?? false;
+                                    orderDressingRoom = state.checkboxStates['orderDressingRoom'] ?? false;
 
-                                await Api().artEnd(
-                                    date,
-                                    time,
-                                    reportCompletedArt,
-                                    commentReportCompleteArt.text,
-                                    commentDirectorReportCompletedArt,
-                                    reportCompleteMarket,
-                                    commentReportCompleteMarket.text,
-                                    commentDirectorReportCompleteMarket,
-                                    art,
-                                    bar,
-                                    market,
-                                    hostes,
-                                    commentSendReportChat.text,
-                                    commentDirectorSendReportChat,
-                                    orderDressingRoom,
-                                    orderDressingRoomPhotoPath,
-                                    commentOrderDressingRoom.text,
-                                    commentDirectorOrderDressingRoom,
-                                    idUser);
+                                    if (id == 0) {
+                                      await Api().artEnd(
+                                          date,
+                                          time,
+                                          reportCompletedArt,
+                                          commentReportCompleteArt.text,
+                                          commentDirectorReportCompletedArt,
+                                          reportCompleteMarket,
+                                          commentReportCompleteMarket.text,
+                                          commentDirectorReportCompleteMarket,
+                                          art,
+                                          bar,
+                                          market,
+                                          hostes,
+                                          commentSendReportChat.text,
+                                          commentDirectorSendReportChat,
+                                          orderDressingRoom,
+                                          orderDressingRoomPhotoPath,
+                                          commentOrderDressingRoom.text,
+                                          commentDirectorOrderDressingRoom,
+                                          widget.idUser);
+                                    } else {
+                                      await Api().updateArtEnd(
+                                          date,
+                                          time,
+                                          reportCompletedArt,
+                                          commentReportCompleteArt.text,
+                                          commentDirectorReportCompletedArt,
+                                          reportCompleteMarket,
+                                          commentReportCompleteMarket.text,
+                                          commentDirectorReportCompleteMarket,
+                                          art,
+                                          bar,
+                                          market,
+                                          hostes,
+                                          commentSendReportChat.text,
+                                          commentDirectorSendReportChat,
+                                          orderDressingRoom,
+                                          orderDressingRoomPhotoPath,
+                                          commentOrderDressingRoom.text,
+                                          commentDirectorOrderDressingRoom,
+                                          id,
+                                          status);
+                                    }
 
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Отправить отчет',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  height: 1.3,
-                                  color: Colors.white,
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    'Сохранить и выйти',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      height: 1.3,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: const Size(100, 50),
+                                    textStyle: const TextStyle(fontSize: 20),
+                                    backgroundColor: Colors.green[800],
+                                  ),
+                                  onPressed: () async {
+                                    final photostate = photoBloc.state;
+                                    final orderDressingRoomPhoto = photostate.photoStates['orderDressingRoomPhoto'];
+                                    if (orderDressingRoomPhoto != null) {
+                                      orderDressingRoomPhotoPath = orderDressingRoomPhoto.path;
+                                    }
+
+                                    DateTime now = DateTime.now();
+                                    String date = '${now.year}-${now.month}-${now.day}';
+                                    String time = '${now.hour}:${now.minute}:${now.second}';
+
+                                    final state = checkboxBloc.state;
+                                    reportCompletedArt = state.checkboxStates['reportCompletedArt'] ?? false;
+                                    reportCompleteMarket = state.checkboxStates['reportCompleteMarket'] ?? false;
+                                    art = state.checkboxStates['art'] ?? false;
+                                    bar = state.checkboxStates['bar'] ?? false;
+                                    market = state.checkboxStates['market'] ?? false;
+                                    hostes = state.checkboxStates['hostes'] ?? false;
+                                    orderDressingRoom = state.checkboxStates['orderDressingRoom'] ?? false;
+                                    status = 1;
+
+                                    await Api().updateArtEnd(
+                                        date,
+                                        time,
+                                        reportCompletedArt,
+                                        commentReportCompleteArt.text,
+                                        commentDirectorReportCompletedArt,
+                                        reportCompleteMarket,
+                                        commentReportCompleteMarket.text,
+                                        commentDirectorReportCompleteMarket,
+                                        art,
+                                        bar,
+                                        market,
+                                        hostes,
+                                        commentSendReportChat.text,
+                                        commentDirectorSendReportChat,
+                                        orderDressingRoom,
+                                        orderDressingRoomPhotoPath,
+                                        commentOrderDressingRoom.text,
+                                        commentDirectorOrderDressingRoom,
+                                        id,
+                                        status);
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    'Отправить отчет',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      height: 1.3,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              ],
                             )
-                                : const SizedBox(height: 0,)
                           ),
                         ],
                       ),

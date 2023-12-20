@@ -632,22 +632,60 @@ class Api {
   }
 
   Future<Map<String, dynamic>> updateArtEnd(
+      String date,
+      String time,
+      bool reportCompletedArt,
+      String? commentReportCompleteArt,
       String? commentDirectorReportCompletedArt,
+      bool reportCompleteMarket,
+      String? commentReportCompleteMarket,
       String? commentDirectorReportCompleteMarket,
+      bool art,
+      bool bar,
+      bool market,
+      bool hostes,
+      String? commentSendReportChat,
       String? commentDirectorSendReportChat,
+      bool orderDressingRoom,
+      String? orderDressingRoomFile,
+      String? commentOrderDressingRoom,
       String? commentDirectorOrderDressingRoom,
-      int idUser,
-      String date) async {
+      int id,
+      int status) async {
     Map<String, dynamic> data = {
-      'commentDirectorReportCompletedArt': commentDirectorReportCompletedArt,
-      'commentDirectorReportCompleteMarket': commentDirectorReportCompleteMarket,
-      'commentDirectorSendReportChat': commentDirectorSendReportChat,
-      'commentDirectorOrderDressingRoom': commentDirectorOrderDressingRoom,
-      'idUsers': idUser,
       'date': date,
+      'time': time,
+      'reportCompletedArt': reportCompletedArt,
+      'commitReportCompleteArt': commentReportCompleteArt,
+      'commentDirectorReportCompletedArt': commentDirectorReportCompletedArt,
+      'reportCompleteMarket': reportCompleteMarket,
+      'commentReportCompleteMarket': commentReportCompleteMarket,
+      'commentDirectorReportCompleteMarket': commentDirectorReportCompleteMarket,
+      'art': art,
+      'bar': bar,
+      'market': market,
+      'hostes': hostes,
+      'commentSendReportChat': commentSendReportChat,
+      'commentDirectorSendReportChat': commentDirectorSendReportChat,
+      'orderDressingRoom': orderDressingRoom,
+      'orderDressingRoomFile': orderDressingRoomFile,
+      'commentOrderDressingRoom': commentOrderDressingRoom,
+      'commentDirectorOrderDressingRoom': commentDirectorOrderDressingRoom,
+      'id': id,
+      'status': status
     };
+    if (orderDressingRoomFile != null) {
+      data['orderDressingRoomFile'] =
+      await MultipartFile.fromFile(orderDressingRoomFile);
+    }
+
+    final formData = FormData.fromMap(data);
     debugPrint(data.toString());
-    final response = await Dio().post('$baseUrl/UpdateArtEnd', data: data);
+    final response = await Dio().post('$baseUrl/UpdateArtEnd',
+        data: formData,
+        options: Options(headers: {
+          "Content-Type": "multipart/form-data",
+        }));
     return response.data;
   }
 
