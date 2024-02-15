@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_form/api/api.dart';
 import 'package:test_form/component/Forms.dart';
-import 'package:test_form/main.dart';
-import '../../../component/checkbox/bloc/checkbox_bloc.dart';
-import '../../../component/checkbox/checkbox.dart';
+import 'package:test_form/component/checkbox/bloc/checkbox_bloc.dart';
+import 'package:test_form/component/checkbox/checkbox.dart';
 
 class Host_begin extends StatefulWidget {
   final int idUser;
@@ -27,8 +26,10 @@ class _Host_beginState extends State<Host_begin> {
 
   String? cleanlinessWorkplaceHostPath = null;
   String? cleanlinessWorkplaceHostName = null;
-  String? commentDirectorTakeRadioTerminalTelephone;
-  String? commentDirectorSendMessage;
+
+  String commentDirectorTakeRadioTerminalTelephone = '';
+  String commentDirectorSendMessage = '';
+
   bool takeRadioTerminalTelephone = false;
   bool sendMessageWatsApp = false;
   bool sendMessageTelegram = false;
@@ -42,11 +43,11 @@ class _Host_beginState extends State<Host_begin> {
       final response = await Api().showHostBegin(date);
       takeRadioTerminalTelephone = response['TakeRadioTerminalTelephone'] != 0 ? true : false;
       commentTakeRadioTerminalTelephone.text = response['Comment_TakeRadioTerminalTelephone'];
-      commentDirectorTakeRadioTerminalTelephone = response['CommentDirector_TakeRadioTerminalTelephone'] as String?;
+      commentDirectorTakeRadioTerminalTelephone = response['CommentDirector_TakeRadioTerminalTelephone'];
       sendMessageWatsApp = response['SendMessageWatsApp'] != 0 ? true : false;
       sendMessageTelegram = response['SendMessageTelegram'] != 0 ? true : false;
       commentSendMessage.text = response['Comment_SendMessage'];
-      commentDirectorSendMessage = response['CommentDirector_SendMessage'] as String?;
+      commentDirectorSendMessage = response['CommentDirector_SendMessage'];
       setState(() {});
     }
   }
@@ -61,57 +62,50 @@ class _Host_beginState extends State<Host_begin> {
     @override
     Widget build(BuildContext context) {
       return Scaffold(
-        body: SizedBox(
-          width: 400,
-          height: double.infinity,
-          child: Column(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 width: double.infinity,
-                // decoration: const BoxDecoration (
-                /// разделяющая линия приветсвие и филиал (207:6)
-                //   color: Colors.white,
-                // ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
                       padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
-                      width: double.infinity,
-                      height: 174,
+                      height: 200,
                       decoration: const BoxDecoration(
                         color: Color(0xff000000),
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Container(
                             margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
                             width: 173,
                             height: double.infinity,
-                            child: Container(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
-                              width: double.infinity,
-                              height: 63.17,
-                              child: Column(
+                            child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    margin:
-                                    const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
-                                    child: const Text(
-                                      'Привет Хостес',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400,
-                                        height: 1.3,
-                                        color: Color(0xffffffff),
+                                  const Expanded(
+                                    child: SingleChildScrollView(
+                                      child: SizedBox(
+                                        width: 200,
+                                        child: Text(
+                                          'Привет Хост',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w400,
+                                            height: 1.3,
+                                            color: Color(0xffffffff),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
                                   Text(
-                                    // 6oq (207:28)
                                     'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
                                     style: const TextStyle(
                                       fontSize: 15,
@@ -120,13 +114,17 @@ class _Host_beginState extends State<Host_begin> {
                                       color: Color(0xffffffff),
                                     ),
                                   ),
+                                  const Divider(
+                                    color: Colors.white,
+                                    thickness: 1,
+                                  ),
+                                  const Text('Стрип Барсук Казань'),
                                 ],
                               ),
                             ),
-                          ),
                           SizedBox(
                             width: 100,
-                            height: 150,
+                            height: 100,
                             child: Align(
                                 alignment: Alignment.topRight,
                                 child: Image.asset("assets/emblem.png")),
@@ -137,9 +135,8 @@ class _Host_beginState extends State<Host_begin> {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
-                child: const Text(
+              const SizedBox(
+                child: Text(
                   'Начало смены',
                   style: TextStyle(
                     fontSize: 32,
@@ -152,17 +149,13 @@ class _Host_beginState extends State<Host_begin> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Container(
-                    padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
+                    padding: const EdgeInsets.fromLTRB(0, 31.5, 0, 62),
+                    margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
                     width: double.infinity,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
-                          width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+
                               BlocProvider<CheckboxBloc>(
                                 create: (context) => checkboxBloc,
                                 child: BlocBuilder<CheckboxBloc, CheckboxState>(
@@ -241,60 +234,64 @@ class _Host_beginState extends State<Host_begin> {
                                 readOnly: readOnly,
                               ),
                               ShowCommentDirector(valueDirector: commentDirectorSendMessage),
+                              const SizedBox(height: 20,),
+                              Center(
+                                  child: enabled == true ? ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      minimumSize: const Size(100, 50),
+                                      textStyle: const TextStyle(fontSize: 20),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                    onPressed: () {
+                                      DateTime now = DateTime.now();
+                                      String date = '${now.year}-${now.month}-${now.day}';
+                                      String time = '${now.hour}:${now.minute}:${now.second}';
+
+                                      final state = checkboxBloc.state;
+                                      takeRadioTerminalTelephone = state.checkboxStates['takeRadioTerminalTelephone'] ?? false;
+                                      sendMessageWatsApp = state.checkboxStates['sendMessageWatsApp'] ?? false;
+                                      sendMessageTelegram = state.checkboxStates['sendMessageTelegram'] ?? false;
+
+                                      Api().hostBegin(
+                                          date,
+                                          time,
+                                          takeRadioTerminalTelephone,
+                                          commentTakeRadioTerminalTelephone.text,
+                                          commentDirectorTakeRadioTerminalTelephone,
+                                          sendMessageWatsApp,
+                                          sendMessageTelegram,
+                                          commentSendMessage.text,
+                                          commentDirectorSendMessage,
+                                          widget.idUser);
+
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Отправить отчет',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        height: 1.3,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ) :
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green[800],
+                                    ),
+                                    onPressed: (){
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('На главный экран'))
+                              ),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 20,),
-                        Center(
-                            child: enabled == true ? ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(100, 50),
-                                textStyle: const TextStyle(fontSize: 20),
-                                backgroundColor: Colors.green,
-                              ),
-                              onPressed: () {
-                                DateTime now = DateTime.now();
-                                String date = '${now.year}-${now.month}-${now.day}';
-                                String time = '${now.hour}:${now.minute}:${now.second}';
-
-                                final state = checkboxBloc.state;
-                                takeRadioTerminalTelephone = state.checkboxStates['takeRadioTerminalTelephone'] ?? false;
-                                sendMessageWatsApp = state.checkboxStates['sendMessageWatsApp'] ?? false;
-                                sendMessageTelegram = state.checkboxStates['sendMessageTelegram'] ?? false;
-
-                                Api().hostBegin(
-                                    date,
-                                    time,
-                                    takeRadioTerminalTelephone,
-                                    commentTakeRadioTerminalTelephone.text,
-                                    commentDirectorTakeRadioTerminalTelephone,
-                                    sendMessageWatsApp,
-                                    sendMessageTelegram,
-                                    commentSendMessage.text,
-                                    commentDirectorSendMessage,
-                                    idUser);
-
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Отправить отчет',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  height: 1.3,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ) : const SizedBox(height: 0,),
-                        ),
-                      ],
                     ),
                   ),
+        ],
                 ),
-              ),
-            ],
-          ),
-        ),
       );
     }
   }

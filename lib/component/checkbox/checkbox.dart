@@ -26,7 +26,7 @@ class NewCheck extends StatelessWidget {
     return BlocConsumer<CheckboxBloc, CheckboxState>(
       bloc: checkboxBloc,
       listener: (context, state) {
-        // Add any necessary listeners here
+
       },
       builder: (context, state) {
         final checkboxStates = state.checkboxStates;

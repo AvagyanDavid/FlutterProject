@@ -20,7 +20,6 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
     'wipeMenuPhoto': null,
     'checkAndTakeAlcogolPhoto': null,
     'wipeDustShelvingBeginPhoto': null,
-    'wipeDustShelvingEndPhoto': null
   })) {
     on<PhotoEvent>((event, emit) async {
       final updatedPhotoStates = Map<String, XFile?>.from(state.photoStates);

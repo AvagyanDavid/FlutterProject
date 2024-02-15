@@ -2,10 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class Api {
+
+  // String baseUrl = 'http://45.12.237.176:5000';
+
   /// Симферополь
   String baseUrl = 'http://192.168.0.102:3000';
+  // String baseUrl = "25.67.41.148";
 
-  // Ви)
+  /// Ви
   // static const String baseUrl = 'http://192.168.0.104:3000';
 
   /// Севастополь
@@ -57,11 +61,11 @@ class Api {
       String time,
       bool takeRadioTerminalTelephone,
       String? commentTakeRadioTerminalTelephone,
-      String? commentDirectorTakeRadioTerminalTelephone,
+      String commentDirectorTakeRadioTerminalTelephone,
       bool sendMessageWatsApp,
       bool sendMessageTelegram,
       String? commentSendMessage,
-      String? commentDirectorSendMessage,
+      String commentDirectorSendMessage,
       int idUser) async {
     Map<String, dynamic> data = {
       'date': date,
@@ -195,8 +199,7 @@ class Api {
       'putEverythingOnTheTables': putEverythingOnTheTables,
       'putEverythingOnTheTablesFile': putEverythingOnTheTablesFile,
       'commentPutEverithingOnTheTables': commentPutEverithingOnTheTables,
-      'commentDirectorPutEverithingOnTheTables':
-          commentDirectorPutEverithingOnTheTables,
+      'commentDirectorPutEverithingOnTheTables': commentDirectorPutEverithingOnTheTables,
       'wipeMenu': wipeMenu,
       'wipeMenuFile': wipeMenuFile,
       'commentWipeMenu': commentWipeMenu,
@@ -219,6 +222,7 @@ class Api {
           commentDirectorRequestStartAndStopList,
       'cleanHumidor': cleanHumidor,
       'commentCleanHumidor': commentCleanHumidor,
+      'commentDirectorCleanHumidor' : commentDirectorCleanHumidor,
       'idUser': idUser,
     };
     debugPrint(data.toString());
@@ -254,7 +258,7 @@ class Api {
 
     final formData = FormData.fromMap(data);
     debugPrint(data.toString());
-    final response = await Dio().post('$baseUrl/waiterBegin',
+    final response = await Dio().post('$baseUrl/WaiterBegin',
         data: formData,
         options: Options(headers: {
           "Content-Type": "multipart/form-data",
@@ -497,7 +501,7 @@ class Api {
       'date': date,
       'time': time,
       'reportCompletedArt': reportCompletedArt,
-      'commitReportCompleteArt': commentReportCompleteArt,
+      'commentReportCompletedArt': commentReportCompleteArt,
       'commentDirectorReportCompletedArt': commentDirectorReportCompletedArt,
       'reportCompleteMarket': reportCompleteMarket,
       'commentReportCompleteMarket': commentReportCompleteMarket,
@@ -579,7 +583,6 @@ class Api {
       bool toyOrder,
       String? commentToyOrder,
       String? commentDirectorToyOrder,
-      int status,
       int id) async {
     Map<String, dynamic> data = {
       'date': date,
@@ -624,7 +627,6 @@ class Api {
       'commentToyOrder' : commentToyOrder,
       'commentDirectorToyOrder' : commentDirectorToyOrder,
       'id': id,
-      'status': status
     };
     debugPrint(data.toString());
     final response = await Dio().post('$baseUrl/UpdateArtBegin', data: data);
@@ -650,8 +652,7 @@ class Api {
       String? orderDressingRoomFile,
       String? commentOrderDressingRoom,
       String? commentDirectorOrderDressingRoom,
-      int id,
-      int status) async {
+      int id) async {
     Map<String, dynamic> data = {
       'date': date,
       'time': time,
@@ -672,7 +673,6 @@ class Api {
       'commentOrderDressingRoom': commentOrderDressingRoom,
       'commentDirectorOrderDressingRoom': commentDirectorOrderDressingRoom,
       'id': id,
-      'status': status
     };
     if (orderDressingRoomFile != null) {
       data['orderDressingRoomFile'] =
@@ -689,11 +689,60 @@ class Api {
     return response.data;
   }
 
+  Future<Map<String, dynamic>> updateDirectorArtBegin(
+      String? commentDirectorListArtist,
+      String? commentDirectorReadiness,
+      String? commentDirectorSendListOfGirls,
+      String? commentDirectorListDJ,
+      String? commentDirectorAnalyzeGraph,
+      String? commentDirectorControlArtistAnalize,
+      String? commentDirectorFiveMinutes,
+      String? commentDirectorCard,
+      String? commentDirectorToyOrder,
+      int idUser,
+      String date) async {
+    Map<String, dynamic> data = {
+      'commentDirectorListArtist': commentDirectorListArtist,
+      'commentDirectorReadiness': commentDirectorReadiness,
+      'commentDirectorSendListOfGirls': commentDirectorSendListOfGirls,
+      'commentDirectorListDJ': commentDirectorListDJ,
+      'commentDirectorAnalyzeGraph': commentDirectorAnalyzeGraph,
+      'commentDirectorControlArtistAnalize': commentDirectorControlArtistAnalize,
+      'commentDirectorFiveMinutes': commentDirectorFiveMinutes,
+      'commentDirectorCard': commentDirectorCard,
+      'commentDirectorToyOrder': commentDirectorToyOrder,
+      'idUsers': idUser,
+      'date': date,
+    };
+    debugPrint(data.toString());
+    final response = await Dio().post('$baseUrl/UpdateDirectorArtBegin', data: data);
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> updateDirectorArtEnd(
+      String? commentDirectorReportCompletedArt,
+      String? commentDirectorReportCompleteMarket,
+      String? commentDirectorSendReportChat,
+      String? commentDirectorOrderDressingRoom,
+      int idUser,
+      String date) async {
+    Map<String, dynamic> data = {
+      'commentDirectorReportCompletedArt': commentDirectorReportCompletedArt,
+      'commentDirectorReportCompleteMarket': commentDirectorReportCompleteMarket,
+      'commentDirectorSendReportChat': commentDirectorSendReportChat,
+      'commentDirectorOrderDressingRoom': commentDirectorOrderDressingRoom,
+      'idUsers': idUser,
+      'date': date,
+    };
+    debugPrint(data.toString());
+    final response = await Dio().post('$baseUrl/UpdateDirectorArtBegin', data: data);
+    return response.data;
+  }
+
 
 
 
 /// Все запросы к Barman
-
   Future<Map<String, dynamic>> barmanBegin(
       String date,
       String time,
@@ -798,10 +847,6 @@ class Api {
       String? cleanlinessWorkplaceFile,
       String? commentCleanlinessWorkplace,
       String? commentDirectorCleanlinessWorkplace,
-      bool wipeDustShelvingEnd,
-      String? wipeDustShelvingEndFile,
-      String? commentWipeDustShelvingEnd,
-      String? commentDirectorWipeDustShelvingEnd,
       int idUser) async {
     Map<String, dynamic> data = {
       'date': date,
@@ -815,15 +860,12 @@ class Api {
       'commentFillOutReport': commentFillOutReport,
       'commentDirectorFillOutReport': commentDirectorFillOutReport,
       'closeShift': closeShift,
+      'commentCloseShift': commentCloseShift,
       'commentDirectorCloseShift': commentDirectorCloseShift,
       'cleanlinessWorkplace': cleanlinessWorkplace,
       'cleanlinessWorkplaceFile': cleanlinessWorkplaceFile,
       'commentCleanlinessWorkplace': commentCleanlinessWorkplace,
       'commentDirectorCleanlinessWorkplace': commentDirectorCleanlinessWorkplace,
-      'wipeDustShelvingEnd' : wipeDustShelvingEnd,
-      'wipeDustShelvingEndFile': wipeDustShelvingEndFile,
-      'commentWipeDustShelvingEnd': commentWipeDustShelvingEnd,
-      'commentDirectorWipeDustShelvingEnd' : commentDirectorWipeDustShelvingEnd,
       'idUser': idUser,
     };
     debugPrint(data.toString());
@@ -831,10 +873,6 @@ class Api {
     if (cleanlinessWorkplaceFile != null) {
       data['cleanlinessWorkplaceFile'] =
       await MultipartFile.fromFile(cleanlinessWorkplaceFile);
-    }
-
-    if (wipeDustShelvingEndFile != null) {
-      data['wipeDustShelvingEndFile'] = await MultipartFile.fromFile(wipeDustShelvingEndFile);
     }
 
     final formData = FormData.fromMap(data);
@@ -905,6 +943,320 @@ class Api {
     debugPrint(data.toString());
 
     final response = await Dio().post('$baseUrl/UpdateBarmanEnd', data: data);
+    return response.data;
+  }
+
+  /// Все запросы к Клинингу
+  Future<Map<String, dynamic>> cleaningBegin(
+      String date,
+      String time,
+      bool washFloors,
+      bool wipeTablesWindowShelves,
+      String? commentCabinet,
+      String? commentDirectorCabinet,
+      bool corridor,
+      bool relax,
+      bool guestbook,
+      bool toilet,
+      bool wipeWindowSills,
+      bool wipePanelBox,
+      bool wipePaintings,
+      bool wipeInteriorDoors,
+      String? commentFirstFloor,
+      String? commentDirectorFirstFloor,
+      bool wipeWalls,
+      bool cleanSinks,
+      bool cleanToilets,
+      bool wipeMirrors,
+      bool wipeDispensers,
+      bool fillDispensers,
+      String? commentToilets,
+      String? commentDirectorToilets,
+      bool washStairsSecondFloor,
+      String? commentWashStairsSecondFloor,
+      String? commentDirectorWashStairsSecondFloor,
+      bool washFloorsSecondFloor,
+      bool washStage,
+      bool wipeLargeMirror,
+      bool vacuum,
+      bool wipeBaseboardsOnColumn,
+      bool prepareCrazyRoom,
+      String? commentSecondFloor,
+      String? commentDirectorSecondFloor,
+      bool washFloorsBar,
+      bool washDishesBar,
+      String? commentBar,
+      String? commentDirectorBar,
+      bool washFloorsAlice,
+      bool wipeMirrorsHallway,
+      bool fillDispensersAlice,
+      bool wipeBathroomMirror,
+      bool cleanSinkToilet,
+      bool wipeReception,
+      bool wipeTableGuestRoom,
+      bool vacuumStairs,
+      String? commentAlice,
+      String? commentDirectorAlice,
+      bool takeAllTrash,
+      String? commentTakeAllTrash,
+      String? commentDirectorTakeAllTrash,
+      bool wipeIronWindowSills,
+      bool wipeDoorSign,
+      bool removeCobwebs,
+      bool emptyTrashCan,
+      String? commentStreet,
+      String? commentDirectorStreet,
+      bool checkRoomsCobwebs,
+      String? commentCheckRoomsCobwebs,
+      String? commentDirectorCheckRoomsCobwebs,
+      bool checkCleanlinessBathrooms1,
+      String? commentCheckCleanlinessBathrooms1,
+      bool checkCleanlinessBathrooms2,
+      String? commentCheckCleanlinessBathrooms2,
+      bool checkCleanlinessBathrooms3,
+      String? commentCheckCleanlinessBathrooms3,
+      bool checkCleanlinessBathrooms4,
+      String? commentCheckCleanlinessBathrooms4,
+      bool checkCleanlinessBathrooms5,
+      String? commentCheckCleanlinessBathrooms5,
+      bool checkCleanlinessBathrooms6,
+      String? commentCheckCleanlinessBathrooms6,
+      bool checkCleanlinessBathrooms7,
+      String? commentCheckCleanlinessBathrooms7,
+      bool checkCleanlinessBathrooms8,
+      String? commentCheckCleanlinessBathrooms8,
+      bool checkCleanlinessBathrooms9,
+      String? commentCheckCleanlinessBathrooms9,
+      bool checkCleanlinessBathrooms10,
+      String? commentCheckCleanlinessBathrooms10,
+      bool checkCleanlinessBathrooms11,
+      String? commentCheckCleanlinessBathrooms11,
+      bool checkCleanlinessBathrooms12,
+      String? commentCheckCleanlinessBathrooms12,
+      bool checkCleanlinessBathrooms13,
+      String? commentCheckCleanlinessBathrooms13,
+      bool checkCleanlinessBathrooms14,
+      String? commentCheckCleanlinessBathrooms14,
+      bool checkCleanlinessBathrooms15,
+      String? commentCheckCleanlinessBathrooms15,
+      bool checkCleanlinessBathrooms16,
+      String? commentCheckCleanlinessBathrooms16,
+      String? commentDirectorCheckCleanlinessBathrooms,
+      int idUser) async {
+    Map<String, dynamic> data = {
+      'date': date,
+      'time': time,
+      'washFloors': washFloors,
+      'wipeTablesWindowShelves': wipeTablesWindowShelves,
+      'commentCabinet': commentCabinet,
+      'commentDirectorCabinet': commentDirectorCabinet,
+      'corridor': corridor,
+      'relax': relax,
+      'guestbook': guestbook,
+      'toilet': toilet,
+      'wipeWindowSills': wipeWindowSills,
+      'wipePanelBox': wipePanelBox,
+      'wipePaintings': wipePaintings,
+      'wipeInteriorDoors': wipeInteriorDoors,
+      'commentFirstFloor': commentFirstFloor,
+      'commentDirectorFirstFloor': commentDirectorFirstFloor,
+      'wipeWalls': wipeWalls,
+      'cleanSinks': cleanSinks,
+      'cleanToilets': cleanToilets,
+      'wipeMirrors': wipeMirrors,
+      'wipeDispensers': wipeDispensers,
+      'fillDispensers': fillDispensers,
+      'commentToilets': commentToilets,
+      'commentDirectorToilets': commentDirectorToilets,
+      'washStairsSecondFloor': washStairsSecondFloor,
+      'commentWashStairsSecondFloor': commentWashStairsSecondFloor,
+      'commentDirectorWashStairsSecondFloor': commentDirectorWashStairsSecondFloor,
+      'washFloorsSecondFloor': washFloorsSecondFloor,
+      'washStage': washStage,
+      'wipeLargeMirror': wipeLargeMirror,
+      'vacuum': vacuum,
+      'wipeBaseboardsOnColumn': wipeBaseboardsOnColumn,
+      'prepareCrazyRoom': prepareCrazyRoom,
+      'commentSecondFloor': commentSecondFloor,
+      'commentDirectorSecondFloor': commentDirectorSecondFloor,
+      'washFloorsBar': washFloorsBar,
+      'washDishesBar': washDishesBar,
+      'commentBar': commentBar,
+      'commentDirectorBar': commentDirectorBar,
+      'washFloorsAlice': washFloorsAlice,
+      'wipeMirrorsHallway': wipeMirrorsHallway,
+      'fillDispensersAlice': fillDispensersAlice,
+      'wipeBathroomMirror': wipeBathroomMirror,
+      'cleanSinkToilet': cleanSinkToilet,
+      'wipeReception': wipeReception,
+      'wipeTableGuestRoom': wipeTableGuestRoom,
+      'vacuumStairs': vacuumStairs,
+      'commentAlice': commentAlice,
+      'commentDirectorAlice': commentDirectorAlice,
+      'takeAllTrash': takeAllTrash,
+      'commentTakeAllTrash': commentTakeAllTrash,
+      'commentDirectorTakeAllTrash': commentDirectorTakeAllTrash,
+      'wipeIronWindowSills': wipeIronWindowSills,
+      'wipeDoorSign': wipeDoorSign,
+      'removeCobwebs': removeCobwebs,
+      'emptyTrashCan': emptyTrashCan,
+      'commentStreet': commentStreet,
+      'commentDirectorStreet': commentDirectorStreet,
+      'checkRoomsCobwebs': checkRoomsCobwebs,
+      'commentCheckRoomsCobwebs': commentCheckRoomsCobwebs,
+      'commentDirectorCheckRoomsCobwebs': commentDirectorCheckRoomsCobwebs,
+      'checkCleanlinessBathrooms1': checkCleanlinessBathrooms1,
+      'commentCheckCleanlinessBathrooms1': commentCheckCleanlinessBathrooms1,
+      'checkCleanlinessBathrooms2': checkCleanlinessBathrooms2,
+      'commentCheckCleanlinessBathrooms2': commentCheckCleanlinessBathrooms2,
+      'checkCleanlinessBathrooms3': checkCleanlinessBathrooms3,
+      'commentCheckCleanlinessBathrooms3': commentCheckCleanlinessBathrooms3,
+      'checkCleanlinessBathrooms4': checkCleanlinessBathrooms4,
+      'commentCheckCleanlinessBathrooms4': commentCheckCleanlinessBathrooms4,
+      'checkCleanlinessBathrooms5': checkCleanlinessBathrooms5,
+      'commentCheckCleanlinessBathrooms5': commentCheckCleanlinessBathrooms5,
+      'checkCleanlinessBathrooms6': checkCleanlinessBathrooms6,
+      'commentCheckCleanlinessBathrooms6': commentCheckCleanlinessBathrooms6,
+      'checkCleanlinessBathrooms7': checkCleanlinessBathrooms7,
+      'commentCheckCleanlinessBathrooms7': commentCheckCleanlinessBathrooms7,
+      'checkCleanlinessBathrooms8': checkCleanlinessBathrooms8,
+      'commentCheckCleanlinessBathrooms8': commentCheckCleanlinessBathrooms8,
+      'checkCleanlinessBathrooms9': checkCleanlinessBathrooms9,
+      'commentCheckCleanlinessBathrooms9': commentCheckCleanlinessBathrooms9,
+      'checkCleanlinessBathrooms10': checkCleanlinessBathrooms10,
+      'commentCheckCleanlinessBathrooms10': commentCheckCleanlinessBathrooms10,
+      'checkCleanlinessBathrooms11': checkCleanlinessBathrooms11,
+      'commentCheckCleanlinessBathrooms11': commentCheckCleanlinessBathrooms11,
+      'checkCleanlinessBathrooms12': checkCleanlinessBathrooms12,
+      'commentCheckCleanlinessBathrooms12': commentCheckCleanlinessBathrooms12,
+      'checkCleanlinessBathrooms13': checkCleanlinessBathrooms13,
+      'commentCheckCleanlinessBathrooms13': commentCheckCleanlinessBathrooms13,
+      'checkCleanlinessBathrooms14': checkCleanlinessBathrooms14,
+      'commentCheckCleanlinessBathrooms14': commentCheckCleanlinessBathrooms14,
+      'checkCleanlinessBathrooms15': checkCleanlinessBathrooms15,
+      'commentCheckCleanlinessBathrooms15': commentCheckCleanlinessBathrooms15,
+      'checkCleanlinessBathrooms16': checkCleanlinessBathrooms16,
+      'commentCheckCleanlinessBathrooms16': commentCheckCleanlinessBathrooms16,
+      'commentDirectorCheckCleanlinessBathrooms': commentDirectorCheckCleanlinessBathrooms,
+      'idUser': idUser
+    };
+    debugPrint(data.toString());
+    final response = await Dio().post('$baseUrl/CleaningBegin', data: data);
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> cleaningEnd(
+      String date,
+      String time,
+      bool emptyTrashCansAllBathrooms,
+      String? commentEmptyTrashCansAllBathrooms,
+      String? commentDirectorEmptyTrashCansAllBathrooms,
+      bool emptyTrashCanStreet,
+      String? commentEmptyTrashCanStreet,
+      String? commentDirectorEmptyTrashCanStreet,
+      bool washFloorsAllRooms,
+      String? commentWashFloorsAllRooms,
+      String? commentDirectorWashFloorsAllRooms,
+      bool takeTrashStorageRoom,
+      String? commentTakeTrashStorageRoom,
+      String? commentDirectorTakeTrashStorageRoom,
+      bool countNumberCleanTowels,
+      String? commentCountNumberCleanTowels,
+      String? commentDirectorCountNumberCleanTowels,
+      int idUser
+      ) async {
+    Map<String, dynamic> data = {
+      'date' : date,
+      'time' : time,
+      'emptyTrashCansAllBathrooms' : emptyTrashCansAllBathrooms ,
+      'commentEmptyTrashCansAllBathrooms' : commentEmptyTrashCansAllBathrooms,
+      'commentDirectorEmptyTrashCansAllBathrooms' : commentDirectorEmptyTrashCansAllBathrooms,
+      'emptyTrashCanStreet' : emptyTrashCanStreet,
+      'commentEmptyTrashCanStreet' : commentEmptyTrashCanStreet,
+      'commentDirectorEmptyTrashCanStreet' : commentDirectorEmptyTrashCanStreet,
+      'washFloorsAllRooms' : washFloorsAllRooms,
+      'commentWashFloorsAllRooms' : commentWashFloorsAllRooms,
+      'commentDirectorWashFloorsAllRooms' : commentDirectorWashFloorsAllRooms,
+      'takeTrashStorageRoom' : takeTrashStorageRoom,
+      'commentTakeTrashStorageRoom' : commentTakeTrashStorageRoom,
+      'commentDirectorTakeTrashStorageRoom' : commentDirectorTakeTrashStorageRoom,
+      'countNumberCleanTowels' : countNumberCleanTowels,
+      'commentCountNumberCleanTowels' : commentCountNumberCleanTowels,
+      'commentDirectorCountNumberCleanTowels' : commentDirectorCountNumberCleanTowels,
+      'idUser': idUser
+    };
+    debugPrint(data.toString());
+    final response = await Dio().post('$baseUrl/CleaningEnd', data: data);
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> showCleaningBegin(String? date) async {
+    final response = await Dio().post('$baseUrl/ShowCleaningBegin', data: {"Date": date});
+    debugPrint(response.data.toString());
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> showCleaningEnd(String? date) async {
+    final response = await Dio().post('$baseUrl/ShowCleaningEnd', data: {"Date": date});
+    debugPrint(response.data.toString());
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> updateCleaningBegin(
+      String? commentDirectorCabinet,
+      String? commentDirectorFirstFloor,
+      String? commentDirectorToilets,
+      String? commentDirectorWashStairsSecondFloor,
+      String? commentDirectorSecondFloor,
+      String? commentDirectorBar,
+      String? commentDirectorAlice,
+      String? commentDirectorTakeAllTrash,
+      String? commentDirectorStreet,
+      String? commentDirectorCheckRoomsCobwebs,
+      String? commentDirectorCheckCleanlinessBathrooms,
+      int idUser,
+      String date) async {
+    Map<String, dynamic> data = {
+      'commentDirectorCabinet': commentDirectorCabinet,
+      'commentDirectorFirstFloor': commentDirectorFirstFloor,
+      'commentDirectorToilets': commentDirectorToilets,
+      'commentDirectorWashStairsSecondFloor': commentDirectorWashStairsSecondFloor,
+      'commentDirectorSecondFloor': commentDirectorSecondFloor,
+      'commentDirectorBar': commentDirectorBar,
+      'commentDirectorAlice': commentDirectorAlice,
+      'commentDirectorTakeAllTrash': commentDirectorTakeAllTrash,
+      'commentDirectorStreet': commentDirectorStreet,
+      'commentDirectorCheckRoomsCobwebs': commentDirectorCheckRoomsCobwebs,
+      'commentDirectorCheckCleanlinessBathrooms': commentDirectorCheckCleanlinessBathrooms,
+      'idUsers': idUser,
+      'date': date,
+    };
+    debugPrint(data.toString());
+
+    final response = await Dio().post('$baseUrl/UpdateCleaningBegin', data: data);
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> updateCleaningEnd(
+      String? commentDirectorEmptyTrashCansAllBathrooms,
+      String? commentDirectorEmptyTrashCanStreet,
+      String? commentDirectorWashFloorsAllRooms,
+      String? commentDirectorTakeTrashStorageRoom,
+      String? commentDirectorCountNumberCleanTowels,
+      int idUser,
+      String date) async {
+    Map<String, dynamic> data = {
+      'commentDirectorEmptyTrashCansAllBathrooms': commentDirectorEmptyTrashCansAllBathrooms,
+      'commentDirectorEmptyTrashCanStreet': commentDirectorEmptyTrashCanStreet,
+      'commentDirectorWashFloorsAllRooms': commentDirectorWashFloorsAllRooms,
+      'commentDirectorTakeTrashStorageRoom': commentDirectorTakeTrashStorageRoom,
+      'commentDirectorCountNumberCleanTowels': commentDirectorCountNumberCleanTowels,
+      'idUsers': idUser,
+      'date': date,
+    };
+    debugPrint(data.toString());
+
+    final response = await Dio().post('$baseUrl/UpdateCleaningEnd', data: data);
     return response.data;
   }
 
@@ -983,6 +1335,24 @@ class Api {
     return null;
   }
 
+  Future<String?> checkReportCleaningBegin(String? date) async {
+    final response = await Dio().post('$baseUrl/CheckReportCleaningBegin', data: {"Date": date});
+    debugPrint(response.data.toString());
+    if(response.data != null) {
+      return response.data['Login'] as String;
+    }
+    return null;
+  }
+
+  Future<String?> checkReportCleaningEnd(String? date) async {
+    final response = await Dio().post('$baseUrl/CheckReportCleaningEnd', data: {"Date": date});
+    debugPrint(response.data.toString());
+    if(response.data != null) {
+      return response.data['Login'] as String;
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>> registration(
       String login,
       String password,
@@ -1029,6 +1399,21 @@ class Api {
       }
   }
 
+  Future<List> branchId () async {
+    final response = await Dio().post('$baseUrl/BranchId');
+    return response.data;
+  }
+
+  Future<List> branchSelection(int branch) async {
+    final response = await Dio().post('$baseUrl/BranchSelection', data: {"Branch_idBranch": branch});
+    // debugPrint(response.data.toString());
+    if(response.statusCode == 400) {
+      return [{"message": "Error"}];
+    } else if (response.data.length == 0) {
+      return [{"message": "Нет сотрудников"}];
+    }
+    return response.data;
+  }
 
 
 

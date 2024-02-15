@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:test_form/main.dart';
 import 'package:test_form/screens/aithorization.dart';
-import 'package:test_form/screens/strip_barsuk_kazan/Art/Art_begin.dart';
-import 'package:test_form/screens/strip_barsuk_kazan/Art/Art_end.dart';
+import 'package:test_form/screens/strip_barsuk_kazan/Cleaning/cleaning_begin.dart';
+import 'package:test_form/screens/strip_barsuk_kazan/Cleaning/cleaning_end.dart';
 
-class Art extends StatelessWidget {
+class Cleaning extends StatelessWidget {
   final int id;
   final String login;
   final String post;
 
-  Art({super.key, required this.id, required this.login, required this.post});
+  Cleaning({super.key, required this.id, required this.login, required this.post});
 
   @override
   Widget build(BuildContext context) {
     DateTime date = DateTime.now();
     return Scaffold(
-      body: Column(children: [
-        SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
-                height: 200,
+      body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+          SizedBox(
+            width: double.infinity,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(22, 0, 0, 100),
+                height: 300,
                 decoration: const BoxDecoration(
                   color: Color(0xff000000),
                 ),
@@ -31,19 +30,14 @@ class Art extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                      margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
+                      margin: const EdgeInsets.fromLTRB(0, 50, 10, 12.74),
                       width: 173,
                       height: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Expanded(
-                            child: SingleChildScrollView(
-                              child: SizedBox(
-                                width: 200,
-                                child: Text(
-                                  'Привет Арт',
+                          const Text(
+                                  'Привет Клининг',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w400,
@@ -51,12 +45,6 @@ class Art extends StatelessWidget {
                                     color: Color(0xffffffff),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
                           Text(
                             'сегодня ${date.day}-${date.month}-${date.year}',
                             style: const TextStyle(
@@ -71,20 +59,18 @@ class Art extends StatelessWidget {
                             thickness: 1,
                           ),
                           const Text('Стрип Барсук Казань'),
-                        ],
-                      ),
-                    ),
+                ]
+              ),
+              ),
                     SizedBox(
                       width: 100,
                       height: 100,
                       child: Align(alignment: Alignment.topRight, child: Image.asset("assets/emblem.png")),
                     ),
-                  ],
+        ]
                 ),
               ),
-            ],
-          ),
-        ),
+      ),
         Align(
           alignment: Alignment.topCenter,
           child: Container(
@@ -105,7 +91,7 @@ class Art extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Art_begin(idUser: id, now: date)),
+                            MaterialPageRoute(builder: (context) => Cleaning_begin(idUser: 5, now: date)),
                           );
                         },
                         child: const Text(
@@ -135,10 +121,10 @@ class Art extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Art_end(
-                                      idUser: id,
-                                      now: date,
-                                    )),
+                                builder: (context) => Cleaning_end(
+                                  idUser: 5,
+                                  now: date,
+                                )),
                           );
                         },
                         child: const Text(

@@ -6,43 +6,45 @@ import '../../../../component/checkbox/checkbox.dart';
 class ShowArtBegin extends StatefulWidget {
   final String formatterdate;
   final String post;
-  ShowArtBegin({required this.formatterdate, required this.post});
+  ShowArtBegin({required this.formatterdate,required this.post});
   @override
   _ShowArtBeginState createState() => _ShowArtBeginState();
 }
 
 class _ShowArtBeginState extends State<ShowArtBegin> {
 
-  TextEditingController commentWorkerSendMessageController = TextEditingController();
+  TextEditingController commentDirectorListArtist = TextEditingController();
+  TextEditingController commentDirectorReadiness = TextEditingController();
+  TextEditingController commentDirectorSendListOfGirls = TextEditingController();
+  TextEditingController commentDirectorListDJ = TextEditingController();
+  TextEditingController commentDirectorAnalyzeGraph = TextEditingController();
+  TextEditingController commentDirectorControlArtistAnalize = TextEditingController();
+  TextEditingController commentDirectorFiveMinutes = TextEditingController();
+  TextEditingController commentDirectorCard = TextEditingController();
+  TextEditingController commentDirectorToyOrder = TextEditingController();
 
   bool readOnly = false;
 
+  int idWorker = 0;
+
   bool listArtist = false;
   String? commentListArtist;
-  String? commentDirectorListArtist;
   bool readiness = false;
   String? commentReadiness;
-  String? commentDirectorReadiness;
   bool sendListOfGirls = false;
   String? commentSendListOfGirls;
-  String? commentDirectorSendListOfGirls;
   bool listDJ = false;
   String? commentListDJ;
-  String? commentDirectorListDJ;
   bool analyzeGraph = false;
   String? commentAnalyzeGraph;
-  String? commentDirectorAnalyzeGraph;
   bool controlArtistAnalize = false;
   String? commentControlArtistAnalize;
-  String? commentDirectorControlArtistAnalize;
   bool fiveMinutes = false;
   String? commentFiveMinutes;
-  String? commentDirectorFiveMinutes;
   bool firstCard = false;
   bool secondCard = false;
   bool thirdCard = false;
   String? commentCard;
-  String? commentDirectorCard;
   bool control1 = false;
   String? commentControl1;
   bool control2 = false;
@@ -55,36 +57,35 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
   String? commentControl5;
   bool toyOrder = false;
   String? commentToyOrder;
-  String? commentDirectorToyOrder;
 
   void getData() async{
     final response = await Api().showArtBegin(widget.formatterdate);
     listArtist = response['ListArtist'] != 0 ? true : false;
     commentListArtist = response['Comment_ListArtist'] as String?;
-    commentDirectorListArtist = response['CommentDirector_ListArtist'] as String?;
+    commentDirectorListArtist.text = response['CommentDirector_ListArtist'] as String;
     readiness = response['Readiness'] != 0 ? true : false;
     commentReadiness = response['Comment_Readiness'] as String?;
-    commentDirectorReadiness = response['CommentDirector_Readiness'] as String?;
+    commentDirectorReadiness.text = response['CommentDirector_Readiness'] as String;
     sendListOfGirls= response['SendListOfGirls'] != 0 ? true : false;
     commentSendListOfGirls = response['Comment_SendListOfGirls'] as String?;
-    commentDirectorSendListOfGirls = response['CommentDirector_SendListOfGirls'] as String?;
+    commentDirectorSendListOfGirls.text = response['CommentDirector_SendListOfGirls'] as String;
     listDJ = response['ListDJ'] != 0 ? true : false;
     commentListDJ = response['Comment_ListDJ'] as String?;
-    commentDirectorListDJ = response['CommentDirector_ListDJ'] as String?;
+    commentDirectorListDJ.text = response['CommentDirector_ListDJ'] as String;
     analyzeGraph= response['AnalyzeGraph'] != 0 ? true : false;
     commentAnalyzeGraph = response['Comment_AnalyzeGraph'] as String?;
-    commentDirectorAnalyzeGraph = response['CommentDirector_AnalyzeGraph'] as String?;
+    commentDirectorAnalyzeGraph.text = response['CommentDirector_AnalyzeGraph'] as String;
     controlArtistAnalize = response['ControlArtistAnalize'] != 0 ? true : false;
     commentControlArtistAnalize = response['Comment_ControlArtistAnalize'] as String?;
-    commentDirectorControlArtistAnalize = response['CommentDirector_ControlArtistAnalize'] as String?;
+    commentDirectorControlArtistAnalize.text = response['CommentDirector_ControlArtistAnalize'] as String;
     fiveMinutes = response['FiveMinutes'] != 0 ? true : false;
     commentFiveMinutes = response['Comment_FiveMinutes'] as String?;
-    commentDirectorFiveMinutes = response['CommentDirector_FiveMinutes'] as String?;
+    commentDirectorFiveMinutes.text = response['CommentDirector_FiveMinutes'] as String;
     firstCard = response['FirstCard'] != 0 ? true : false;
     secondCard = response['SecondCard'] != 0 ? true : false;
     thirdCard = response['ThirdCard'] != 0 ? true : false;
     commentCard = response['Comment_Card'] as String?;
-    commentDirectorCard = response['CommentDirector_Card'] as String?;
+    commentDirectorCard.text = response['CommentDirector_Card'] as String;
     control1 = response['Control1'] != 0 ? true : false;
     commentControl1 = response['Comment_Control1'] as String?;
     control2 = response['Control2'] != 0 ? true : false;
@@ -97,7 +98,10 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
     commentControl5 = response['Comment_Control5'] as String?;
     toyOrder = response['ToyOrder'] != 0 ? true : false;
     commentToyOrder = response['Comment_ToyOrder'] as String?;
-    commentDirectorToyOrder = response['CommentDirector_ToyOrder'] as String?;
+    commentDirectorToyOrder.text = response['CommentDirector_ToyOrder'] as String;
+
+    idWorker = response['Users_idUsers'];
+    debugPrint(response.toString());
     setState(() {});
   }
 
@@ -113,57 +117,47 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
       readOnly = true;
     }
     return Scaffold(
-      body: SizedBox(
-        width: 400,
-        height: double.infinity,
-        child: Column(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               width: double.infinity,
-              // decoration: const BoxDecoration (
-              /// разделяющая линия приветсвие и филиал (207:6)
-              //   color: Colors.white,
-              // ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
+              child: Container(
                     padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
                     width: double.infinity,
-                    height: 174,
+                    height: 200,
                     decoration: const BoxDecoration(
                       color: Color(0xff000000),
                     ),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Container(
                           margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
                           width: 173,
                           height: double.infinity,
-                          child: Container(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
-                            width: double.infinity,
-                            height: 63.17,
-                            child: Column(
+                          child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  margin:
-                                  const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
-                                  child: const Text(
-                                    'Отчет Арта',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400,
-                                      height: 1.3,
-                                      color: Color(0xffffffff),
+                                const Expanded(
+                                  child: SingleChildScrollView(
+                                    child: SizedBox(
+                                      width: 200,
+                                      child: Text(
+                                        'Отчет Арта',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.3,
+                                          color: Color(0xffffffff),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                                 Text(
-                                  'Отчет за:  ${widget.formatterdate}',
+                                  'Отчет за ${widget.formatterdate}',
                                   style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
@@ -171,10 +165,14 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                                     color: Color(0xffffffff),
                                   ),
                                 ),
+                                const Divider(
+                                  color: Colors.white,
+                                  thickness: 1,
+                                ),
+                                const Text('Стрип Барсук Казань'),
                               ],
                             ),
                           ),
-                        ),
                         SizedBox(
                           width: 100,
                           height: 150,
@@ -185,11 +183,8 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                       ],
                     ),
                   ),
-                ],
               ),
-            ),
             Container(
-              // BD1 (231:55)
               margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
               child: const Text(
                 'Начало смены',
@@ -205,14 +200,12 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
               child: SingleChildScrollView(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
+                  margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
                   width: double.infinity,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
-                        width: double.infinity,
-                        child: Column(
+                      Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ShowCheck(
@@ -221,10 +214,10 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                             ),
                             ShowCommentWorker(commentValue: commentListArtist,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorListArtist,onChanged: (value){
-                              commentDirectorListArtist = value!;
-                            },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorListArtist,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20),
                             ShowCheck(
                                       text: 'Проверка готовности артисток к работе(внести данные в таблицу).Недостатки и исправления уточнить в прилагающем сообщении',
@@ -235,10 +228,10 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                               commentValue: commentReadiness,
                             ),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorReadiness,onChanged: (value){
-                              commentDirectorReadiness = value!;
-                            },
-                              readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorReadiness,
+                              readOnly: readOnly,
+                            ),
                             ShowCheck(
                                     text: 'Скинуть список девочек в чат Арт ',
                                     value: sendListOfGirls
@@ -247,10 +240,10 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                               commentValue: commentSendListOfGirls,
                             ),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorSendListOfGirls,onChanged: (value){
-                              commentDirectorSendListOfGirls = value!;
-                            },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorSendListOfGirls,
+                              readOnly: readOnly,
+                            ),
                             ShowCheck(
                                     text: 'Составить список для диджея ',
                                     value: listDJ
@@ -259,10 +252,10 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                               commentValue: commentListDJ,
                             ),
                             const SizedBox(height: 10),
-                            CommentDirector(valueDirector: commentDirectorListDJ,onChanged: (value){
-                              commentDirectorListDJ = value!;
-                            },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorListDJ,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                     text:
@@ -273,10 +266,10 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                               commentValue: commentAnalyzeGraph
                             ),
                             const SizedBox(height: 10,),
-                            CommentDirector(valueDirector: commentDirectorAnalyzeGraph,onChanged: (value){
-                              commentDirectorAnalyzeGraph = value!;
-                            },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorAnalyzeGraph,
+                              readOnly: readOnly,
+                            ),
                             ShowCheck(
                                     text: "Контроль наличия анализов у артисток",
                                     value: controlArtistAnalize
@@ -287,9 +280,10 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                             const SizedBox(
                               height: 10,
                             ),
-                            CommentDirector(valueDirector: commentDirectorControlArtistAnalize,onChanged: (value){
-                              commentDirectorControlArtistAnalize = value!;
-                            },readOnly: readOnly),
+                            CommentDirector(
+                                valueDirector: commentDirectorControlArtistAnalize,
+                                readOnly: readOnly
+                            ),
                             const SizedBox(height: 20,),
                             ShowCheck(
                                     text: "Пятиминутка",
@@ -299,10 +293,10 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                               commentValue: commentFiveMinutes,
                             ),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentFiveMinutes,onChanged: (value){
-                              commentDirectorFiveMinutes = value!;
-                            },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorFiveMinutes,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20),
                             SizedBox(
                               width: double.infinity,
@@ -333,10 +327,10 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                             ),
                             ShowCommentWorker(commentValue: commentCard),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorCard,onChanged: (value){
-                              commentDirectorCard = value!;
-                            },
-                            readOnly: readOnly,),
+                            CommentDirector(
+                              valueDirector: commentDirectorCard,
+                              readOnly: readOnly,
+                            ),
                             const SizedBox(height: 20,),
                             const Text(
                                 'Контроль:',
@@ -440,30 +434,56 @@ class _ShowArtBeginState extends State<ShowArtBegin> {
                                     value: toyOrder),
                             ShowCommentWorker(commentValue: commentToyOrder,),
                             const SizedBox(height: 20,),
-                            CommentDirector(valueDirector: commentDirectorToyOrder,onChanged: (value){
-                              commentDirectorToyOrder = value!;
-                            },
-                                readOnly: readOnly),
+                            CommentDirector(
+                                valueDirector: commentDirectorToyOrder,
+                                readOnly: readOnly
+                            ),
                         if (widget.post == 'Manager')
-                          ElevatedButton(
-                            onPressed: () {
-                            /// запрос с апдейтом
-                          },
-                        child: const Text('Отправить комментарии'),
-              ),
+                          Column(
+                            children: [
+                              const SizedBox(height: 20,),
+                              Center(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Api().updateDirectorArtBegin(commentDirectorListArtist.text, commentDirectorReadiness.text, commentDirectorSendListOfGirls.text, commentDirectorListDJ.text, commentDirectorAnalyzeGraph.text, commentDirectorControlArtistAnalize.text, commentDirectorFiveMinutes.text, commentDirectorCard.text, commentDirectorToyOrder.text, idWorker, widget.formatterdate);
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green[800],
+                                  ),
+                                  child: const Text('Отправить комментарии')
+                                ),
+                              ),
+                            ],
+                          )
+                        else
+                          Column(
+                            children: [
+                              const SizedBox(height: 20,),
+                              Center(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green[800]
+                                  ),
+                                  child: const Text('Выйти',),
+                                ),
+                              ),
+                            ],
+                          )
+
+
                 ],
                         ),
-                      ),
-
                     ],
-
                   ),
                 ),
               ),
             ),
           ],
               ),
-            ),
         );
   }
 }

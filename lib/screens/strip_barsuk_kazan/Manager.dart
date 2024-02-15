@@ -56,10 +56,9 @@ class _ManagerState extends State<Manager> {
     String date = '${now.year}-${now.month}-${now.day}';
     print(widget.post);
     return Scaffold(
-      body: SizedBox(
-        width: 400,
-        height: double.infinity,
-        child: Column(children: [
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
           SizedBox(
             width: double.infinity,
             child: Container(
@@ -69,48 +68,65 @@ class _ManagerState extends State<Manager> {
                 color: Color(0xff000000),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Flexible(
-                    flex: 2,
-                    child: Container(
-                      margin: const EdgeInsets.fromLTRB(0, 6.58, 10, 12.74),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Привет Управленец',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                              height: 1.3,
-                              color: Color(0xffffffff),
+                  SizedBox(
+                    width: 173,
+                    height: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Expanded(
+                          child: SingleChildScrollView(
+                            child: SizedBox(
+                              width: 300,
+                              child: Text(
+                                'Привет Управлящий',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.3,
+                                  color: Color(0xffffffff),
+                                ),
+                              ),
                             ),
                           ),
-                          Text(
-                            'сегодня $date',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                              height: 1.3,
-                              color: Color(0xffffffff),
-                            ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'сегодня $date',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            height: 1.3,
+                            color: Color(0xffffffff),
                           ),
-                        ],
-                      ),
+                        ),
+                        const Divider(
+                          color: Colors.white,
+                          thickness: 1,
+                        ),
+                        const Text('Стрип Барсук Казань'),
+                      ],
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Registration(),
-                        ),
-                      );
-                    },
-                    child: const Icon(Icons.add),
-                  ),
-                  Container(
+
+
+                  const SizedBox(width: 20,),
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => Registration(),
+                  //       ),
+                  //     );
+                  //   },
+                  //   child: const Icon(Icons.add),
+                  // ),
+                  SizedBox(
                     width: 100,
                     height: 100,
                     child: Align(
@@ -144,8 +160,7 @@ class _ManagerState extends State<Manager> {
                               },
                               rowHeight: 50,
                               daysOfWeekHeight: 10,
-                              headerStyle:
-                                  const HeaderStyle(formatButtonVisible: false),
+                              headerStyle: const HeaderStyle(formatButtonVisible: false),
                               onDaySelected: (selectedDay, focusedDay) async {
                                 formattedDate =
                                     formatter.format(selectedDay.toLocal());
@@ -205,13 +220,15 @@ class _ManagerState extends State<Manager> {
                                             builder: (context) => ShowArtBegin(
                                                   formatterdate: formattedDate,
                                                   post: widget.post,
-                                                )),
+                                                )
+                                        ),
                                       );
                                     } else {
                                       return;
                                     }
                                   },
                                   child: const Text('Начало смены')),
+                              const SizedBox(width: 20,),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -264,8 +281,7 @@ class _ManagerState extends State<Manager> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ShowBarmanBegin(
-                                                formatterdate: formattedDate,
-                                            id: idUser,
+                                            formatterdate: formattedDate,
                                             post: widget.post,
                                               )),
                                     );
@@ -275,6 +291,7 @@ class _ManagerState extends State<Manager> {
                                 },
                                 child: const Text('Начало смены'),
                               ),
+                              const SizedBox(width: 20,),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -288,8 +305,7 @@ class _ManagerState extends State<Manager> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => ShowBarmanEnd(
-                                                  formatterdate: formattedDate,
-                                              id: idUser,
+                                              formatterdate: formattedDate,
                                               post: widget.post,
                                                 )),
                                       );
@@ -331,7 +347,7 @@ class _ManagerState extends State<Manager> {
                                             builder: (context) =>
                                                 ShowWaiterBegin(
                                                   formatterdate: formattedDate,
-                                                  post:widget.post, id: idUser,
+                                                  post:widget.post
                                                 )),
                                       );
                                     } else {
@@ -339,6 +355,7 @@ class _ManagerState extends State<Manager> {
                                     }
                                   },
                                   child: const Text('Начало смены')),
+                              const SizedBox(width: 20,),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -353,7 +370,6 @@ class _ManagerState extends State<Manager> {
                                         MaterialPageRoute(
                                             builder: (context) => ShowWaiterEnd(
                                                   formatterdate: formattedDate,
-                                                  id:idUser,
                                                   post: widget.post,
                                                 )),
                                       );
@@ -393,7 +409,6 @@ class _ManagerState extends State<Manager> {
                                         MaterialPageRoute(
                                             builder: (context) => ShowHostBegin(
                                                   formatterdate: formattedDate,
-                                                  id: idUser,
                                                   post: widget.post,
                                                 )),
                                       );
@@ -402,6 +417,7 @@ class _ManagerState extends State<Manager> {
                                     }
                                   },
                                   child: const Text('Начало смены')),
+                              const SizedBox(width: 20,),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -416,7 +432,6 @@ class _ManagerState extends State<Manager> {
                                         MaterialPageRoute(
                                             builder: (context) => ShowHostEnd(
                                                   formatterdate: formattedDate,
-                                                  id: idUser,
                                                   post: widget.post,
                                                 )),
                                       );
@@ -430,6 +445,7 @@ class _ManagerState extends State<Manager> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 20,),
                     Center(
                       child: SizedBox(
                         height: 51,
@@ -466,7 +482,6 @@ class _ManagerState extends State<Manager> {
             ),
           ),
         ]),
-      ),
     );
   }
 }

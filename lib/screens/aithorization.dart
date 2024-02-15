@@ -137,11 +137,11 @@ class Autorization extends StatelessWidget {
                   builder: (context) => Waiter(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],),
                   ));
 
-              // case 'Barman':
-              //   Navigator.pushReplacement(context,
-              //     MaterialPageRoute(
-              //     builder: (context) => Barman(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],),
-              //     ));
+              case 'Barman':
+                Navigator.pushReplacement(context,
+                  MaterialPageRoute(
+                  builder: (context) => Barman(id: responseUser['idUsers'], login: responseUser['Login'], post: responseUser['Post'],),
+                  ));
               case 'Host':
                 Navigator.pushReplacement(
                   context,

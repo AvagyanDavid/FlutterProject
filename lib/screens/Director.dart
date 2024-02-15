@@ -15,6 +15,9 @@ import 'package:test_form/screens/strip_barsuk_kazan/ShowReports/host/show_host_
 import 'package:test_form/screens/strip_barsuk_kazan/ShowReports/waiter/show_waiter_begin.dart';
 import 'package:test_form/screens/strip_barsuk_kazan/ShowReports/waiter/show_waiter_end.dart';
 
+import '../component/models/listUsers.dart';
+import 'employees.dart';
+
 class Director extends StatefulWidget {
   final int id;
   final String login;
@@ -27,6 +30,9 @@ class Director extends StatefulWidget {
 }
 
 class _DirectorState extends State<Director> {
+
+  String? selectedValue = 'Стрип Барсук Казань';
+  List<String> options = ['Стрип Барсук Казань', 'Релакс Барсук Казань', 'Стрип Барсук Тюмень', 'Стрип Чилли Тюмень', 'Релакс Чилаут Тюмень'];
 
   RatioBloc ratioBloc = RatioBloc();
 
@@ -44,28 +50,30 @@ class _DirectorState extends State<Director> {
   String? responseArtBegin;
   String? responseArtEnd;
 
+  List Users = [];
+  List listBranch = [];
+
   @override
   Widget build(BuildContext context) {
     String date = '${now.year}-${now.month}-${now.day}';
+    String? message;
     return Scaffold(
-      body: SizedBox(
-        width: 400,
-        height: double.infinity,
-        child: Column(children: [
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+            children: [
           SizedBox(
             width: double.infinity,
             child: Container(
               padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
-              height: 200,
+              height: 300,
               decoration: const BoxDecoration(
                 color: Color(0xff000000),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Flexible(
-                    flex: 2,
-                    child: Container(
-                      margin: const EdgeInsets.fromLTRB(0, 6.58, 10, 12.74),
+                  Container(
+                      margin: const EdgeInsets.fromLTRB(0, 50, 10, 12.74),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -87,21 +95,66 @@ class _DirectorState extends State<Director> {
                               color: Color(0xffffffff),
                             ),
                           ),
+                          DropdownButton(
+                            items: listBranch.map((valueItem){
+                              return DropdownMenuItem<String>(
+                                child: Text(valueItem.branchName),
+                                value: valueItem.idBranch.toString(),
+                              );
+                            }).toList(),
+                            value: selectedValue,
+                            icon: const Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: const TextStyle(color: Colors.white),
+                            dropdownColor: Colors.black,
+                            underline: Container(
+                              height: 2,
+                              color: Colors.blue,
+                            ),
+                            onChanged: (newValue) async {
+                              final responseBranchSelection = await Api().branchSelection(int.parse(newValue!));
+                              message = responseBranchSelection[0]["message"];
+                              if (message != "Error" && message != "Нет сотрудников") {
+                                for (int i = 0; i < responseBranchSelection.length; i++) {
+                                  Users.add(ListUsers(
+                                      idUsers: responseBranchSelection[i]["idUsers"],
+                                      login: responseBranchSelection[i]["Login"],
+                                      password: responseBranchSelection[i]["Password"],
+                                      post: responseBranchSelection[i]["Post"],
+                                      idBranch: responseBranchSelection[i]["idBranch"],
+                                      branchName: responseBranchSelection[i]["BranchName"]));
+                                }
+                              }
+                              debugPrint(responseBranchSelection.toString());
+                              debugPrint(Users.toString());
+                              setState(() {
+                                selectedValue = newValue;
+
+                                /// вызов Api
+                              });
+                            },
+                          ),
+                          ElevatedButton(onPressed: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Employees(id: 3,)),
+                            );
+                          }, child: const Text('Сотрудники'),)
                         ],
                       ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Registration(),
-                        ),
-                      );
-                    },
-                    child: const Icon(Icons.add),
-                  ),
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => Registration(),
+                  //       ),
+                  //     );
+                  //   },
+                  //   child: const Icon(Icons.add),
+                  // ),
                   SizedBox(
                     width: 100,
                     height: 100,
@@ -122,7 +175,6 @@ class _DirectorState extends State<Director> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      // frame6qHZ (211:334)
                       margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                       width: double.infinity,
                       child: Column(
@@ -193,6 +245,7 @@ class _DirectorState extends State<Director> {
                                     }
                                   },
                                   child: const Text('Начало смены')),
+                              const SizedBox(width: 20,),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -245,7 +298,6 @@ class _DirectorState extends State<Director> {
                                       MaterialPageRoute(
                                           builder: (context) => ShowBarmanBegin(
                                             formatterdate: formattedDate,
-                                            id: idUser,
                                             post: widget.post,
                                           )
                                       ),
@@ -256,6 +308,7 @@ class _DirectorState extends State<Director> {
                                 },
                                 child: const Text('Начало смены'),
                               ),
+                              const SizedBox(width: 20,),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -270,7 +323,6 @@ class _DirectorState extends State<Director> {
                                         MaterialPageRoute(
                                             builder: (context) => ShowBarmanEnd(
                                               formatterdate: formattedDate,
-                                              id: idUser,
                                               post: widget.post,
                                             )
                                         ),
@@ -309,7 +361,6 @@ class _DirectorState extends State<Director> {
                                         MaterialPageRoute(
                                             builder: (context) => ShowWaiterBegin(
                                               formatterdate: formattedDate,
-                                              id: idUser,
                                               post: widget.post ,
                                             )
                                         ),
@@ -319,6 +370,7 @@ class _DirectorState extends State<Director> {
                                     }
                                   },
                                   child: const Text('Начало смены')),
+                              const SizedBox(width: 20,),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -333,7 +385,6 @@ class _DirectorState extends State<Director> {
                                         MaterialPageRoute(
                                             builder: (context) => ShowWaiterEnd(
                                               formatterdate: formattedDate,
-                                              id: idUser,
                                               post: widget.post,)
                                         ),
                                       );
@@ -369,7 +420,7 @@ class _DirectorState extends State<Director> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowHostBegin(formatterdate: formattedDate, id: idUser, post: widget.post,)
+                                            builder: (context) => ShowHostBegin(formatterdate: formattedDate,post: widget.post,)
                                         ),
                                       );
                                     } else {
@@ -377,6 +428,7 @@ class _DirectorState extends State<Director> {
                                     }
                                   },
                                   child: const Text('Начало смены')),
+                              const SizedBox(width: 20,),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -387,7 +439,7 @@ class _DirectorState extends State<Director> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ShowHostEnd(formatterdate: formattedDate,id: idUser, post: widget.post,)
+                                            builder: (context) => ShowHostEnd(formatterdate: formattedDate, post: widget.post,)
                                         ),
                                       );
                                     } else {
@@ -400,6 +452,7 @@ class _DirectorState extends State<Director> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 20,),
                     Center(
                       child: SizedBox(
                         height: 51,
@@ -437,7 +490,6 @@ class _DirectorState extends State<Director> {
             ),
           ),
         ]),
-      ),
     );
   }
 }

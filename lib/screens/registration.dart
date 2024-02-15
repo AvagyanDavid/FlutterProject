@@ -7,12 +7,17 @@ import 'package:test_form/component/ratio/bloc/ratio_bloc.dart';
 
 class Registration extends StatelessWidget {
 
+  final String post;
+  Registration({required this.post});
+
   CheckboxBloc checkboxBloc = CheckboxBloc();
-  RatioBloc ratioBloc = RatioBloc();
+  // RatioBloc ratioBloc = RatioBloc();
   String login = '';
   String password1 = '';
   String password2 = '';
-  String post = '';
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,19 +29,16 @@ class Registration extends StatelessWidget {
             const SizedBox(
               height: 100,
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
-              child: Container(
-                // ANK (211:310)
-                child: const Text(
-                  'Новый сотрудник',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w400,
-                    height: 2,
-                    color: Colors.white,
-                  ),
+              child: Text(
+                'Новый сотрудник(${post})',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w400,
+                  height: 2,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -97,50 +99,50 @@ class Registration extends StatelessWidget {
                 initialValue: password2,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: BlocProvider<RatioBloc>(
-                create: (context) => ratioBloc,
-                child: BlocBuilder<RatioBloc, RatioState>(
-                  builder: (context, state) {
-                    List<FormBuilderChipOption<Object>> options = [
-                      const FormBuilderChipOption<Object>(
-                        value: 'Art',
-                        child: Text('Арт'),
-                      ),
-                      const FormBuilderChipOption<Object>(
-                        value: 'Barman',
-                        child: Text('Бармен'),
-                      ),
-                      const FormBuilderChipOption<Object>(
-                        value: 'Host',
-                        child: Text('Хост'),
-                      ),
-                      const FormBuilderChipOption<Object>(
-                        value: 'Waiter',
-                        child: Text('Официант'),
-                      ),
-                      const FormBuilderChipOption<Object>(
-                        value: 'Manager',
-                        child: Text('Управляющий'),
-                      ),
-                    ];
-                    return FormBuilderChoiceChip(
-                      runSpacing: 5.0,
-                      selectedColor: Colors.blue,
-                      name: 'choice_chip',
-                      decoration: const InputDecoration(labelText: 'Должность'),
-                      options: options,
-                      initialValue: post,
-                      onChanged: (value) {
-                        post = value.toString()!;
-                        print(post);
-                      },
-                    );
-                  },
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            //   child: BlocProvider<RatioBloc>(
+            //     create: (context) => ratioBloc,
+            //     child: BlocBuilder<RatioBloc, RatioState>(
+            //       builder: (context, state) {
+            //         List<FormBuilderChipOption<Object>> options = [
+            //           const FormBuilderChipOption<Object>(
+            //             value: 'Art',
+            //             child: Text('Арт'),
+            //           ),
+            //           const FormBuilderChipOption<Object>(
+            //             value: 'Barman',
+            //             child: Text('Бармен'),
+            //           ),
+            //           const FormBuilderChipOption<Object>(
+            //             value: 'Host',
+            //             child: Text('Хост'),
+            //           ),
+            //           const FormBuilderChipOption<Object>(
+            //             value: 'Waiter',
+            //             child: Text('Официант'),
+            //           ),
+            //           const FormBuilderChipOption<Object>(
+            //             value: 'Manager',
+            //             child: Text('Управляющий'),
+            //           ),
+            //         ];
+            //         return FormBuilderChoiceChip(
+            //           runSpacing: 5.0,
+            //           selectedColor: Colors.blue,
+            //           name: 'choice_chip',
+            //           decoration: const InputDecoration(labelText: 'Должность'),
+            //           options: options,
+            //           initialValue: post,
+            //           onChanged: (value) {
+            //             post = value.toString()!;
+            //             print(post);
+            //           },
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // ),
             const SizedBox(height: 20),
             Center(
                 child: ElevatedButton(
@@ -162,7 +164,27 @@ class Registration extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-            )),
+            ),
+            ),
+            const SizedBox(height: 20,),
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(100,50),
+                  textStyle: const TextStyle(fontSize: 20),
+                  backgroundColor: Colors.red,
+                ),
+                onPressed: () { Navigator.pop(context); },
+                child: const Text('Назад',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 15,
+                      height: 1.3,
+                      color: Colors.white,
+                    )
+                ),
+              ),
+            )
           ],
         ),
       ),

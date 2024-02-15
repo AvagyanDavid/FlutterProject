@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_form/api/api.dart';
 import 'package:test_form/component/Forms.dart';
 import 'package:test_form/component/photo/photo.dart';
-import 'package:test_form/main.dart';
-import '../../../component/photo/bloc/photo_bloc.dart';
-import '../../../component/checkbox/bloc/checkbox_bloc.dart';
-import '../../../component/checkbox/checkbox.dart';
+import 'package:test_form/component/photo/bloc/photo_bloc.dart';
+import 'package:test_form/component/checkbox/bloc/checkbox_bloc.dart';
+import 'package:test_form/component/checkbox/checkbox.dart';
 
 class Host_end extends StatefulWidget {
   final int idUser;
@@ -30,8 +29,10 @@ class _Host_endState extends State<Host_end> {
   PhotoBloc photoBloc = PhotoBloc();
 
   String? cleanlinessWorkplaceHostPath = null;
-  String? commentDirectorChargerRadioTerminalTelephone;
-  String? commentDirectorWorkplace;
+
+  String commentDirectorChargerRadioTerminalTelephone = '';
+  String commentDirectorWorkplace = '';
+
   String? cleanlinessWorkplaceHostPhoto;
   bool chargerRadioTerminalTelephone = false;
   bool cleanWorkplace = false;
@@ -45,10 +46,10 @@ class _Host_endState extends State<Host_end> {
       final response = await Api().showHostEnd(date);
       chargerRadioTerminalTelephone = response['ChargerRadioTerminalTelephone'] != 0 ? true : false;
       commentChargerRadioTerminalTelephone.text = response['Comment_ChargerRadioTerminalTelephone'];
-      commentDirectorChargerRadioTerminalTelephone = response['CommentDirector_ChargerRadioTerminalTelephone'] as String?;
+      commentDirectorChargerRadioTerminalTelephone = response['CommentDirector_ChargerRadioTerminalTelephone'];
       cleanWorkplace = response['CleanWorkplace'] != 0 ? true : false;
       commentWorkplace.text = response['Comment_Workplace'];
-      commentDirectorWorkplace = response['CommentDirector_Workplace'] as String?;
+      commentDirectorWorkplace = response['CommentDirector_Workplace'];
 
       cleanlinessWorkplaceHostPhoto = response['WorkplacePhoto'] == null ? null : Api().getPhoto(response['WorkplacePhoto']);
       setState(() {});
@@ -64,83 +65,75 @@ class _Host_endState extends State<Host_end> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        width: 400,
-        height: double.infinity,
-        child: Column(children: [
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
           SizedBox(
             width: double.infinity,
-            // decoration: const BoxDecoration (
-            /// разделяющая линия приветсвие и филиал (207:6)
-            //   color: Colors.white,
-            // ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
+            child: Container(
                   padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
-                  width: double.infinity,
-                  height: 174,
+                  height: 200,
                   decoration: const BoxDecoration(
                     color: Color(0xff000000),
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
                         width: 173,
                         height: double.infinity,
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
-                          width: double.infinity,
-                          height: 63.17,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
-                                child: const Text(
-                                  'Привет Хостес',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.3,
-                                    color: Color(0xffffffff),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Expanded(
+                              child: SingleChildScrollView(
+                                child: SizedBox(
+                                  width: 200,
+                                  child: Text(
+                                    'Привет Хост',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                      height: 1.3,
+                                      color: Color(0xffffffff),
+                                    ),
                                   ),
                                 ),
                               ),
-                              Text(
-                                'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.3,
-                                  color: Color(0xffffffff),
-                                ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                                height: 1.3,
+                                color: Color(0xffffffff),
                               ),
-                            ],
-                          ),
+                            ),
+                            const Divider(
+                              color: Colors.white,
+                              thickness: 1,
+                            ),
+                            const Text('Стрип Барсук Казань'),
+                          ],
                         ),
                       ),
                       SizedBox(
                         width: 100,
-                        height: 150,
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: Image.asset("assets/emblem.png")),
+                        height: 100,
+                        child: Align(alignment: Alignment.topRight, child: Image.asset("assets/emblem.png")),
                       ),
                     ],
                   ),
                 ),
-              ],
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
-            child: const Text(
+          const SizedBox(
+            child: Text(
               'Конец смены',
               style: TextStyle(
                 fontSize: 32,
@@ -153,15 +146,10 @@ class _Host_endState extends State<Host_end> {
           Expanded(
             child: SingleChildScrollView(
               child: Container(
-                padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
+                padding: const EdgeInsets.fromLTRB(0, 31.5, 0, 62),
+                margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
                 width: double.infinity,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
-                      width: double.infinity,
-                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           BlocProvider<CheckboxBloc>(
@@ -240,52 +228,65 @@ class _Host_endState extends State<Host_end> {
                             height: 0,
                           ),
                           ShowCommentDirector(valueDirector: commentDirectorWorkplace,),
+                          const SizedBox(height: 20,),
+                          Center(
+                              child: enabled == true ? ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(100, 50),
+                                  textStyle: const TextStyle(fontSize: 20),
+                                  backgroundColor: Colors.green,
+                                ),
+                                onPressed: () {
+                                  final photostate = photoBloc.state;
+                                  final cleanlinessWorkplaceHostPhoto = photostate.photoStates['cleanlinessWorkplaceHostPhoto'];
+                                  if(cleanlinessWorkplaceHostPhoto != null) {
+                                    cleanlinessWorkplaceHostPath = cleanlinessWorkplaceHostPhoto.path;
+                                  }
+                                  DateTime now = DateTime.now();
+                                  String date = '${now.year}-${now.month}-${now.day}';
+                                  String time = '${now.hour}:${now.minute}:${now.second}';
+
+                                  final state = checkboxBloc.state;
+                                  chargerRadioTerminalTelephone = state.checkboxStates['chargeRadioTerminalTelephone'] ?? false;
+                                  cleanWorkplace = state.checkboxStates['cleanlinessWorkplaceHost'] ?? false;
+
+                                  Api().hostEnd(
+                                      date,
+                                      time,
+                                      chargerRadioTerminalTelephone,
+                                      commentChargerRadioTerminalTelephone.text,
+                                      commentDirectorChargerRadioTerminalTelephone,
+                                      cleanWorkplace,
+                                      cleanlinessWorkplaceHostPath,
+                                      commentWorkplace.text,
+                                      commentDirectorWorkplace,
+                                      widget.idUser);
+
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Отправить отчет',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    height: 1.3,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ) : ElevatedButton(onPressed: (){
+                                Navigator.pop(context);
+                              },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green[800],
+                                  ),
+                                  child: const Text('На главный экран'))
+                          ),
                         ],
                       ),
                     ),
-                    Center(
-                      child: enabled == true ? ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(100, 50),
-                            textStyle: const TextStyle(fontSize: 20),
-                            backgroundColor: Colors.green,
-                          ),
-                          onPressed: () async{
-                            final photostate = photoBloc.state;
-                            final cleanlinessWorkplaceHostPhoto = photostate.photoStates['cleanlinessWorkplaceHostPhoto'];
-                            if(cleanlinessWorkplaceHostPhoto != null) {
-                              cleanlinessWorkplaceHostPath = cleanlinessWorkplaceHostPhoto.path;
-                            }
-                            DateTime now = DateTime.now();
-                            String date = '${now.year}-${now.month}-${now.day}';
-                            String time = '${now.hour}:${now.minute}:${now.second}';
-
-                            final state = checkboxBloc.state;
-                            chargerRadioTerminalTelephone = state.checkboxStates['chargeRadioTerminalTelephone'] ?? false;
-                            cleanWorkplace = state.checkboxStates['cleanlinessWorkplaceHost'] ?? false;
-
-                            Api().hostEnd(date,time,chargerRadioTerminalTelephone,commentChargerRadioTerminalTelephone.text,commentDirectorChargerRadioTerminalTelephone,cleanWorkplace,cleanlinessWorkplaceHostPath,commentWorkplace.text,commentDirectorWorkplace,idUser);
-
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            'Отправить отчет',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 15,
-                              height: 1.3,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ) : const SizedBox(height: 0,),
-                      ),
-                  ],
                 ),
               ),
-            ),
-          ),
         ]),
-      ),
     );
   }
 }

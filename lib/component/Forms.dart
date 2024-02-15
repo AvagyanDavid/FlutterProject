@@ -46,8 +46,7 @@ class ShowCommentWorker extends StatelessWidget {
   late String? commentValue;
   final TextEditingController textController;
 
-  ShowCommentWorker({required String? commentValue})
-      : textController = TextEditingController(text: commentValue);
+  ShowCommentWorker({required String? commentValue}) : textController = TextEditingController(text: commentValue);
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +122,7 @@ class ShowCommentDirector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (valueDirector != null) {
+    if (valueDirector != '') {
       final commentKey = Key(valueDirector!);
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),

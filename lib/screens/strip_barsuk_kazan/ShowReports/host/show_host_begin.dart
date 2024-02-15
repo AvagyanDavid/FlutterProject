@@ -5,10 +5,9 @@ import '../../../../component/checkbox/checkbox.dart';
 
 class ShowHostBegin extends StatefulWidget {
   final String formatterdate;
-  final int id;
   final String post;
 
-  ShowHostBegin({required this.formatterdate, required this.id, required this.post});
+  ShowHostBegin({required this.formatterdate,required this.post});
 
   @override
   _ShowHostBeginState createState() => _ShowHostBeginState();
@@ -18,8 +17,9 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
   TextEditingController commentDirectorTakeRadioTerminalTelephone = TextEditingController();
   TextEditingController commentDirectorSendMessage = TextEditingController();
 
+  int idWorker = 0;
+
   bool readOnly = false;
-  bool enabled = true;
 
   bool takeRadioTerminalTelephone = false;
   String? commentWorkerTakeRadioTerminalTelephone;
@@ -28,15 +28,17 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
   String? commentWorkerSendMessage;
 
   void getData() async {
-    debugPrint('дата в шоу = ${widget.formatterdate}');
     final response = await Api().showHostBegin(widget.formatterdate);
+    debugPrint(response.toString());
     takeRadioTerminalTelephone = response['TakeRadioTerminalTelephone'] != 0 ? true : false;
-    commentWorkerTakeRadioTerminalTelephone = response['CommentWorker_TakeRadioTerminalTelephone'] as String?;
-    commentDirectorTakeRadioTerminalTelephone.text = response['CommentDirector_TakeRadioTerminalTelephone'];
+    commentWorkerTakeRadioTerminalTelephone = response['Comment_TakeRadioTerminalTelephone'] as String?;
+    commentDirectorTakeRadioTerminalTelephone.text = response['CommentDirector_TakeRadioTerminalTelephone'] as String;
     sendMessageWatsApp = response['SendMessageWatsApp'] != 0 ? true : false;
     sendMessageTelegram = response['SendMessageTelegram'] != 0 ? true : false;
-    commentWorkerSendMessage = response['CommentWorker_SendMessage'] as String?;
+    commentWorkerSendMessage = response['Comment_SendMessage'] as String?;
     commentDirectorSendMessage.text = response['CommentDirector_SendMessage'];
+
+    idWorker = response['idUsers'];
     debugPrint(response.toString());
     setState(() {});
   }
@@ -53,162 +55,165 @@ class _ShowHostBeginState extends State<ShowHostBegin> {
       readOnly = true;
     }
     return Scaffold(
-      body: SizedBox(
-        width: 400,
-        height: double.infinity,
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              // decoration: const BoxDecoration (
-              /// разделяющая линия приветсвие и филиал (207:6)
-              //   color: Colors.white,
-              // ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
-                    padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
-                    width: double.infinity,
-                    height: 174,
-                    decoration: const BoxDecoration(
-                      color: Color(0xff000000),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
-                          width: 173,
-                          height: double.infinity,
-                          child: Container(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
-                            width: double.infinity,
-                            height: 63.17,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
-                                  child: const Text(
-                                    'Отчет Хостеса',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400,
-                                      height: 1.3,
-                                      color: Color(0xffffffff),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Отчет за ${widget.formatterdate}',
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.3,
-                                    color: Color(0xffffffff),
-                                  ),
-                                ),
-                              ],
+      body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        SizedBox(
+          width: double.infinity,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
+            width: double.infinity,
+            height: 200,
+            decoration: const BoxDecoration(
+              color: Color(0xff000000),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
+                  width: 173,
+                  height: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Expanded(
+                        child: SingleChildScrollView(
+                          child: SizedBox(
+                            width: 200,
+                            child: Text(
+                              'Отчет Хост',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                height: 1.3,
+                                color: Color(0xffffffff),
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 100,
-                          height: 150,
-                          child: Align(alignment: Alignment.topRight, child: Image.asset("assets/emblem.png")),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
-              child: const Text(
-                'Начало смены',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w400,
-                  height: 1.2999999523,
-                  color: Color(0xffffffff),
-                ),
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ShowCheck(text: "Взять рацию, терминал, телефон", value: takeRadioTerminalTelephone),
-                            ShowCommentWorker(
-                              commentValue: commentWorkerTakeRadioTerminalTelephone,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            CommentDirector(
-                              valueDirector: commentDirectorTakeRadioTerminalTelephone,
-                              readOnly: readOnly,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text(
-                              'Отправить сообщение:',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                height: 1.3,
-                                color: Colors.white,
-                              ),
-                            ),
-                            ShowCheck(text: "WhatsApp", value: sendMessageWatsApp),
-                            ShowCheck(text: "Telegram", value: sendMessageTelegram),
-                            ShowCommentWorker(commentValue: commentWorkerSendMessage),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            CommentDirector(
-                              valueDirector: commentDirectorSendMessage,
-                              readOnly: readOnly,
-                            ),
-                            if (widget.post == 'Manager')
-                              ElevatedButton(
-                                onPressed: () {
-                                  Api().updateHostBegin(commentDirectorTakeRadioTerminalTelephone.text, commentDirectorSendMessage.text, widget.id, widget.formatterdate);
-                                },
-                                child: const Text('Отправить комментарии'),
-                              )
-                            else
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Выйти'),
-                              )
-                          ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Отчет за ${widget.formatterdate}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          height: 1.3,
+                          color: Color(0xffffffff),
                         ),
                       ),
+                      const Divider(
+                        color: Colors.white,
+                        thickness: 1,
+                      ),
+                      const Text('Стрип Барсук Казань'),
                     ],
                   ),
                 ),
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Align(alignment: Alignment.topRight, child: Image.asset("assets/emblem.png")),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const Text(
+          'Начало смены',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.w400,
+            height: 1.2999999523,
+            color: Color(0xffffffff),
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
+              margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShowCheck(text: "Взять рацию, терминал, телефон", value: takeRadioTerminalTelephone),
+                  ShowCommentWorker(
+                    commentValue: commentWorkerTakeRadioTerminalTelephone,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CommentDirector(
+                    valueDirector: commentDirectorTakeRadioTerminalTelephone,
+                    readOnly: readOnly,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    'Отправить сообщение:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      height: 1.3,
+                      color: Colors.white,
+                    ),
+                  ),
+                  ShowCheck(text: "WhatsApp", value: sendMessageWatsApp),
+                  ShowCheck(text: "Telegram", value: sendMessageTelegram),
+                  ShowCommentWorker(commentValue: commentWorkerSendMessage),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CommentDirector(
+                    valueDirector: commentDirectorSendMessage,
+                    readOnly: readOnly,
+                  ),
+                  if (widget.post == 'Manager')
+                    Column(
+                      children: [
+                        const SizedBox(height: 20,),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Api().updateHostBegin(
+                                  commentDirectorTakeRadioTerminalTelephone.text, commentDirectorSendMessage.text, idWorker, widget.formatterdate);
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green[800],
+                            ),
+                            child: const Text('Отправить комментарии'),
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    Column(
+                      children: [
+                        const SizedBox(height: 20,),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green[800]
+                            ),
+                            child: const Text('Выйти',),
+                          ),
+                        ),
+                      ],
+                    )
+                ],
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ]),
     );
   }
 }

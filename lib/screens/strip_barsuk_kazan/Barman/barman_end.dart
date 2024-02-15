@@ -29,22 +29,28 @@ class _barman_endState extends State<barman_end> {
   bool fillOutReport = false;
   bool closeShift = false;
   bool cleanlinessWorkplace = false;
+  bool wipeDustShelvingEnd = false;
+
   CheckboxBloc checkboxBloc = CheckboxBloc();
   PhotoBloc photoBloc = PhotoBloc();
+
   String? cleanlinessWorkplacePath = null;
   String? wipeDustShelvingEndPath = null;
+
   TextEditingController commentCleanlinessWorkplace = TextEditingController();
   TextEditingController commentCloseShift = TextEditingController();
   TextEditingController commentFillOutReport = TextEditingController();
   TextEditingController commentApplication = TextEditingController();
   TextEditingController commentWipeDustShelvingEnd = TextEditingController();
-  String? commentDirectorApplication;
-  String? commentDirectorFillOutReport;
-  String? commentDirectorCloseShift;
-  String? commentDirectorCleanlinessWorkplace;
-  String? commentDirectorWipeDustShelvingEnd;
 
-  String? PhotoCleanlinessWorkplace;
+  String commentDirectorApplication = '';
+  String commentDirectorFillOutReport = '';
+  String commentDirectorCloseShift = '';
+  String commentDirectorCleanlinessWorkplace = '';
+  String commentDirectorWipeDustShelvingEnd = '';
+
+  String? photoCleanlinessWorkplace;
+  String? photoWipeDustShelvingEnd;
 
   void getStatusReport() async {
     String date = '${widget.now.year}-${widget.now.month}-${widget.now.day}';
@@ -57,105 +63,103 @@ class _barman_endState extends State<barman_end> {
       nonAlcogol = response['NonAlcogol'] != 0 ? true : false;
       tobacco = response['Tobacco'] != 0 ? true : false;
       commentApplication.text = response['Comment_Application'];
-      commentDirectorApplication = response['CommentDirector_Application'] as String?;
+      commentDirectorApplication = response['CommentDirector_Application'];
       fillOutReport = response['FillOutReport'] != 0 ? true : false;
-      commentFillOutReport.text = response['CommentFillOutReport'];
-      commentDirectorFillOutReport = response['CommentDirector_FillOutReport'] as String?;
+      commentFillOutReport.text = response['Comment_FillOutReport'];
+      commentDirectorFillOutReport = response['CommentDirector_FillOutReport'];
       closeShift = response['CloseShift'] != 0 ? true : false;
       commentCloseShift.text = response['Comment_CloseShift'];
-      commentDirectorCloseShift = response['CommentDirector_CloseShift'] as String?;
+      commentDirectorCloseShift = response['CommentDirector_CloseShift'];
       cleanlinessWorkplace= response['CleanlinessWorkplace'] != 0 ? true : false;
       commentCleanlinessWorkplace.text = response['Comment_CleanlinessWorkplace'];
-      commentDirectorCleanlinessWorkplace = response['CommentDirector_CleanlinessWorkplace'] as String?;
+      commentDirectorCleanlinessWorkplace = response['CommentDirector_CleanlinessWorkplace'];
+      wipeDustShelvingEnd = response['WipeDustShelvingEnd'] != 0 ? true: false;
+      commentWipeDustShelvingEnd.text = response['Comment_WipeDustShelving'];
+      commentDirectorWipeDustShelvingEnd = response['CommentDirector_WipeDustShelving'];
 
-      PhotoCleanlinessWorkplace = response['CleanlinessWorkplacePhoto'] == null ? null : Api().getPhoto(response['CleanlinessWorkplacePhoto']);
+      photoCleanlinessWorkplace = response['CleanlinessWorkplacePhoto'] == null ? null : Api().getPhoto(response['CleanlinessWorkplacePhoto']);
+      photoWipeDustShelvingEnd = response['WipeDustShelvingPhoto'] == null ? null : Api().getPhoto(response['WipeDustShelvingEndPhoto']);
+      setState(() {});
     }
+  }
+
+  @override
+  void initState() {
+    getStatusReport();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        // frame5Sco (207:23)a
-        width: 400,
-        height: double.infinity,
-        child: Column(children: [
-          Container(
-            width: double.infinity,
-            // decoration: const BoxDecoration (
-            /// разделяющая линия приветсвие и филиал (207:6)
-            //   color: Colors.white,
-            // ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 4.5),
-                  padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
-                  width: double.infinity,
-                  height: 174,
-                  decoration: const BoxDecoration(
-                    color: Color(0xff000000),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+      body:  Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(22, 35.93, 0, 53.58),
+                height: 200,
+                decoration: const BoxDecoration(
+                  color: Color(0xff000000),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 6.58, 67, 12.74),
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
                         width: 173,
                         height: double.infinity,
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 7.61),
-                          width: double.infinity,
-                          height: 63.17,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                // qd1 (207:27)
-                                margin:
-                                    const EdgeInsets.fromLTRB(0, 0, 0, 9.56),
-                                child: const Text(
-                                  'Привет Бармен',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.3,
-                                    color: Color(0xffffffff),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Expanded(
+                              child: SingleChildScrollView(
+                                child: SizedBox(
+                                  width: 200,
+                                  child: Text(
+                                    'Привет Бармен',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                      height: 1.3,
+                                      color: Color(0xffffffff),
+                                    ),
                                   ),
                                 ),
                               ),
-                              Text(
-                                // 6oq (207:28)
-                                'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.3,
-                                  color: Color(0xffffffff),
-                                ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'сегодня ${widget.now.day}-${widget.now.month}-${widget.now.year}',
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                                height: 1.3,
+                                color: Color(0xffffffff),
                               ),
-                            ],
-                          ),
+                            ),
+                            const Divider(
+                              color: Colors.white,
+                              thickness: 1,
+                            ),
+                            const Text('Стрип Барсук Казань'),
+                          ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 100,
-                        height: 150,
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: Image.asset("assets/emblem.png")),
+                        height: 100,
+                        child: Align(alignment: Alignment.topRight, child: Image.asset("assets/emblem.png")),
                       ),
-                    ],
-                  ),
-                ),
-              ],
+                    ]),
+              ),
             ),
-          ),
-          Container(
-            // BD1 (231:55)
-            margin: const EdgeInsets.fromLTRB(0, 0, 120, 0),
-            child: const Text(
+          const SizedBox(
+            child: Text(
               'Конец смены',
               style: TextStyle(
                 fontSize: 32,
@@ -169,13 +173,13 @@ class _barman_endState extends State<barman_end> {
             child: SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.fromLTRB(26, 31.5, 0, 62),
+                margin: const EdgeInsets.fromLTRB(14, 0, 19, 56),
                 width: double.infinity,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     Container(
-                        // ANK (211:310)
-                        child: const Text(
+                     const SizedBox(
+                        child:  Text(
                           'Составить заявку:',
                           style: TextStyle(
                             fontSize: 16,
@@ -187,7 +191,6 @@ class _barman_endState extends State<barman_end> {
                       ),
                     BlocProvider<CheckboxBloc>(
                       create: (context) => checkboxBloc,
-                      // BlocBuilder(builder: builder)
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
                         builder: (context, state) {
                           if (enabled == false) {
@@ -231,7 +234,6 @@ class _barman_endState extends State<barman_end> {
                     ),
                     BlocProvider<CheckboxBloc>(
                       create: (context) => checkboxBloc,
-                      // BlocBuilder(builder: builder)
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
                         builder: (context, state) {
                           if (enabled == false) {
@@ -256,6 +258,7 @@ class _barman_endState extends State<barman_end> {
                       readOnly: readOnly,
                     ),
                     ShowCommentDirector(valueDirector: commentDirectorApplication,),
+                    const SizedBox(height: 20,),
                     BlocProvider<CheckboxBloc>(
                       create: (context) => checkboxBloc,
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
@@ -282,9 +285,9 @@ class _barman_endState extends State<barman_end> {
                       readOnly: readOnly,
                     ),
                     ShowCommentDirector(valueDirector: commentDirectorFillOutReport,),
+                    const SizedBox(height: 20,),
                     BlocProvider<CheckboxBloc>(
                       create: (context) => checkboxBloc,
-                      // BlocBuilder(builder: builder)
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
                         builder: (context, state) {
                           if (enabled == false) {
@@ -309,9 +312,9 @@ class _barman_endState extends State<barman_end> {
                       readOnly: readOnly,
                     ),
                     ShowCommentDirector(valueDirector: commentDirectorCloseShift,),
+                    const SizedBox(height: 20,),
                     BlocProvider<CheckboxBloc>(
                       create: (context) => checkboxBloc,
-                      // BlocBuilder(builder: builder)
                       child: BlocBuilder<CheckboxBloc, CheckboxState>(
                         builder: (context, state) {
                           if (enabled == false) {
@@ -336,11 +339,12 @@ class _barman_endState extends State<barman_end> {
                       child: BlocBuilder<PhotoBloc, PhotoState>(
                         builder: (context, state) {
                           if (enabled == false) {
-                            return ShowPhoto(image: cleanlinessWorkplacePath);
+                            return ShowPhoto(image: photoCleanlinessWorkplace);
+                          } else {
+                            return NewPhoto(
+                              photoBloc: photoBloc,
+                              photoId: 'cleanlinessWorkplacePhoto',);
                           }
-                          return NewPhoto(
-                            photoBloc: photoBloc,
-                            photoId: 'cleanlinessWorkplacePhoto',);
                         },
                       ),
                     ),
@@ -355,56 +359,20 @@ class _barman_endState extends State<barman_end> {
                     const SizedBox(
                       height: 20,
                     ),
-                    BlocProvider<PhotoBloc>(
-                      create: (context) => photoBloc,
-                      child: BlocBuilder<PhotoBloc, PhotoState>(
-                        builder: (context, state) {
-                          if (enabled == false) {
-                            return ShowPhoto(image: wipeDustShelvingEndPath);
-                          }
-                          return NewPhoto(
-                            photoBloc: photoBloc,
-                            photoId: 'wipeDustShelvingEnd',);
-                        },
-                      ),
-                    ),
-                    // CommentDirector(readOnly: false)
-
-                    /// НЕДОДЕЛЛАННО ВЕЗДЕ НАДО СДЕЛАТЬ КОММЕНТАРИИ ДИРЕКТОРА!!!!!
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-                    ///
-
+                    const SizedBox(height: 20,),
                     Center(
-                      child: ElevatedButton(
+                      child: enabled == true ? ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(100, 50),
                           textStyle: const TextStyle(fontSize: 20),
                           backgroundColor: Colors.green,
                         ),
-                        onPressed: () async {
+                        onPressed: () {
 
                           final photostate = photoBloc.state;
                           final cleanlinessWorkplacePhoto = photostate.photoStates['cleanlinessWorkplacePhoto'];
                           if (cleanlinessWorkplacePhoto != null) {
                             cleanlinessWorkplacePath = cleanlinessWorkplacePhoto.path;
-                          }
-
-                          final wipeDustShelvingPhoto = photostate.photoStates['wipeDustShelvingPhoto'];
-                          if(wipeDustShelvingPhoto != null) {
-                            wipeDustShelvingEndPath = wipeDustShelvingPhoto.path;
                           }
 
                           DateTime now = DateTime.now().toUtc();
@@ -418,9 +386,8 @@ class _barman_endState extends State<barman_end> {
                           final fillOutReport = state.checkboxStates['fillOutReport'] ?? false;
                           final closeShift = state.checkboxStates['closeShift'] ?? false;
                           final cleanlinessWorkplace = state.checkboxStates['cleanlinessWorkplace'] ?? false;
-                          final wipeDustShelvingEnd = state.checkboxStates['wipeDustShelvingEnd'] ?? false;
 
-                          await Api().barmanEnd(
+                          Api().barmanEnd(
                               date,
                               time,
                               alcogol,
@@ -438,12 +405,7 @@ class _barman_endState extends State<barman_end> {
                               cleanlinessWorkplacePath,
                               commentCleanlinessWorkplace.text,
                               commentDirectorCleanlinessWorkplace,
-                              wipeDustShelvingEnd,
-                              wipeDustShelvingEndPath,
-                              commentWipeDustShelvingEnd.text,
-                              commentDirectorWipeDustShelvingEnd,
                               widget.idUser);
-
                           Navigator.pop(context);
                         },
                         child: const Text(
@@ -455,7 +417,13 @@ class _barman_endState extends State<barman_end> {
                             color: Colors.white,
                           ),
                         ),
-                      ),
+                      ) : ElevatedButton(onPressed: (){
+                        Navigator.pop(context);
+                      },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green[800],
+                          ),
+                          child: const Text('На главный экран'))
                     ),
                   ],
                 ),
@@ -463,7 +431,6 @@ class _barman_endState extends State<barman_end> {
             ),
           ),
         ]),
-      ),
     );
   }
 }
